@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'CT100LW_FS6'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Allegro Microsystems", "CT100LW-FS6" (!) = "", "SOT95P280X135-6N", "SOT23 (6-Pin)", "", "", "Board Mount Hall Effect / Magnetic Sensors Differential TMR High Sensitivity Magnetic 1D Linear  Sensor ,SOT23 - 6 pin Package, F-Temp", "", "1.35 mm"
+END_PART
+
+END.

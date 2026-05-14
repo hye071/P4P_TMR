@@ -1,0 +1,16 @@
+.CT100LW-FS6 :1 ;Board Mount Hall Effect / Magnetic Sensors Differential TMR High Sensitivity Magnetic 1D Linear  Sensor ,SOT23 - 6 pin Package, F-Temp
+SOT95P280X135-6N
+*STM IC
+*NGS
+*PLB 1="X2" 2="N/C_1" 3="X1" 4="GND" 5="N/C_2" 6="VDD"
+*MXP 6
+*DFN CT100LW-FS6
+~!Mouser Part Number (-)
+~!Mouser Price/Stock (-)
+~!Manufacturer_Name (Allegro Microsystems)
+~!Manufacturer_Part_Number (CT100LW-FS6)
+~!Link Datasheet (-)
+~!Height (1.35mm)
+~!3D_Model (CT100LW-FS6)
+CT100LW-FS6
+1.1!U 2.1!U 3.1!U 6.1!U 5.1!U 4.1!U 

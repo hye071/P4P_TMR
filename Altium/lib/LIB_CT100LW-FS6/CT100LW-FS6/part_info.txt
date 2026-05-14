@@ -1,0 +1,9 @@
+Manufacturer=Allegro Microsystems
+PartNumber=CT100LW-FS6
+PartCategory=Integrated Circuit
+PackageCategory=SOT23 (6-Pin)
+PinCount=6
+Version=1.1
+Released=2025-02-13 04:58:34
+Downloaded=2026-05-14 09:27:11
+3D=Y

@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "CT100LW-FS6"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2024-04-29-13:11:35)
+    (mountForm default
+        (footprintRef "SOT95P280X135-6N")
+        (spec "System")
+    )
+)
