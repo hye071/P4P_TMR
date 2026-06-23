@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=3V3 Pin=3V3-1
+Removed Pin From Net: NetName=GND Pin=GND-1
+Removed Member From Class: ClassName=TMR_MAGSAT Member=3V3
+Removed Member From Class: ClassName=TMR_MAGSAT Member=GND
