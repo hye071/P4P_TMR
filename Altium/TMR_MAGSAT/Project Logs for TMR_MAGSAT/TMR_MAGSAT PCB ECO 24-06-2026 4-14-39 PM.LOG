@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=X2 Pin=U2-5
+Removed Pin From Net: NetName=X1 Pin=U2-6
+Change Component Description : Designator=J2 Old Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 New Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 | Keystone Electronics 7771
+Change Component Description : Designator=J3 Old Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 New Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 | Keystone Electronics 7771
+Added Pin To Net: NetName=X1 Pin=U2-5
+Added Pin To Net: NetName=X2 Pin=U2-6
