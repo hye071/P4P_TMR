@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=VIN+ Pin=VIN+-1_1
+Removed Pin From Net: NetName=VIN+ Pin=VIN+-1_2
+Change Component Designator: OldDesignator=VIN+ NewDesignator=J2
+Change Component Designator: OldDesignator=VIN- NewDesignator=J3
+Added Pin To Net: NetName=VIN+ Pin=J2-1_3
+Added Pin To Net: NetName=VIN+ Pin=J2-1_4

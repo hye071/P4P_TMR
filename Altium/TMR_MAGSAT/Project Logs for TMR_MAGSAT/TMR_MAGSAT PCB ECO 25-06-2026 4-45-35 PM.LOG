@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=VIN+ Pin=VIN+-1_3
+Removed Pin From Net: NetName=VIN+ Pin=VIN+-1_4
+Removed Pin From Net: NetName=VIN- Pin=VIN--1_3
+Removed Pin From Net: NetName=VIN- Pin=VIN--1_4
+Change Component Designator: OldDesignator=VIN+ NewDesignator=J2
+Change Component Designator: OldDesignator=VIN- NewDesignator=J3
+Change Component Description : Designator=J2 Old Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 New Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 | Keystone Electronics 7771
+Change Component Description : Designator=J3 Old Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 New Description=Screw Terminal;Nickel;15 Amp;Thru-Hole;Vertical;Unassembled;PC;M3 | Keystone Electronics 7771
