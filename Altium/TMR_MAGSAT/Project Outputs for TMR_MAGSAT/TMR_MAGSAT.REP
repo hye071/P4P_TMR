@@ -1,0 +1,451 @@
+*************************************************************
+FileName = TMR_MAGSAT.GBR
+AutoAperture = True
+*************************************************************
+Generating : Bottom Tenting
+      File : TMR_MAGSAT.GM6
+
+    Adding Layer      : Bottom Tenting
+
+
+Used DCodes :
+    D44
+*************************************************************
+
+*************************************************************
+Generating : Top Tenting
+      File : TMR_MAGSAT.GM4
+
+    Adding Layer      : Top Tenting
+
+
+Used DCodes :
+    D44
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : TMR_MAGSAT.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D35
+    D36
+    D37
+    D40
+    D41
+    D42
+    D43
+    D44
+    D45
+*************************************************************
+
+*************************************************************
+Generating : Bottom Pad Master
+      File : TMR_MAGSAT.GPB
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D35
+    D36
+    D40
+    D41
+    D42
+    D43
+    D45
+*************************************************************
+
+*************************************************************
+Generating : Top Pad Master
+      File : TMR_MAGSAT.GPT
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D17
+    D18
+    D19
+    D20
+    D21
+    D22
+    D23
+    D24
+    D25
+    D35
+    D36
+    D40
+    D41
+    D42
+    D43
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : TMR_MAGSAT.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+    D14
+    D15
+    D16
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : TMR_MAGSAT.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+    D10
+    D16
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : TMR_MAGSAT.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D21
+    D22
+    D23
+    D25
+    D26
+    D27
+    D28
+    D29
+    D30
+    D31
+    D32
+    D33
+    D34
+    D35
+    D36
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : TMR_MAGSAT.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D31
+    D32
+    D33
+    D34
+    D35
+    D36
+    D45
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : TMR_MAGSAT.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D17
+    D18
+    D19
+    D20
+    D21
+    D22
+    D23
+    D24
+    D25
+*************************************************************
+
+*************************************************************
+Generating : Bottom Paste
+      File : TMR_MAGSAT.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D45
+*************************************************************
+
+*************************************************************
+Generating : Keep-Out Layer
+      File : TMR_MAGSAT.GKO
+
+    Adding Layer      : Keep-Out Layer
+
+
+Used DCodes :
+    D49
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 1
+      File : TMR_MAGSAT.GM1
+
+    Adding Layer      : Mechanical 1
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Layer 3(PWR)
+      File : TMR_MAGSAT.G2
+
+    Adding Layer      : Layer 3(PWR)
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D35
+    D36
+    D40
+    D41
+    D42
+    D43
+    D44
+*************************************************************
+
+*************************************************************
+Generating : Bottom Assembly
+      File : TMR_MAGSAT.GM3
+
+    Adding Layer      : Bottom Assembly
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Bottom 3D Body
+      File : TMR_MAGSAT.GM23
+
+    Adding Layer      : Bottom 3D Body
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Top Assembly
+      File : TMR_MAGSAT.GM5
+
+    Adding Layer      : Top Assembly
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Bottom Courtyard
+      File : TMR_MAGSAT.GM21
+
+    Adding Layer      : Bottom Courtyard
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Top Courtyard
+      File : TMR_MAGSAT.GM2
+
+    Adding Layer      : Top Courtyard
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Bottom Component Center
+      File : TMR_MAGSAT.GM24
+
+    Adding Layer      : Bottom Component Center
+
+
+Used DCodes :
+    D13
+*************************************************************
+
+*************************************************************
+Generating : Layer 2(GND)
+      File : TMR_MAGSAT.G1
+
+    Adding Layer      : Layer 2(GND)
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D35
+    D36
+    D40
+    D41
+    D42
+    D43
+    D44
+*************************************************************
+
+*************************************************************
+Generating : Top Layer
+      File : TMR_MAGSAT.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D17
+    D18
+    D19
+    D20
+    D21
+    D22
+    D23
+    D24
+    D25
+    D35
+    D36
+    D37
+    D38
+    D39
+    D40
+    D41
+    D42
+    D43
+    D44
+*************************************************************
+
+*************************************************************
+Generating : Top 3D Body
+      File : TMR_MAGSAT.GM13
+
+    Adding Layer      : Top 3D Body
+
+
+Used DCodes :
+    D10
+    D13
+    D14
+    D46
+    D47
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 15
+      File : TMR_MAGSAT.GM15
+
+    Adding Layer      : Mechanical 15
+
+
+Used DCodes :
+    D13
+    D15
+    D48
+*************************************************************
+
+*************************************************************
+Generating : Top Component Center
+      File : TMR_MAGSAT.GM16
+
+    Adding Layer      : Top Component Center
+
+
+Used DCodes :
+    D13
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 20
+      File : TMR_MAGSAT.GM20
+
+    Adding Layer      : Mechanical 20
+
+
+Used DCodes :
+    D48
+*************************************************************
+
+*************************************************************
+Generating : Drill Drawing
+      File : TMR_MAGSAT.GD1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Drawing
+
+
+Used DCodes :
+    D14
+    D50
+*************************************************************
+
+*************************************************************
+Generating : Drill Guide
+      File : TMR_MAGSAT.GG1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Guide
+
+
+Used DCodes :
+    D14
+*************************************************************
+
+*************************************************************
+Generating : Profile
+      File : TMR_MAGSAT.GM
+
+
+Used DCodes :
+    D51
+*************************************************************
+
