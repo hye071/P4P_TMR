@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -68,7 +69,7 @@ static void MX_I2C1_Init(void);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+
 
   /* USER CODE END 1 */
 
@@ -94,16 +95,79 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
+  // Run automatic calibration for ADC1 in Differential Mode
+   if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+   {
+       /* Calibration Error Handling */
+       Error_Handler();
+   }
+
+   //INA219 Programming calibration registers
+ #define INA219_ADDR (0x40 << 1) //slave address
+ #define REG_CAL  0x05
+ #define REG_CURRENT   0x04
+
+   uint8_t cal_data[2] = {0xA0, 0x00};
+   HAL_I2C_Mem_Write(&hi2c1, INA219_ADDR, REG_CAL, I2C_MEMADD_SIZE_8BIT, cal_data, 2, 100);
+
+   //Variables set up
+   uint32_t adc_value = 0;
+   float voltage_difference = 0.0f; //X1-X2(V)
+   const float V_REF = 3.3f; //Board reference voltage (3V3) (V)
+   float current_amps = 0.0f; //shunt current(A)
+   uint8_t raw_current_bytes[2] = {0};
+   int16_t raw_current_value = 0;
+
   /* USER CODE END 2 */
+
+
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+  while (1) //code doesn't wipe while in while loop
 
-    /* USER CODE BEGIN 3 */
+  {
+
+	  //generates raw differitianal ADC values from TMR sensor
+	  HAL_ADC_Start(&hadc1);
+
+	      if (HAL_ADC_PollForConversion(&hadc1, 10) == HAL_OK) {
+	          adc_value = HAL_ADC_GetValue(&hadc1);
+	      }
+	      HAL_ADC_Stop(&hadc1);
+
+	      //Converting Raw ADC to Analog Voltage
+	      voltage_difference =  ((float)adc_value - 2048.0f) / 2048.0f * V_REF;
+
+	      //Using LED to determine polarity of the field
+
+
+
+
+	      //  Read directly from the Current Register (0x04)
+	      if (HAL_I2C_Mem_Read(&hi2c1, INA219_ADDR, REG_CURRENT, I2C_MEMADD_SIZE_8BIT, raw_current_bytes, 2, 100) == HAL_OK) {
+	          raw_current_value = (int16_t)((raw_current_bytes[0] << 8) | raw_current_bytes[1]);
+
+	          // Multiply by our chosen Current_LSB (0.0002f) to get real Amperes
+	          current_amps = (float)raw_current_value * 0.0002f;
+	      }
+
+
+    // debugging LEDs testing code
+
+	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // Toggle Pin
+	  HAL_Delay(500); // Delay 500ms
+
+	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12); // Toggle Pin
+	  HAL_Delay(500); // Delay 500ms
+
+	  /* Terminal Output via SWO Programmer */
+	        printf("TMR: %.4f V | Current: %.3f A\r\n", voltage_difference, current_amps);
+
+
   }
+    /* USER CODE BEGIN 3 */
+
   /* USER CODE END 3 */
 }
 
