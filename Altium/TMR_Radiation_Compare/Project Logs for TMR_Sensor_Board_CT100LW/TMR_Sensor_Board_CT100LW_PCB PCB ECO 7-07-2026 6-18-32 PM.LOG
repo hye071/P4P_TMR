@@ -1,0 +1,27 @@
+Removed Pin From Net: NetName=GND Pin=C2-1
+Removed Pin From Net: NetName=5V Pin=C2-2
+Removed Pin From Net: NetName=GND Pin=C3-1
+Removed Pin From Net: NetName=X1 Pin=C3-2
+Change Component Footprint: Designator=C2 Old Footprint=C0805 New Footprint=0805 CAP
+Change Component Footprint: Designator=C3 Old Footprint=C0805 New Footprint=0805 CAP
+Change Component Comment : Designator=C2 Old Comment=CCAP0805 New Comment=*
+Change Component Comment : Designator=C3 Old Comment=CCAP0805 New Comment=*
+Change Managed Component Library Link : Designator=C2 Old VaultGUID=45473775-384D-4A7E-9460-2FC0B2C9BA85 New VaultGUID= Old ItemGUID=3247ECA5-E982-4ECC-B974-BDA98D780578 New ItemGUID= Old RevisionGUID=4c2bae9a-ade0-41df-9b79-aa44c84b69ce New RevisionGUID=
+Change Managed Component Library Link : Designator=C3 Old VaultGUID=45473775-384D-4A7E-9460-2FC0B2C9BA85 New VaultGUID= Old ItemGUID=3247ECA5-E982-4ECC-B974-BDA98D780578 New ItemGUID= Old RevisionGUID=4c2bae9a-ade0-41df-9b79-aa44c84b69ce New RevisionGUID=
+Change component parameters: Designator = "C2" ("C2"); Footprint = "C0805"; UniqueID = "\HTYWUTMJ" ("\HTYWUTMJ")
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Change component parameters: Designator = "C3" ("C3"); Footprint = "C0805"; UniqueID = "\ZHURLFKX" ("\ZHURLFKX")
+Change component parameters (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=J1(FP-M20-9990245-MFG)
+Added Component: Designator=J2(FP-M20-9990245-MFG)
+Added Pin To Net: NetName=5V Pin=C2-1
+Added Pin To Net: NetName=GND Pin=C2-2
+Added Pin To Net: NetName=X1 Pin=C3-1
+Added Pin To Net: NetName=GND Pin=C3-2
+Add Pin To Net: Unknown Pin: Pin J1-1
+Add Pin To Net: Unknown Pin: Pin J1-2
+Add Pin To Net: Unknown Pin: Pin J2-1
+Add Pin To Net: Unknown Pin: Pin J2-2
+Added Member To Class: ClassName=TMR_RAD_COMPARE Member=Component C2 *
+Add Class Member: Failed to add class member : Component J1 M20-9990245
+Add Class Member: Failed to add class member : Component J2 M20-9990245

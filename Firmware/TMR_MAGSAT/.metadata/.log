@@ -19,3 +19,47 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY org.eclipse.cdt.core 1 0 2026-07-01 14:01:04.214
 !MESSAGE Indexed 'MAG_SAT_firm_project' (21 sources, 80 headers) in 2.09 sec: 4,697 declarations; 18,990 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0084%)
+!SESSION 2026-07-02 15:21:28.139 -----------------------------------------------
+eclipse.buildId=Version 1.5.1
+java.version=1.8.0_272
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_NZ
+Framework arguments:  C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-07-02 15:21:37.302
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-07-02 15:21:37.338
+!MESSAGE Log4j initialized with config file C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-07-02 15:21:41.602
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2026-07-02 15:21:43.363
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-07-02 15:21:44.756
+!MESSAGE Indexed 'MAG_SAT_firm_project' (26 sources, 85 headers) in 1.9 sec: 6,467 declarations; 39,911 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0043%)
+!SESSION 2026-07-06 16:50:53.846 -----------------------------------------------
+eclipse.buildId=Version 1.5.1
+java.version=1.8.0_272
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_NZ
+Framework arguments:  C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-07-06 16:51:48.114
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-07-06 16:51:48.156
+!MESSAGE Log4j initialized with config file C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-07-06 16:51:53.113
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2026-07-06 16:51:53.761
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-07-06 16:51:55.174
+!MESSAGE Indexed 'MAG_SAT_firm_project' (26 sources, 85 headers) in 1.91 sec: 6,467 declarations; 39,911 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0043%)

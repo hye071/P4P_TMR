@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=GND Pin=U1-5
+Removed Member From Class: ClassName=TMR_Sensor_Board_CT100LW_Sch Member=J1
+Add Component: Footprint Not Found HDR2X1_2P54
+Added Pin To Net: NetName=X1 Pin=C3-2
+Added Pin To Net: NetName=X1 Pin=U1-3
+Added Net: Name=X1
+Added Pin To Net: NetName=X2 Pin=C1-1
+Added Pin To Net: NetName=X2 Pin=U1-1
+Added Net: Name=X2
+Add Class Member: Failed to add class member : Component CON2 HDR2X1

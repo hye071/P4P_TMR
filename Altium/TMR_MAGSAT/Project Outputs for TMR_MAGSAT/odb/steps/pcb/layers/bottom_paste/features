@@ -1,0 +1,23 @@
+UNITS=MM
+#Layer_Color=128
+#
+#Feature symbol names
+#
+$0 rect3534.97388x3263.92794
+
+#
+#Feature attribute names
+#
+@0 .geometry
+@1 .pad_usage
+
+#
+#Feature attribute text strings
+#
+&0 SMD_RectX3534.9739Y3263.9279
+
+#
+#Layer features
+#
+P 146.75000114 82.7794763 0 P 0 0 ;0=0,1=0
+P 146.75000114 87.22052406 0 P 0 0 ;0=0,1=0

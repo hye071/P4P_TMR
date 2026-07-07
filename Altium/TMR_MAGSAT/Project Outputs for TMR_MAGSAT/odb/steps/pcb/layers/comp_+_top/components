@@ -1,0 +1,507 @@
+UNITS=MM
+#
+#Component attribute names
+#
+@0 .comp_mount_type
+@1 .comp_height
+
+# CMP 0
+CMP 2 113.00000006 87.00000126 270 N R7 330 ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 113.00000006 86.00000072 270 N 19 29 1
+TOP 1 113.00000006 88.0000018 270 N 2 1 2
+#
+# CMP 1
+CMP 1 113.00000006 91.49999988 90 N D3 LTST-C170KGKT ;0=1,1=1.0000
+PRP Category 'Optoelectronics'
+PRP Color 'Green'
+PRP ComponentLink1Description 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP ComponentLink1URL 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP Current_-_Test '20mA'
+PRP Features '-'
+PRP Height_(Max) '1.10mm'
+PRP Lens_Color 'Colorless'
+PRP Lens_Style/Size 'Rectangle with Flat Top, 1.40mm x 1.25mm'
+PRP Lens_Transparency 'Clear'
+PRP Manufacturer 'Lite-On Inc.'
+PRP Manufacturer_Part_Number 'LTST-C170KGKT'
+PRP Millicandela_Rating '35mcd'
+PRP Mounting_Type 'Surface Mount'
+PRP Package_/_Case '0805 (2012 Metric)'
+PRP Packaging 'Cut Tape (CT)'
+PRP Part_Status 'Active'
+PRP Pricing_1 '1=0.62, 10=0.459, 25=0.338, 100=0.2415, 250=0.16416, 500=0.14486, 1000=0.11347 (NZD)'
+PRP RoHS 'RoHS Compliant'
+PRP Size_/_Dimension '2.00mm L x 1.25mm W'
+PRP Stock_1 '503069'
+PRP Supplier_1 'Digi-Key'
+PRP Supplier_Part_Number_1 '160-1414-1-ND'
+PRP Viewing_Angle '130°'
+PRP Voltage_-_Forward_(Vf)_(Typ) '2V'
+PRP Wavelength_-_Dominant '571nm'
+PRP Wavelength_-_Peak '574nm'
+TOP 0 113.00000006 92.70000002 270 N 3 1 1
+TOP 1 113.00000006 90.29998704 270 N 2 0 2
+#
+# CMP 2
+CMP 2 110.25000048 88.7500003 270 N R6 330 ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 110.25000048 87.74999976 270 N 19 28 1
+TOP 1 110.25000048 89.75000084 270 N 5 1 2
+#
+# CMP 3
+CMP 2 110.00000098 102.99999974 90 N R5 120 ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 110.00000098 104.00000028 90 N 19 27 1
+TOP 1 110.00000098 101.9999992 90 N 1 1 2
+#
+# CMP 4
+CMP 1 110.25000048 93.24999892 90 N D2 LTST-C170KGKT ;0=1,1=1.0000
+PRP Category 'Optoelectronics'
+PRP Color 'Green'
+PRP ComponentLink1Description 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP ComponentLink1URL 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP Current_-_Test '20mA'
+PRP Features '-'
+PRP Height_(Max) '1.10mm'
+PRP Lens_Color 'Colorless'
+PRP Lens_Style/Size 'Rectangle with Flat Top, 1.40mm x 1.25mm'
+PRP Lens_Transparency 'Clear'
+PRP Manufacturer 'Lite-On Inc.'
+PRP Manufacturer_Part_Number 'LTST-C170KGKT'
+PRP Millicandela_Rating '35mcd'
+PRP Mounting_Type 'Surface Mount'
+PRP Package_/_Case '0805 (2012 Metric)'
+PRP Packaging 'Cut Tape (CT)'
+PRP Part_Status 'Active'
+PRP Pricing_1 '1=0.62, 10=0.459, 25=0.338, 100=0.2415, 250=0.16416, 500=0.14486, 1000=0.11347 (NZD)'
+PRP RoHS 'RoHS Compliant'
+PRP Size_/_Dimension '2.00mm L x 1.25mm W'
+PRP Stock_1 '503069'
+PRP Supplier_1 'Digi-Key'
+PRP Supplier_Part_Number_1 '160-1414-1-ND'
+PRP Viewing_Angle '130°'
+PRP Voltage_-_Forward_(Vf)_(Typ) '2V'
+PRP Wavelength_-_Dominant '571nm'
+PRP Wavelength_-_Peak '574nm'
+TOP 0 110.25000048 94.44999906 270 N 4 1 1
+TOP 1 110.25000048 92.04998608 270 N 5 0 2
+#
+# CMP 5
+CMP 1 110.00000098 98.24999908 270 N D1 LTST-C170KGKT ;0=1,1=1.0000
+PRP Category 'Optoelectronics'
+PRP Color 'Green'
+PRP ComponentLink1Description 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP ComponentLink1URL 'http://optoelectronics.liteon.com/upload/download/DS22-2000-073/LTST-C170KGKT.pdf'
+PRP Current_-_Test '20mA'
+PRP Features '-'
+PRP Height_(Max) '1.10mm'
+PRP Lens_Color 'Colorless'
+PRP Lens_Style/Size 'Rectangle with Flat Top, 1.40mm x 1.25mm'
+PRP Lens_Transparency 'Clear'
+PRP Manufacturer 'Lite-On Inc.'
+PRP Manufacturer_Part_Number 'LTST-C170KGKT'
+PRP Millicandela_Rating '35mcd'
+PRP Mounting_Type 'Surface Mount'
+PRP Package_/_Case '0805 (2012 Metric)'
+PRP Packaging 'Cut Tape (CT)'
+PRP Part_Status 'Active'
+PRP Pricing_1 '1=0.62, 10=0.459, 25=0.338, 100=0.2415, 250=0.16416, 500=0.14486, 1000=0.11347 (NZD)'
+PRP RoHS 'RoHS Compliant'
+PRP Size_/_Dimension '2.00mm L x 1.25mm W'
+PRP Stock_1 '503069'
+PRP Supplier_1 'Digi-Key'
+PRP Supplier_Part_Number_1 '160-1414-1-ND'
+PRP Viewing_Angle '130°'
+PRP Voltage_-_Forward_(Vf)_(Typ) '2V'
+PRP Wavelength_-_Dominant '571nm'
+PRP Wavelength_-_Peak '574nm'
+TOP 0 110.00000098 97.04999894 90 N 20 19 1
+TOP 1 110.00000098 99.45001192 90 N 1 0 2
+#
+# CMP 6
+CMP 11 141.224 99.695 90 N X2 5003 ;0=2,1=4.5700
+PRP ComponentLink1Description 'Manufacturer URL'
+PRP ComponentLink1URL 'http://www.keyelco.com/'
+PRP ComponentLink2Description 'Datasheet'
+PRP ComponentLink2URL 'http://keyelco.com/userAssets/file/M65p56.pdf'
+PRP DatasheetVersion 'Jun-15'
+PRP Diameter '5.3 mm'
+PRP Forward_Current '3 A'
+PRP Forward_Voltage '1.08 V'
+PRP Height '0.25 inch'
+PRP Length '9.5 mm'
+PRP Max_Operating_Temperature '150 degC'
+PRP Max_Surge_Current '80 A'
+PRP Min_Operating_Temperature '-65 degC'
+PRP Mount 'Through Hole'
+PRP Package_Quantity '500'
+PRP PackageDescription '1-Pin Through Hole Device, Dia 2.54 mm'
+PRP PackageReference '5003'
+PRP Packaging 'Bulk'
+PRP Peak_Reverse_Current '600 uA'
+PRP Pins '2'
+PRP Radiation_Hardening 'No'
+PRP REACH_SVHC 'No SVHC'
+PRP RoHSCompliant 'true'
+PRP Weight '0.01 lb'
+PRP Width '0.25 inch'
+TOP 0 141.224 99.695 90 N 6 0 1
+#
+# CMP 7
+CMP 11 141.224 96.774 90 N X1 5003 ;0=2,1=4.5700
+PRP ComponentLink1Description 'Manufacturer URL'
+PRP ComponentLink1URL 'http://www.keyelco.com/'
+PRP ComponentLink2Description 'Datasheet'
+PRP ComponentLink2URL 'http://keyelco.com/userAssets/file/M65p56.pdf'
+PRP DatasheetVersion 'Jun-15'
+PRP Diameter '5.3 mm'
+PRP Forward_Current '3 A'
+PRP Forward_Voltage '1.08 V'
+PRP Height '0.25 inch'
+PRP Length '9.5 mm'
+PRP Max_Operating_Temperature '150 degC'
+PRP Max_Surge_Current '80 A'
+PRP Min_Operating_Temperature '-65 degC'
+PRP Mount 'Through Hole'
+PRP Package_Quantity '500'
+PRP PackageDescription '1-Pin Through Hole Device, Dia 2.54 mm'
+PRP PackageReference '5003'
+PRP Packaging 'Bulk'
+PRP Peak_Reverse_Current '600 uA'
+PRP Pins '2'
+PRP Radiation_Hardening 'No'
+PRP REACH_SVHC 'No SVHC'
+PRP RoHSCompliant 'true'
+PRP Weight '0.01 lb'
+PRP Width '0.25 inch'
+TOP 0 141.224 96.774 90 N 7 0 1
+#
+# CMP 8
+CMP 2 124.46 87.757 180 N R4 10k ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 125.46000054 87.757 180 N 19 13 1
+TOP 1 123.45999946 87.757 180 N 17 0 2
+#
+# CMP 9
+CMP 2 129.54 85.598 270 N R3 10k ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 129.54 84.59799946 270 N 14 2 1
+TOP 1 129.54 86.59800054 270 N 20 17 2
+#
+# CMP 10
+CMP 2 129.54 81.915 90 N R2 10k ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 129.54 82.91500054 90 N 15 2 1
+TOP 1 129.54 80.91499946 90 N 20 16 2
+#
+# CMP 11
+CMP 2 105.791 85.344 0 N R1 280 ;0=1,1=0.0000
+PRP ComponentLink1Description 'https://nz.mouser.com/datasheet/2/315/AOA0000C304-1149620.pdf'
+PRP LatestRevisionDate '17-Jul-2002'
+PRP LatestRevisionNote 'Re-released for DXP Platform.'
+PRP PackageReference 'AXIAL-0.4'
+PRP Published '8-Jun-2000'
+PRP Publisher 'Altium Limited'
+PRP Value ''
+TOP 0 104.79099946 85.344 0 N 10 3 1
+TOP 1 106.79100054 85.344 0 N 18 1 2
+#
+# CMP 12
+CMP 3 134.366 84.963 0 N U3 INA219AIDR ;0=1,1=0.0000
+PRP Alternate_PartNumber 'INA219BID'
+PRP CompType 'IC'
+PRP Copyright 'Copyright (C) 2026 Ultra Librarian. All rights reserved.'
+PRP Manufacturer 'Texas Instruments'
+PRP Manufacturer_Name 'Texas Instruments'
+PRP Manufacturer_Part_Number 'INA219AIDR'
+PRP MountType 'SMT'
+PRP PackageReference 'D0008A'
+PRP PartNumber 'INA219BIDR'
+PRP RefDes 'RefDes'
+PRP RoHS 'Y'
+PRP Type 'TYPE'
+TOP 0 131.96599972 86.868 270 N 19 10 1
+TOP 1 131.96599972 85.598 270 N 19 9 2
+TOP 2 131.96599972 84.328 270 N 14 0 3
+TOP 3 131.96599972 83.058 270 N 15 0 4
+TOP 4 136.76600028 83.058 270 N 20 4 5
+TOP 5 136.76600028 84.328 270 N 19 8 6
+TOP 6 136.76600028 85.598 270 N 8 4 7
+TOP 7 136.76600028 86.868 270 N 9 5 8
+#
+# CMP 13
+CMP 4 120.523 93.98 180 N U2 STM32G431KBT6 ;0=1,1=0.0000
+TOP 0 124.64848324 91.18000052 180 N 20 13 1
+TOP 1 124.64848324 91.98000146 180 N 0 19 2
+TOP 2 124.64848324 92.77999986 180 N 0 18 3
+TOP 3 124.64848324 93.5800008 180 N 16 2 4
+TOP 4 124.64848324 94.38000174 180 N 7 1 5
+TOP 5 124.64848324 95.18000014 180 N 6 1 6
+TOP 6 124.64848324 95.98000108 180 N 0 17 7
+TOP 7 124.64848324 96.77999948 180 N 0 16 8
+TOP 8 123.32299948 98.10548324 180 N 0 12 9
+TOP 9 122.52299854 98.10548324 180 N 0 11 10
+TOP 10 121.72300014 98.10548324 180 N 0 10 11
+TOP 11 120.9229992 98.10548324 180 N 0 9 12
+TOP 12 120.12299826 98.10548324 180 N 0 8 13
+TOP 13 119.32299986 98.10548324 180 N 19 21 14
+TOP 14 118.52299892 98.10548324 180 N 20 11 15
+TOP 15 117.72300052 98.10548324 180 N 19 20 16
+TOP 16 116.39751676 96.77999948 180 N 20 12 17
+TOP 17 116.39751676 95.98000108 180 N 4 0 18
+TOP 18 116.39751676 95.18000014 180 N 0 15 19
+TOP 19 116.39751676 94.38000174 180 N 0 14 20
+TOP 20 116.39751676 93.5800008 180 N 0 13 21
+TOP 21 116.39751676 92.77999986 180 N 3 0 22
+TOP 22 116.39751676 91.98000146 180 N 12 1 23
+TOP 23 116.39751676 91.18000052 180 N 13 1 24
+TOP 24 117.72300052 89.85451676 180 N 15 1 25
+TOP 25 118.52299892 89.85451676 180 N 11 1 26
+TOP 26 119.32299986 89.85451676 180 N 0 7 27
+TOP 27 120.12299826 89.85451676 180 N 0 6 28
+TOP 28 120.9229992 89.85451676 180 N 0 5 29
+TOP 29 121.72300014 89.85451676 180 N 14 1 30
+TOP 30 122.52299854 89.85451676 180 N 17 1 31
+TOP 31 123.32299948 89.85451676 180 N 19 19 32
+#
+# CMP 14
+CMP 9 105.664 88.519 270 N U1 NCP161ASN330T1G ;0=1,1=0.0000
+PRP Copyright 'Copyright (C) 2026 Ultra Librarian. All rights reserved.'
+PRP Manufacturer_Name 'onsemi'
+PRP Manufacturer_Part_Number 'NCP161ASN330T1G'
+PRP RefDes 'RefDes'
+PRP Type 'Type'
+TOP 0 104.71399936 87.24544908 270 N 10 1 1
+TOP 1 105.664 87.24544908 270 N 19 6 2
+TOP 2 106.61400064 87.24544908 270 N 18 0 3
+TOP 3 106.61400064 89.79255092 270 N 0 4 4
+TOP 4 104.71399936 89.79255092 270 N 20 3 5
+#
+# CMP 15
+CMP 8 123.952 76.2 180 N P1 MTSW-103-07-F-D-244 ;0=2,1=8.9400
+PRP ComponentLink1Description 'Manufacturer URL'
+PRP ComponentLink1URL 'http://www.samtec.com'
+PRP ComponentLink2Description 'Datasheet'
+PRP ComponentLink2URL 'http://www.samtec.com/documents/webfiles/pdf/MTSW.PDF'
+PRP ComponentLink3Description 'Package Specification'
+PRP ComponentLink3URL 'http://www.samtec.com/documents/webfiles/cpdf/MTSW-XXX-XX-X-X-XXXX-XX-XXX-MKT1.pdf'
+PRP DatasheetVersion 'F-214'
+PRP Manufacturer 'Samtec'
+PRP Mounting_Technology 'Through-hole'
+PRP Orientation 'Vertical'
+PRP PackageDescription 'Assembly .025_ [.64] SQ Post Terminal Strip'
+PRP PackageReference 'MTSW-103-07-X-D-244'
+PRP PackageVersion 'BI, 2/1987'
+PRP PartNumber 'MTSW-103-07-F-D-244'
+PRP Pitch '2.54 mm'
+PRP RoHS 'True'
+PRP Temperature_Range '-55 to 125 degC'
+TOP 0 123.952 76.2 180 N 20 2 1
+TOP 1 123.952 73.66 180 N 19 5 2
+TOP 2 121.412 76.2 180 N 16 0 3
+TOP 3 121.412 73.66 180 N 12 0 4
+TOP 4 118.872 76.2 180 N 11 0 5
+TOP 5 118.872 73.66 180 N 13 0 6
+#
+# CMP 16
+CMP 7 146.7499986 74.75000036 180 N VIN- 7771 ;0=2,1=6.5600
+PRP Check_prices 'https://www.snapeda.com/parts/7771/Keystone/view-part/?ref=eda'
+PRP MF 'Keystone Electronics'
+PRP MP '7771'
+PRP Package 'None'
+PRP SnapEDA_Link 'https://www.snapeda.com/parts/7771/Keystone/view-part/?ref=snap'
+PRP Value ''
+TOP 0 149.24999868 78.2549997 180 N 8 2 1_1
+TOP 1 144.24999852 78.2549997 180 N 8 3 1_2
+TOP 2 144.24999852 71.24500102 180 N 0 1 1_3
+TOP 3 149.24999868 71.24500102 180 N 0 0 1_4
+#
+# CMP 17
+CMP 7 146.7499986 112.24999902 180 N VIN+ 7771 ;0=2,1=6.5600
+PRP Check_prices 'https://www.snapeda.com/parts/7771/Keystone/view-part/?ref=eda'
+PRP MF 'Keystone Electronics'
+PRP MP '7771'
+PRP Package 'None'
+PRP SnapEDA_Link 'https://www.snapeda.com/parts/7771/Keystone/view-part/?ref=snap'
+PRP Value ''
+TOP 0 149.24999868 115.75499836 180 N 0 2 1_1
+TOP 1 144.24999852 115.75499836 180 N 0 3 1_2
+TOP 2 144.24999852 108.74499968 180 N 9 4 1_3
+TOP 3 149.24999868 108.74499968 180 N 9 3 1_4
+#
+# CMP 18
+CMP 5 104.648 73.787 0 N J1 M20-9990245 ;0=2,1=0.0000
+PRP Case/Package 'SIL'
+PRP Color 'Black'
+PRP Connector_Type 'Male Pin'
+PRP Contact_Finish_-_Mating 'GOLD'
+PRP Contact_Material 'Brass'
+PRP Contact_Mating_Length '0.24inch'
+PRP Contact_Plating 'Gold'
+PRP Contact_Resistance '25mR'
+PRP Contact_Shape 'Square'
+PRP Contact_Type 'Male Pin'
+PRP Current '3A'
+PRP Current_Rating '3A'
+PRP Depth '2.54mm'
+PRP Fastening_Type 'Pull'
+PRP Flammability_Rating 'UL94 V-0'
+PRP Gender 'Male'
+PRP Height '0.12inch'
+PRP Housing_Color 'Black'
+PRP Housing_Material 'Nylon'
+PRP Insulation_Color 'Black'
+PRP Insulation_Material 'Nylon'
+PRP Insulation_Resistance '10GR'
+PRP Lead_Pitch '2.54mm'
+PRP Length '5.08mm'
+PRP Mated_Stacking_Heights '16.54mm'
+PRP Mating_Cycles '300'
+PRP Max_Current_Rating '3A'
+PRP Max_Operating_Temperature '105°C'
+PRP Min_Operating_Temperature '-40°C'
+PRP Mount 'Through Hole'
+PRP Number_of_Contacts '2'
+PRP Number_of_Poles '2'
+PRP Number_of_Positions '2'
+PRP Number_of_Rows '1'
+PRP Orientation 'Straight'
+PRP Package_Quantity '1000'
+PRP Packaging 'Bulk'
+PRP Pitch '2.54mm'
+PRP Radiation_Hardening 'No'
+PRP Reach_SVHC_Compliant 'Yes'
+PRP Series 'M20'
+PRP Termination 'Solder'
+PRP Voltage '50V'
+PRP Voltage_Rating_(AC) '750V'
+PRP Weight '0.25lb'
+PRP Width '0.25inch'
+PRP Working_Voltage '750V'
+TOP 0 103.378 73.787 0 N 10 0 1
+TOP 1 105.918 73.787 0 N 19 4 2
+#
+# CMP 19
+CMP 0 116.50000068 101.2500007 270 N C14 10n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 116.50000068 100.25000016 270 N 20 8 1
+TOP 1 116.50000068 102.25000124 270 N 19 15 2
+#
+# CMP 20
+CMP 0 118.49999922 101.2500007 270 N C13 1u ;0=1,1=0.0000
+PRP Value ''
+TOP 0 118.49999922 100.25000016 270 N 20 7 1
+TOP 1 118.49999922 102.25000124 270 N 19 14 2
+#
+# CMP 21
+CMP 0 128.74999904 92.25000092 90 N C10 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 128.74999904 93.25000146 90 N 16 1 1
+TOP 1 128.74999904 91.25000038 90 N 19 16 2
+#
+# CMP 22
+CMP 0 136.906 80.137 90 N C9 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 136.906 81.13700054 90 N 20 5 1
+TOP 1 136.906 79.13699946 90 N 19 11 2
+#
+# CMP 23
+CMP 0 134.874 80.137 90 N C8 10u ;0=1,1=0.0000
+PRP Value ''
+TOP 0 134.874 81.13700054 90 N 20 6 1
+TOP 1 134.874 79.13699946 90 N 19 12 2
+#
+# CMP 24
+CMP 0 114.2500001 97.99999958 270 N C7 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 114.2500001 96.99999904 270 N 20 10 1
+TOP 1 114.2500001 99.00000012 270 N 19 18 2
+#
+# CMP 25
+CMP 0 112.24999902 97.99999958 270 N C6 4.7u ;0=1,1=0.0000
+PRP Value ''
+TOP 0 112.24999902 96.99999904 270 N 20 9 1
+TOP 1 112.24999902 99.00000012 270 N 19 17 2
+#
+# CMP 26
+CMP 0 102.616 86.106 90 N C5 1u ;0=1,1=0.0000
+PRP Value ''
+TOP 0 102.616 87.10600054 90 N 10 2 1
+TOP 1 102.616 85.10599946 90 N 19 7 2
+#
+# CMP 27
+CMP 0 103.759 91.44 180 N C4 1u ;0=1,1=0.0000
+PRP Value ''
+TOP 0 104.75900054 91.44 180 N 20 18 1
+TOP 1 102.75899946 91.44 180 N 19 26 2
+#
+# CMP 28
+CMP 0 146.75000114 103.75000078 0 N C3 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 145.7500006 103.75000078 0 N 20 14 1
+TOP 1 147.75000168 103.75000078 0 N 19 24 2
+#
+# CMP 29
+CMP 0 104.521 78.613 0 N C2 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 103.52099946 78.613 0 N 10 4 1
+TOP 1 105.52100054 78.613 0 N 19 22 2
+#
+# CMP 30
+CMP 0 104.521 76.454 0 N C1 100n ;0=1,1=0.0000
+PRP Value ''
+TOP 0 103.52099946 76.454 0 N 10 5 1
+TOP 1 105.52100054 76.454 0 N 19 23 2
+#
+# CMP 31
+CMP 10 146.75000114 100.49999966 270 N B1 CT100LW-FS6 ;0=1,1=0.0000
+PRP Datasheet_Link ''
+PRP Geometry.Height '1.35mm'
+PRP Manufacturer_Name 'Allegro Microsystems'
+PRP Manufacturer_Part_Number 'CT100LW-FS6'
+PRP Mouser_Part_Number ''
+PRP Mouser_Price/Stock ''
+TOP 0 145.8000005 99.24999962 270 N 6 2 1
+TOP 1 146.75000114 99.24999962 270 N 0 21 2
+TOP 2 147.70000178 99.24999962 270 N 7 2 3
+TOP 3 147.70000178 101.7499997 270 N 19 25 4
+TOP 4 146.75000114 101.7499997 270 N 0 20 5
+TOP 5 145.8000005 101.7499997 270 N 20 15 6
+#

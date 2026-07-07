@@ -1,451 +1,158 @@
 *************************************************************
-FileName = TMR_MAGSAT.GBR
-AutoAperture = True
+FileName = TMR_MAGSAT.PcbDoc
+ODB++ directory structure
 *************************************************************
-Generating : Bottom Tenting
-      File : TMR_MAGSAT.GM6
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\profile
 
-    Adding Layer      : Bottom Tenting
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\stephdr
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\attrlist
 
-Used DCodes :
-    D44
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_4\features
 
-*************************************************************
-Generating : Top Tenting
-      File : TMR_MAGSAT.GM4
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_4\attrlist
 
-    Adding Layer      : Top Tenting
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_2\features
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_2\attrlist
 
-Used DCodes :
-    D44
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_1\features
 
-*************************************************************
-Generating : Bottom Layer
-      File : TMR_MAGSAT.GBL
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_1\attrlist
 
-    Adding Layer      : Bottom Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_3\features
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_3\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_5\features
 
-Used DCodes :
-    D35
-    D36
-    D37
-    D40
-    D41
-    D42
-    D43
-    D44
-    D45
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\dielectric_5\attrlist
 
-*************************************************************
-Generating : Bottom Pad Master
-      File : TMR_MAGSAT.GPB
-
-    Adding Layer      : Bottom Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_type_1b\features
 
-    Adding Layer      : Multi-Layer
-
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_type_1b\attrlist
 
-Used DCodes :
-    D35
-    D36
-    D40
-    D41
-    D42
-    D43
-    D45
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_type_1b\tools
 
-*************************************************************
-Generating : Top Pad Master
-      File : TMR_MAGSAT.GPT
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_plated_bottom_layer-top_layer\features
 
-    Adding Layer      : Top Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_plated_bottom_layer-top_layer\attrlist
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_plated_bottom_layer-top_layer\tools
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_1\features
 
-Used DCodes :
-    D17
-    D18
-    D19
-    D20
-    D21
-    D22
-    D23
-    D24
-    D25
-    D35
-    D36
-    D40
-    D41
-    D42
-    D43
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_1\attrlist
 
-*************************************************************
-Generating : Top Overlay
-      File : TMR_MAGSAT.GTO
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_paste\features
 
-    Adding Layer      : Top Overlay
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_paste\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\keep-out_layer\features
 
-Used DCodes :
-    D10
-    D11
-    D12
-    D13
-    D14
-    D15
-    D16
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\keep-out_layer\attrlist
 
-*************************************************************
-Generating : Bottom Overlay
-      File : TMR_MAGSAT.GBO
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_courtyard\features
 
-    Adding Layer      : Bottom Overlay
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_courtyard\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_20\features
 
-Used DCodes :
-    D10
-    D16
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_20\attrlist
 
-*************************************************************
-Generating : Top Solder
-      File : TMR_MAGSAT.GTS
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_component_center\features
 
-    Adding Layer      : Top Solder
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_component_center\attrlist
 
-    Adding Layer      : Top Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_courtyard\features
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_courtyard\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\layer_3_pwr_\features
 
-Used DCodes :
-    D21
-    D22
-    D23
-    D25
-    D26
-    D27
-    D28
-    D29
-    D30
-    D31
-    D32
-    D33
-    D34
-    D35
-    D36
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\layer_3_pwr_\attrlist
 
-*************************************************************
-Generating : Bottom Solder
-      File : TMR_MAGSAT.GBS
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_3d_body\features
 
-    Adding Layer      : Bottom Solder
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_3d_body\attrlist
 
-    Adding Layer      : Bottom Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_component_center\features
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_component_center\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_solder\features
 
-Used DCodes :
-    D31
-    D32
-    D33
-    D34
-    D35
-    D36
-    D45
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_solder\attrlist
 
-*************************************************************
-Generating : Top Paste
-      File : TMR_MAGSAT.GTP
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_15\features
 
-    Adding Layer      : Top Paste
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\mechanical_15\attrlist
 
-    Adding Layer      : Top Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_layer\features
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_layer\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_guide_top_layer-bottom_layer\features
 
-Used DCodes :
-    D17
-    D18
-    D19
-    D20
-    D21
-    D22
-    D23
-    D24
-    D25
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_guide_top_layer-bottom_layer\attrlist
 
-*************************************************************
-Generating : Bottom Paste
-      File : TMR_MAGSAT.GBP
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_guide_type_1b\features
 
-    Adding Layer      : Bottom Paste
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_guide_type_1b\attrlist
 
-    Adding Layer      : Bottom Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\layer_2_gnd_\features
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\layer_2_gnd_\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_drawing_type_1b\features
 
-Used DCodes :
-    D45
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_drawing_type_1b\attrlist
 
-*************************************************************
-Generating : Keep-Out Layer
-      File : TMR_MAGSAT.GKO
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_paste\features
 
-    Adding Layer      : Keep-Out Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_paste\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_overlay\features
 
-Used DCodes :
-    D49
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_overlay\attrlist
 
-*************************************************************
-Generating : Mechanical 1
-      File : TMR_MAGSAT.GM1
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_assembly\features
 
-    Adding Layer      : Mechanical 1
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\bottom_assembly\attrlist
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_drawing_top_layer-bottom_layer\features
 
-Used DCodes :
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\drill_drawing_top_layer-bottom_layer\attrlist
 
-*************************************************************
-Generating : Layer 3(PWR)
-      File : TMR_MAGSAT.G2
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_solder\features
 
-    Adding Layer      : Layer 3(PWR)
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_solder\attrlist
 
-    Adding Layer      : Multi-Layer
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_layer\features
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_layer\attrlist
 
-Used DCodes :
-    D35
-    D36
-    D40
-    D41
-    D42
-    D43
-    D44
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_overlay\features
 
-*************************************************************
-Generating : Bottom Assembly
-      File : TMR_MAGSAT.GM3
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_overlay\attrlist
 
-    Adding Layer      : Bottom Assembly
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_3d_body\features
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_3d_body\attrlist
 
-Used DCodes :
-    D10
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_assembly\features
 
-*************************************************************
-Generating : Bottom 3D Body
-      File : TMR_MAGSAT.GM23
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\top_assembly\attrlist
 
-    Adding Layer      : Bottom 3D Body
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\comp_+_bot\features
 
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\comp_+_bot\components
 
-Used DCodes :
-    D10
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\comp_+_top\features
 
-*************************************************************
-Generating : Top Assembly
-      File : TMR_MAGSAT.GM5
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\layers\comp_+_top\components
 
-    Adding Layer      : Top Assembly
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\steps\pcb\eda\data
 
-
-Used DCodes :
-    D10
-*************************************************************
-
-*************************************************************
-Generating : Bottom Courtyard
-      File : TMR_MAGSAT.GM21
-
-    Adding Layer      : Bottom Courtyard
-
-
-Used DCodes :
-    D10
-*************************************************************
-
-*************************************************************
-Generating : Top Courtyard
-      File : TMR_MAGSAT.GM2
-
-    Adding Layer      : Top Courtyard
-
-
-Used DCodes :
-    D10
-*************************************************************
-
-*************************************************************
-Generating : Bottom Component Center
-      File : TMR_MAGSAT.GM24
-
-    Adding Layer      : Bottom Component Center
-
-
-Used DCodes :
-    D13
-*************************************************************
-
-*************************************************************
-Generating : Layer 2(GND)
-      File : TMR_MAGSAT.G1
-
-    Adding Layer      : Layer 2(GND)
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D35
-    D36
-    D40
-    D41
-    D42
-    D43
-    D44
-*************************************************************
-
-*************************************************************
-Generating : Top Layer
-      File : TMR_MAGSAT.GTL
-
-    Adding Layer      : Top Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D17
-    D18
-    D19
-    D20
-    D21
-    D22
-    D23
-    D24
-    D25
-    D35
-    D36
-    D37
-    D38
-    D39
-    D40
-    D41
-    D42
-    D43
-    D44
-*************************************************************
-
-*************************************************************
-Generating : Top 3D Body
-      File : TMR_MAGSAT.GM13
-
-    Adding Layer      : Top 3D Body
-
-
-Used DCodes :
-    D10
-    D13
-    D14
-    D46
-    D47
-*************************************************************
-
-*************************************************************
-Generating : Mechanical 15
-      File : TMR_MAGSAT.GM15
-
-    Adding Layer      : Mechanical 15
-
-
-Used DCodes :
-    D13
-    D15
-    D48
-*************************************************************
-
-*************************************************************
-Generating : Top Component Center
-      File : TMR_MAGSAT.GM16
-
-    Adding Layer      : Top Component Center
-
-
-Used DCodes :
-    D13
-*************************************************************
-
-*************************************************************
-Generating : Mechanical 20
-      File : TMR_MAGSAT.GM20
-
-    Adding Layer      : Mechanical 20
-
-
-Used DCodes :
-    D48
-*************************************************************
-
-*************************************************************
-Generating : Drill Drawing
-      File : TMR_MAGSAT.GD1
-
-    Adding Drill Pair : Top Layer-Bottom Layer
-
-    Adding Layer      : Drill Drawing
-
-
-Used DCodes :
-    D14
-    D50
-*************************************************************
-
-*************************************************************
-Generating : Drill Guide
-      File : TMR_MAGSAT.GG1
-
-    Adding Drill Pair : Top Layer-Bottom Layer
-
-    Adding Layer      : Drill Guide
-
-
-Used DCodes :
-    D14
-*************************************************************
-
-*************************************************************
-Generating : Profile
-      File : TMR_MAGSAT.GM
-
-
-Used DCodes :
-    D51
-*************************************************************
+Generated File : C:\Users\hye071\Downloads\P4P_TMR\Altium\TMR_MAGSAT\Project Outputs for TMR_MAGSAT\odb\matrix\matrix
 

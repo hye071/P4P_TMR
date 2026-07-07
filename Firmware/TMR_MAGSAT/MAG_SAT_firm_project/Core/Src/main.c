@@ -125,7 +125,6 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) //code doesn't wipe while in while loop
-
   {
 
 	  //generates raw differitianal ADC values from TMR sensor

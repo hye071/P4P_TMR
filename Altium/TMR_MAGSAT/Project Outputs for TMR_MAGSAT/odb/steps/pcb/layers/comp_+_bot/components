@@ -1,0 +1,39 @@
+UNITS=MM
+#
+#Component attribute names
+#
+@0 .comp_mount_type
+@1 .comp_height
+
+# CMP 0
+CMP 6 146.75000114 85.00000018 270 N Rs PA2512FKM7W0R001E ;0=1,1=0.0000
+PRP Automotive 'Yes'
+PRP Automotive_Grade 'Grade 0'
+PRP Category 'Res'
+PRP ComponentLink2Description 'Datasheet'
+PRP ComponentLink2URL 'http://www.yageo.com/documents/recent/PYu-PA_E_51_RoHS_10.pdf'
+PRP Composition 'Metal Element'
+PRP Device_Class_L1 'Passive Components'
+PRP Device_Class_L2 'Resistors'
+PRP Device_Class_L3 'Chip SMD Resistors'
+PRP Digikey_Description 'METAL CURRENT SENSOR 2512 1% 75P'
+PRP Height '0.88mm'
+PRP Ipc_Land_Pattern_Name 'RESC635318X63'
+PRP Lead_Free 'Yes'
+PRP Manufacturer 'Yageo'
+PRP Manufacturer_Part_Number 'PA2512FKM7W0R001E'
+PRP Octopart 'https://octopart.com/pa2512fkm7w0r001e-yageo-94661137'
+PRP Package 'PA2512E-0R001-0R004'
+PRP Power_Rating '2W'
+PRP Resistance '1mO'
+PRP RoHS 'TRUE'
+PRP Series 'PA_E'
+PRP Temperature '-55°C to +170°C'
+PRP Temperature_Coefficient '75ppm/°C'
+PRP Temperature_Range_High '+170°C'
+PRP Temperature_Range_Low '-55°C'
+PRP Tolerance '1%'
+PRP Value '1mO'
+TOP 0 146.75000114 82.7794763 270 N 8 1 1
+TOP 1 146.75000114 87.22052406 270 N 9 2 2
+#
