@@ -23,6 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <stdlib.h>
+
 
 /* USER CODE END Includes */
 
@@ -47,6 +49,15 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 
+volatile uint32_t adc_value = 0;
+volatile float voltage_difference = 0.0f;
+volatile float current_amps = 0.0f;
+
+const float V_REF = 3.3f;
+uint8_t raw_current_bytes[2] = {0};
+int16_t raw_current_value = 0;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,6 +71,15 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+// Redirect printf to the SWV/ITM hardware trace port
+int __io_putchar(int ch)
+{
+    // This built-in CMSIS function automatically targets ITM Stimulus Port 0
+    ITM_SendChar(ch);
+    return ch;
+}
+
 
 /* USER CODE END 0 */
 
@@ -79,6 +99,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
 
   /* USER CODE END Init */
 
@@ -111,12 +132,12 @@ int main(void)
    HAL_I2C_Mem_Write(&hi2c1, INA219_ADDR, REG_CAL, I2C_MEMADD_SIZE_8BIT, cal_data, 2, 100);
 
    //Variables set up
-   uint32_t adc_value = 0;
-   float voltage_difference = 0.0f; //X1-X2(V)
-   const float V_REF = 3.3f; //Board reference voltage (3V3) (V)
-   float current_amps = 0.0f; //shunt current(A)
-   uint8_t raw_current_bytes[2] = {0};
-   int16_t raw_current_value = 0;
+//   uint32_t adc_value = 0;
+//   float voltage_difference = 0.0f; //X1-X2(V)
+//   const float V_REF = 3.3f; //Board reference voltage (3V3) (V)
+//   float current_amps = 0.0f; //shunt current(A)
+//   uint8_t raw_current_bytes[2] = {0};
+//   int16_t raw_current_value = 0;
 
   /* USER CODE END 2 */
 

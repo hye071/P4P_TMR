@@ -1,0 +1,16 @@
+!SESSION 2026-07-14 23:33:05.312 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_NZ
+Framework arguments:  C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-07-14 23:33:09.560
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-07-14 23:33:09.568
+!MESSAGE Log4j2 initialized with config file C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-07-14 23:33:11.677
+!MESSAGE Started RMI Server, listening on port 41337
