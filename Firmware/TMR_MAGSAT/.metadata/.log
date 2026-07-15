@@ -517,3 +517,46 @@ java.lang.NullPointerException: Cannot read the array length because "containers
 
 !ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 00:13:06.883
 !MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+!SESSION 2026-07-15 16:02:42.097 -----------------------------------------------
+eclipse.buildId=Version 1.15.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_NZ
+Framework arguments:  C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-07-15 16:03:36.467
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-07-15 16:03:36.467
+!MESSAGE Log4j2 initialized with config file C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-07-15 16:03:43.176
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-07-15 16:03:46.737
+!MESSAGE Indexed 'MAG_SAT_firm_project' (26 sources, 107 headers) in 3.37 sec: 10,641 declarations; 49,448 references; 3 unresolved inclusions; 46 syntax errors; 171 unresolved names (0.28%)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 16:06:23.747
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:24:02.409
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:29:24.637
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:42:26.615
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:45:40.285
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:52:31.436
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:53:47.677
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.swv 1 1 2026-07-15 17:57:12.956
+!MESSAGE SWV configuration; base: 36000000; minDiv: 18; maxDiv: 65535; maxSWO: 2000000; limit: 2000000 => SWO: 2000000; CPU: 170000000; div: 85

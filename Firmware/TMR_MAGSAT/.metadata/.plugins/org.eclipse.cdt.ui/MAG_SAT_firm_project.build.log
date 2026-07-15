@@ -1,10 +1,10 @@
-00:13:01 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+17:57:07 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
 make -j12 all 
 arm-none-eabi-size  MAG_SAT_firm_project.elf 
    text	   data	    bss	    dec	    hex	filename
-  31444	    476	   2108	  34028	   84ec	MAG_SAT_firm_project.elf
+  31276	    476	   2108	  33860	   8444	MAG_SAT_firm_project.elf
 Finished building: default.size.stdout
  
 
-00:13:01 Build Finished. 0 errors, 0 warnings. (took 313ms)
+17:57:08 Build Finished. 0 errors, 0 warnings. (took 292ms)
 

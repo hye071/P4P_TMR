@@ -159,6 +159,7 @@ int main(void)
 	      //Converting Raw ADC to Analog Voltage
 	      voltage_difference =  ((float)adc_value - 2048.0f) / 2048.0f * V_REF;
 
+
 	      //Using LED to determine polarity of the field
 
 
@@ -175,14 +176,16 @@ int main(void)
 
     // debugging LEDs testing code
 
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // Toggle Pin
-	  HAL_Delay(500); // Delay 500ms
-
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12); // Toggle Pin
-	  HAL_Delay(500); // Delay 500ms
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // Toggle Pin
+//	  HAL_Delay(500); // Delay 500ms
+//
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12); // Toggle Pin
+//	  HAL_Delay(500); // Delay 500ms
 
 	  /* Terminal Output via SWO Programmer */
-	        printf("TMR: %.4f V | Current: %.3f A\r\n", voltage_difference, current_amps);
+
+//	      	HAL_Delay(10); // Delay 10ms
+	      	printf("%d,%.4f,%.3f\r\n", HAL_GetTick(), voltage_difference, current_amps);
 
 
   }
