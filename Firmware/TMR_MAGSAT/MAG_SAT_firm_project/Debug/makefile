@@ -60,8 +60,8 @@ all: main-build
 main-build: MAG_SAT_firm_project.elf secondary-outputs
 
 # Tool invocations
-MAG_SAT_firm_project.elf MAG_SAT_firm_project.map: $(OBJS) $(USER_OBJS) C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\STM32G431KBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MAG_SAT_firm_project.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\repo\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MAG_SAT_firm_project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+MAG_SAT_firm_project.elf MAG_SAT_firm_project.map: $(OBJS) $(USER_OBJS) C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\STM32G431KBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MAG_SAT_firm_project.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MAG_SAT_firm_project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
