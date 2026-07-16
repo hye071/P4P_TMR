@@ -20,7 +20,7 @@ figure('Color', [1 1 1], 'Position', [100, 100, 1000, 450]);
 % Subplot 1: Floating Voltage
 subplot(1, 2, 1);
 plot(timeSeconds, voltage, '-b', 'LineWidth', 1.5);
-title('Floating Voltage vs. Time');
+title('Voltage vs. Time');
 xlabel('Time (Seconds)');
 ylabel('Voltage (V)');
 grid on;
