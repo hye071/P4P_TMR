@@ -1,7 +1,7 @@
 clear; clc; close all;
 
 % 1. Read the raw matrix (readmatrix automatically ignores the text header line)
-rawData = readmatrix('telemetry.csv');
+rawData = readmatrix('telemetry3.csv');
 
 % 2. Strip out any accidental empty/NaN rows
 rawData(any(isnan(rawData), 2), :) = [];

@@ -185,7 +185,7 @@ int main(void)
 	  /* Terminal Output via SWO Programmer */
 
 //	      	HAL_Delay(10); // Delay 10ms
-	      	printf("%d,%.4f,%.3f\r\n", HAL_GetTick(), voltage_difference, current_amps);
+	    //  	printf("%d,%.4f,%.3f\r\n", HAL_GetTick(), voltage_difference, current_amps);
 
 
   }
