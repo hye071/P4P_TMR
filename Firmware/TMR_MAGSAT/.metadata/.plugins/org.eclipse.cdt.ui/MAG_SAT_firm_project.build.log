@@ -1,18 +1,10 @@
-20:40:20 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+13:16:02 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
 make -j28 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32G431xx -DUSE_HAL_DRIVER -DDEBUG -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc -o "MAG_SAT_firm_project.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\hye071\Downloads\P4P_TMR\Firmware\TMR_MAGSAT\MAG_SAT_firm_project\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MAG_SAT_firm_project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
-C:/ST/STM32CubeIDE_1.15.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.0.100.202403111256/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: warning: MAG_SAT_firm_project.elf has a LOAD segment with RWX permissions
-Finished building target: MAG_SAT_firm_project.elf
- 
 arm-none-eabi-size  MAG_SAT_firm_project.elf 
-arm-none-eabi-objdump -h -S MAG_SAT_firm_project.elf  > "MAG_SAT_firm_project.list"
    text	   data	    bss	    dec	    hex	filename
   31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
 Finished building: default.size.stdout
  
-Finished building: MAG_SAT_firm_project.list
- 
 
-20:40:23 Build Finished. 0 errors, 1 warnings. (took 2s.986ms)
+13:16:03 Build Finished. 0 errors, 0 warnings. (took 497ms)
 

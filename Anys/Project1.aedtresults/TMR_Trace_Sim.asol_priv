@@ -1,0 +1,99 @@
+$begin '$base_index$'
+  $begin 'properties'
+    all_levels=000000000000
+    time(year=000000002026, month=000000000007, day=000000000021, hour=000000000013, min=000000000002, sec=000000000036)
+    version=000000000000
+  $end 'properties'
+  $begin '$base_index$'
+    $index$(pos=000000000000, lin=000000000001, lvl=000000000000)
+  $end '$base_index$'
+$end '$base_index$'
+$begin 'SolutionBlock28'
+	SimSetupID=5
+	SimSetupName='Setup1'
+	VersionID=171
+	SolveSetupID=0
+	$begin 'CurrMeshes'
+		IDDblMap(41, -1)
+		$begin 'DataMap'
+			VID=38
+			Ver=171
+			M(DblID=41, Dir='DV38_S5_V171.cmesh41/')
+		$end 'DataMap'
+	$end 'CurrMeshes'
+	$begin 'LastPassNumbers'
+		LP(VID=38, Ver=171, P=10)
+	$end 'LastPassNumbers'
+	$begin 'Profiles'
+		Vmap(171, 208)
+		P(VID=38, Ver=171, File='DV38_S5_V208.profile')
+	$end 'Profiles'
+	$begin 'MI'
+		$begin 'SubData'
+			ID=0
+			MI(VID=38, Ver=171, Dir='DV38_S5_MI0_V171.sd/')
+		$end 'SubData'
+	$end 'MI'
+$end 'SolutionBlock28'
+$begin 'BlockMapName'
+	FileHeader='SolutionBlock4'
+	'SolutionKey(SimSetup=5, Instance=\'\', Solution=-3, VersionID=171)'='SolutionBlock29'
+	'SolutionKey(SimSetup=5, Instance=\'SetupDefinition\', Solution=-1, VersionID=171)'='SolutionBlock28'
+	'SolutionKey(SimSetup=5, Instance=\'SolutionDefinition\', Solution=6, VersionID=171)'='SolutionBlock26'
+	'SolutionKey(SimSetup=5, Instance=\'SolutionDefinition\', Solution=7, VersionID=171)'='SolutionBlock27'
+$end 'BlockMapName'
+$begin 'SolutionBlock4'
+	ProductName=''
+	CircuitName='TMR_Trace_Sim'
+	VersionID=171
+	PostProcess=false
+	LossLess=true
+	NextUniqueID=218
+	MoveBackwards=false
+	$begin 'VariationIDs'
+		Map(V='', ID=38)
+	$end 'VariationIDs'
+	$begin 'LinkedDataList'
+	$end 'LinkedDataList'
+	$begin 'InitialMeshes'
+		M(VID=38, Ver=171, Dir='DV38_V171.imesh/')
+	$end 'InitialMeshes'
+	$begin 'MI'
+		$begin 'SubData'
+			ID=0
+			MI(VID=38, Ver=171, Dir='DV38_MI0_V171.sd/')
+		$end 'SubData'
+	$end 'MI'
+$end 'SolutionBlock4'
+$begin 'SolutionBlock27'
+	SolutionName='LastAdaptive'
+	SolutionID=7
+	V=171
+	$begin 'States'
+		F(VID=38, Ver=171)
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies()
+		SolutionType=1
+		CenterFreq=0
+	$end 'Definition'
+	$begin 'Fields'
+		Vmap(171, 211)
+		IDDblMap(43, -1)
+		$begin 'DataMap'
+			VID=38
+			Ver=171
+			Field(DblID=43, Dir='DV38_SOL7_V211.Field43/')
+		$end 'DataMap'
+	$end 'Fields'
+	$begin 'PD'
+		NextUniqueID=135
+		MoveBackwards=false
+		$begin 'SubData'
+			ID=0
+			Ver=120
+			PD(VID=38, Ver=120, File='DV38_SOL7_PD0_V120.sd')
+		$end 'SubData'
+	$end 'PD'
+$end 'SolutionBlock27'
