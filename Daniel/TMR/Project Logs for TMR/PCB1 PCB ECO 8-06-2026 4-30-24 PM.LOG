@@ -1,0 +1,7 @@
+Change Component Designator: OldDesignator=J? NewDesignator=J3
+Change Component Designator: OldDesignator=J? NewDesignator=J4
+Change Component Designator: OldDesignator=J? NewDesignator=J5
+Change Component Designator: OldDesignator=J? NewDesignator=J6
+Added Member To Class: ClassName=Sheet1 Member=Component J3 Test pin
+Added Member To Class: ClassName=Sheet1 Member=Component J4 Test pin
+Added Member To Class: ClassName=Sheet1 Member=Component J5 Test pin

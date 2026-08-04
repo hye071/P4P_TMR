@@ -1,0 +1,31 @@
+Added Component: Designator=B1(SOT95P280X135-6N)
+Add component (AddParameter): Name = "Datasheet Link"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Geometry.Height"; Value = "1.35mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Name"; Value = "Allegro Microsystems"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "CT100LW-FS6"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Part Number"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mouser Price/Stock"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=C1(ece-RAD0.2)
+Add component (AddParameter): Name = "Value"; Value = "0.1 uF"; VariantName = "[No Variations]"
+Added Component: Designator=P1(ece-TER-2.02)
+Added Component: Designator=P2(ece-TER-2.02)
+Added Pin To Net: NetName=GND Pin=B1-2
+Added Pin To Net: NetName=GND Pin=B1-4
+Added Pin To Net: NetName=GND Pin=B1-5
+Added Pin To Net: NetName=GND Pin=C1-2
+Added Pin To Net: NetName=GND Pin=P1-2
+Added Net: Name=GND
+Added Pin To Net: NetName=VDD Pin=B1-6
+Added Pin To Net: NetName=VDD Pin=C1-1
+Added Pin To Net: NetName=VDD Pin=P1-1
+Added Net: Name=VDD
+Added Pin To Net: NetName=X1 Pin=B1-3
+Added Pin To Net: NetName=X1 Pin=P2-1
+Added Net: Name=X1
+Added Pin To Net: NetName=X2 Pin=B1-1
+Added Pin To Net: NetName=X2 Pin=P2-2
+Added Net: Name=X2
+Added Member To Class: ClassName=Sheet1 Member=Component B1 CT100LW-FS6
+Added Member To Class: ClassName=Sheet1 Member=Component C1 0.1 uF
+Added Member To Class: ClassName=Sheet1 Member=Component P1 Connector2way
+Added Member To Class: ClassName=Sheet1 Member=Component P2 Connector2way
