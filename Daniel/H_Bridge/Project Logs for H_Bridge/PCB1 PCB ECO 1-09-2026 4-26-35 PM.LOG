@@ -1,0 +1,126 @@
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 CAP
+Add Component: Footprint Not Found 0805 LED
+Add Component: Footprint Not Found 0805 LED
+Add Component: Footprint Not Found 0805 LED
+Add Component: Footprint Not Found 0805 LED
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Add Component: Footprint Not Found FP-M20-9990245-MFG
+Added Component: Designator=P1(SMTC-MTSW-103-07-X-D-244)
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Manufacturer URL"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.samtec.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.samtec.com/documents/webfiles/pdf/MTSW.PDF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3Description"; Value = "Package Specification"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3URL"; Value = "http://www.samtec.com/documents/webfiles/cpdf/MTSW-XXX-XX-X-X-XXXX-XX-XXX-MKT1.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "F-214"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Samtec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Technology"; Value = "Through-hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Orientation"; Value = "Vertical"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Assembly .025" [.64] SQ Post Terminal Strip"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "MTSW-103-07-X-D-244"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageVersion"; Value = "BI, 2/1987"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PartNumber"; Value = "MTSW-103-07-F-D-244"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pitch"; Value = "2.54 mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RoHS"; Value = "True"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Temperature Range"; Value = "-55 to 125 degC"; VariantName = "[No Variations]"
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found 0805 RES
+Add Component: Footprint Not Found TP_TH
+Add Component: Footprint Not Found TP_TH
+Add Component: Footprint Not Found TP_TH
+Add Component: Footprint Not Found TP_TH
+Add Component: Footprint Not Found TP_TH
+Add Component: Footprint Not Found TP_TH
+Added Component: Designator=U1(FP-LQFP32-5V-IPC_B)
+Add Component: Footprint Not Found SOT23_527AH_ONS
+Add Component: Footprint Not Found SOP100P1030X260-13N
+Add Component: Footprint Not Found SOT23_527AH_ONS
+Add Component: Footprint Not Found SOP100P1030X260-13N
+Added Pin To Net: NetName=3V3 Pin=P1-6
+Added Pin To Net: NetName=3V3 Pin=U1-1
+Added Pin To Net: NetName=3V3 Pin=U1-15
+Added Pin To Net: NetName=3V3 Pin=U1-17
+Added Net: Name=3V3
+Added Net: Name=5V
+Added Pin To Net: NetName=CSN Pin=U1-9
+Added Net: Name=CSN
+Added Pin To Net: NetName=DEBUG1 Pin=U1-19
+Added Net: Name=DEBUG1
+Added Pin To Net: NetName=DEBUG2 Pin=U1-20
+Added Net: Name=DEBUG2
+Added Pin To Net: NetName=DIR Pin=U1-29
+Added Net: Name=DIR
+Added Pin To Net: NetName=DIS Pin=U1-30
+Added Net: Name=DIS
+Added Pin To Net: NetName=GND Pin=P1-5
+Added Pin To Net: NetName=GND Pin=U1-14
+Added Pin To Net: NetName=GND Pin=U1-16
+Added Pin To Net: NetName=GND Pin=U1-32
+Added Net: Name=GND
+Added Net: Name=NetD1_1
+Added Net: Name=NetD2_1
+Added Net: Name=NetD3_1
+Added Net: Name=NetD4_1
+Added Net: Name=NetR2_1
+Added Pin To Net: NetName=NetR3_1 Pin=U1-31
+Added Net: Name=NetR3_1
+Added Net: Name=NetR7_1
+Added Pin To Net: NetName=NRST Pin=P1-4
+Added Pin To Net: NetName=NRST Pin=U1-4
+Added Net: Name=NRST
+Added Net: Name=PELTIER1
+Added Net: Name=PELTIER2
+Added Pin To Net: NetName=PWM Pin=U1-18
+Added Net: Name=PWM
+Added Pin To Net: NetName=SPI1_MISO Pin=U1-11
+Added Net: Name=SPI1_MISO
+Added Pin To Net: NetName=SPI1_MOSI Pin=U1-12
+Added Net: Name=SPI1_MOSI
+Added Pin To Net: NetName=SPI1_SCK Pin=U1-10
+Added Net: Name=SPI1_SCK
+Added Pin To Net: NetName=SWCLK Pin=P1-1
+Added Pin To Net: NetName=SWCLK Pin=U1-24
+Added Net: Name=SWCLK
+Added Pin To Net: NetName=SWDIO Pin=P1-3
+Added Pin To Net: NetName=SWDIO Pin=U1-23
+Added Net: Name=SWDIO
+Added Pin To Net: NetName=SWO Pin=P1-2
+Added Pin To Net: NetName=SWO Pin=U1-26
+Added Net: Name=SWO
+Added Net: Name=V_IN
+Added Pin To Net: NetName=X1 Pin=U1-5
+Added Net: Name=X1
+Added Pin To Net: NetName=X2 Pin=U1-6
+Added Net: Name=X2
+Added Class: Name=H_Bridge

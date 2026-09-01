@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=P3 NewDesignator=SPI1_MOSI
+Change Component Designator: OldDesignator=P4 NewDesignator=DIR
+Change Component Designator: OldDesignator=P5 NewDesignator=SPI1_MISO
+Change Component Designator: OldDesignator=P6 NewDesignator=PWM
+Change Component Designator: OldDesignator=P7 NewDesignator=CSN
+Change Component Designator: OldDesignator=P9 NewDesignator=SPI1_SCK

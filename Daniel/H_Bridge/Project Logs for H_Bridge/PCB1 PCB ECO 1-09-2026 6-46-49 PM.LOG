@@ -1,0 +1,3 @@
+Change Component Designator: OldDesignator=SPI1_MISO NewDesignator=MISO
+Change Component Designator: OldDesignator=SPI1_MOSI NewDesignator=MOSI
+Change Component Designator: OldDesignator=SPI1_SCK NewDesignator=SCK
