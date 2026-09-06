@@ -21,7 +21,7 @@
 clear; clc; close all;
 
 %% ---- User setting ----
-filename = 'swv_trace.txt';   % <-- change this if the file lives elsewhere
+filename = '0A_NS3_INA.txt';   % <-- change this if the file lives elsewhere
 
 %% ---- Read the file as raw bytes ----
 % The export is ISO-8859-1 (Latin-1) encoded -- that's the encoding behind
@@ -125,6 +125,36 @@ end
 value  = value(~isGlitch);
 cycles = cycles(~isGlitch);
 timeS  = timeS(~isGlitch);
+
+%% ---- Sanity check: what time span does this trace actually cover? ----
+fprintf('Data time span: %.6f s to %.6f s (%d points)\n', min(timeS), max(timeS), numel(timeS));
+if any(isnan(value))
+    fprintf('Warning: %d NaN value(s) found in the data.\n', sum(isnan(value)));
+end
+
+%% ---- Average value over a specified time range ----
+tRangeStart = 0;   % seconds -- edit to fall inside the span printed above
+tRangeEnd   = 20;   % seconds -- edit to fall inside the span printed above
+
+inRange = timeS >= tRangeStart & timeS <= tRangeEnd;
+if ~any(inRange)
+    warning('parse_swv_trace:emptyRange', ...
+        'No samples found in [%.3f, %.3f] s -- check tRangeStart/tRangeEnd against the time span above.', ...
+        tRangeStart, tRangeEnd);
+    avgValue = NaN;
+    stdValue = NaN;
+else
+    avgValue = mean(value(inRange), 'omitnan');
+    stdValue = std(value(inRange), 'omitnan');
+    fprintf('Mean %s over [%.3f, %.3f] s: %.6f\n', varName, tRangeStart, tRangeEnd, avgValue);
+    fprintf('Std dev over that window: %.6f\n', stdValue);
+end
+
+
+
+
+
+
 
 %% ---- Plot value vs time ----
 figure;

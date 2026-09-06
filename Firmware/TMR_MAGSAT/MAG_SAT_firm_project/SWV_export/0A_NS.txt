@@ -1,0 +1,4 @@
+SWV Data Trace - Watch
+"1";"current_amps";"0.0"
+SWV Data Trace - History
+"WRITE";"0.0";"";"941121";"58.820063 ms"
