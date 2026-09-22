@@ -1511,3 +1511,283 @@ arm-none-eabi-size  MAG_SAT_firm_project.elf
   31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
 Finished building: default.size.stdout
  
+19:56:27 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:56:50 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:57:07 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:57:37 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:57:53 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:59:00 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:59:16 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+19:59:46 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+20:18:26 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+20:18:49 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+22:06:56 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+22:41:10 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+22:46:17 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+22:57:01 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:02:30 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:04:57 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:07:37 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:07:52 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:12:04 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:12:44 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:16:15 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+23:30:49 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:23:51 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:24:07 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:31:24 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:35:54 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:51:23 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:51:57 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:52:09 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+15:55:40 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:31:16 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:34:13 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:38:33 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:41:26 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:41:38 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:48:30 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:51:28 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:55:35 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:55:47 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 
+16:58:50 **** Incremental Build of configuration Debug for project MAG_SAT_firm_project ****
+make -j28 all 
+arm-none-eabi-size  MAG_SAT_firm_project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  31176	    476	   2108	  33760	   83e0	MAG_SAT_firm_project.elf
+Finished building: default.size.stdout
+ 

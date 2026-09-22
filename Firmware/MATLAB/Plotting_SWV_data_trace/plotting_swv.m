@@ -21,7 +21,7 @@
 clear; clc; close all;
 
 %% ---- User setting ----
-filename = '-502mA_NSR.txt';   % <-- change this if the file lives elsewhere
+filename = '-2999mA_NSR_INA.txt';   % <-- change this if the file lives elsewhere
 
 %% ---- Read the file as raw bytes ----
 % The export is ISO-8859-1 (Latin-1) encoded -- that's the encoding behind
