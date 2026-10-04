@@ -18,27 +18,24 @@
 \contentsline {subsection}{\numberline {6.3}Sensor-Only Saturation and Recovery Behaviour}{8}{subsection.6.3}%
 \contentsline {section}{\numberline {7}Integrated Board: Field Excitation and Design}{10}{section.7}%
 \contentsline {subsection}{\numberline {7.1}Integrated Board Design}{10}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Analytical Field Model}{10}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Simulated vs.\ Experimental Field Validation}{11}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}PCB Substrate and Trace Design}{12}{subsection.7.4}%
-\contentsline {subsection}{\numberline {7.5}Current Sensing and Field Back-Calculation}{12}{subsection.7.5}%
-\contentsline {subsection}{\numberline {7.6}Firmware}{12}{subsection.7.6}%
-\contentsline {subsection}{\numberline {7.7}Design Note for Future PCB Revisions}{13}{subsection.7.7}%
-\contentsline {section}{\numberline {8}Instrumentation Cross-Validation}{13}{section.8}%
-\contentsline {section}{\numberline {9}Non-Irradiated Sensitivity and Saturation Characterisation}{14}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Data Collection Method}{14}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Current Sweep: Data and Sensitivity Fit}{14}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Field-Model vs.\ Measurement Discrepancy}{15}{subsection.9.3}%
-\contentsline {subsection}{\numberline {9.4}Saturation Recovery on the Integrated Board}{15}{subsection.9.4}%
-\contentsline {section}{\numberline {10}Radiation Testing (Total Ionising Dose)}{15}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Rationale and Test Isolation Strategy}{15}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Experimental Setup}{16}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Sensor-Only Board Response Post-Irradiation}{16}{subsection.10.3}%
-\contentsline {subsection}{\numberline {10.4}Quantitative Sweep on the Integrated Board}{16}{subsection.10.4}%
-\contentsline {section}{\numberline {11}Magnetic Shielding}{17}{section.11}%
-\contentsline {subsection}{\numberline {11.1}Enclosure Design}{17}{subsection.11.1}%
-\contentsline {subsection}{\numberline {11.2}Shielded Sweep Results}{18}{subsection.11.2}%
-\contentsline {subsection}{\numberline {11.3}Combined Radiation and Shielding Results}{18}{subsection.11.3}%
-\contentsline {section}{\numberline {12}Discussion}{19}{section.12}%
-\contentsline {section}{\numberline {13}Conclusions and Future Work}{20}{section.13}%
-\contentsline {section}{References}{22}{section*.19}%
+\contentsline {subsection}{\numberline {7.2}PCB Trace Design}{11}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Analytical Field Model}{12}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Simulated vs.\ Experimental Field Validation}{12}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Firmware}{12}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.6}Design Note for Future PCB Revisions}{13}{subsection.7.6}%
+\contentsline {section}{\numberline {8}Non-Irradiated Sensitivity and Saturation Characterisation}{13}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Data Collection Method}{13}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Saturation Recovery on the Integrated Board}{13}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Current Sweep: Data and Sensitivity Fit}{14}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Radiation Testing (Total Ionising Dose)}{16}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Rationale and Test Isolation Strategy}{16}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Experimental Setup}{16}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Sensor-Only Board Response Post-Irradiation}{17}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Quantitative Sweep on the Integrated Board}{17}{subsection.9.4}%
+\contentsline {section}{\numberline {10}Magnetic Shielding}{18}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Enclosure Design}{18}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Shielded Sweep Results}{18}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Combined Radiation and Shielding Results}{19}{subsection.10.3}%
+\contentsline {section}{\numberline {11}Discussion}{20}{section.11}%
+\contentsline {section}{\numberline {12}Conclusions and Future Work}{21}{section.12}%
+\contentsline {section}{References}{23}{section*.21}%
