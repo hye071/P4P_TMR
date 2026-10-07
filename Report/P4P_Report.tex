@@ -213,9 +213,9 @@ The \mbox{CT100LW-FS6} supports a supply voltage range of \SI{1.0}{\volt} to \SI
 \subsection{Physical Operating Principle}
 \label{sec:ct100-principle}
 
-The CT100LW-FS6, like other TMR devices is built around magnetic tunnel junctions (MTJs): a pinned ferromagnetic reference layer, an ultra-thin (\textasciitilde\SI{2}{\nano\metre}) insulating crystalline magnesium oxide (MgO) layer -- and a magnetically free ferromagnetic layer. 
+The CT100LW-FS6, like other TMR devices is built around magnetic tunnel junctions (MTJs): a pinned ferromagnetic reference layer, an ultra-thin (\textasciitilde\SI{2}{\nano\metre}) insulating crystalline magnesium oxide (MgO) layer and a magnetically free ferromagnetic layer. 
 
-Conduction through the junction is done under the quantum tunnelling property, in which electrons have a nonzero probability of passing through the MgO barrier. Below is a figure denoting the MTJs equivalent circuit model.
+Conduction through the junction is done under the quantum tunnelling property, in which electrons have a nonzero probability of passing through the MgO barrier. Figure~\ref{fig:mtj_equivalent_structure} denotes the MTJs equivalent circuit model.
 
 \begin{figure}[htbp]
   \centering
@@ -266,17 +266,21 @@ Conduction through the junction is done under the quantum tunnelling property, i
     \node[right] at (6.8, 1.5) {$R_{}$};
 
   \end{circuitikz}
-  \caption{Equivalent electrical circuit model equating a standard variable resistor (left) to the physical three-layer Magnetic Tunnel Junction (MTJ) stack structure (right).}
+  \caption{Equivalent electrical circuit model equating a standard variable resistor (left) to the physical three-layer Magnetic Tunnel Junction stack structure (right).}
   \label{fig:mtj_equivalent_structure}
 \end{figure}
 
-The basic operation of the Magnetic Tunnel Junction (MTJ) comes down to how easily electrons can pass through the thin insulating barrier (MgO) placed between two ferromagnetic layers. The bottom layer serves as a fixed reference with a locked magnetic direction, while the top free layer can rotate its magnetic orientation $360^\circ$ to match an external magnetic field.
+The basic operation of the MTJ comes down to how easily electrons can pass through the MgO barrier placed between two ferromagnetic layers. The bottom layer serves as a fixed reference with a locked magnetic direction, while the top free layer can rotate its magnetic orientation $360^\circ$ to align an external magnetic field.
 
-When an external field aligns the free layer's direction parallel ($0^\circ$) with the reference layer, electrons hop across the insulating barrier much more easily. Higher electron movement per unit of time represents a greater amount of electrical charge ($\Delta Q$) passing through the barrier over time ($\Delta t$). By definition, electric current is the rate of charge flow per unit time:
+When an external field aligns the free layer's direction  ($0^\circ$) with the bottom reference layer, electrons hop across the insulating barrier much more easily. Higher electron movement per unit of time represents a greater amount of electrical charge $\Delta Q$ passing through the barrier over time $\Delta t$. By definition, current is the rate of charge flow per unit of time:
 \begin{equation}
     I = \frac{\Delta Q}{\Delta t}
 \end{equation}
-Therefore, this increased charge movement results in a higher current flow ($I$) for a constant supply voltage ($V_{\text{DD}}$), putting the sensor into its lowest resistance state ($R = \frac{V_{\text{DD}}}{I}$). Conversely, when the field points in the opposite direction ($180^\circ$), fewer electrons can cross, restricting current flow and increasing resistance. If the external magnetic field is applied strictly orthogonal ($90^\circ$) to the fixed reference direction, the sensor cannot detect it, making the element effectively blind to perpendicular fields.
+Therefore, this increased charge movement results in a higher current flow $I$ for a constant supply voltage $V_{\text{DD}}$, putting the sensor into its parallel, lowest resistance state $R = \frac{V_{\text{DD}}}{I}$. Conversely, when the field lines points in the opposite direction ($180^\circ$), fewer electrons can cross, restricting current flow and increasing resistance. If the external magnetic field is applied orthogonal to the fixed reference direction, the sensor cannot detect it, making the element effectively blind to perpendicular fields. Hence, a TMR element can be modelled as a variable resister where it's resistance varies dependant on the polarity and strength of an external magnetic field. 
+
+
+fix this othongal thing just means we don't know what axis the field is more towards parlell or anti parell kinda thing
+
 
 \subsection{Bridge Topology, Output Convention, and Saturation Ceiling}
 \label{sec:bridge-topology}
@@ -284,7 +288,7 @@ Therefore, this increased charge movement results in a higher current flow ($I$)
 
 
 
-The CT100 arranges four such TMR elements in a passive Wheatstone bridge configuration (Figure~\ref{fig:wheatstone_comparison}).
+The CT100LW-FS6 ( I will refer to the device as the CT100 ) arranges four such TMR elements in a passive Wheatstone bridge configuration as seen in Figure~\ref{fig:wheatstone_comparison}.
 
 
 \begin{figure}[htbp]
@@ -344,13 +348,13 @@ The CT100 arranges four such TMR elements in a passive Wheatstone bridge configu
 
 
 % 2. MATHEMATICAL DERIVATION SECOND
-The CT100 arranges four internal TMR elements in a passive Wheatstone bridge configuration (Figure~\ref{fig:wheatstone_comparison}a). According to the device datasheet, the per-element resistance ranges from $R_{\min} \approx \SI{20}{\kilo\ohm}$ (parallel magnetic alignment, lowest-resistance state) to $R_{\max} \approx \SI{40}{\kilo\ohm}$ (antiparallel magnetic alignment, highest-resistance state). 
+To predict the maximum differential output voltage prior to saturation, the CT100's internal TMR Wheatstone bridge (Figure~\ref{fig:wheatstone_comparison}a) was evaluated theoretically. An equivalent schematic with explicitly labeled internal elements is provided in Figure~\ref{fig:wheatstone_comparison}b to aid in following the derivation below.  According to the device datasheet, the per-element resistance ranges from $R_{\min} \approx \SI{20}{\kilo\ohm}$ where the element experiences parallel magnetic alignment, lowest-resistance state) to $R_{\max} \approx \SI{40}{\kilo\ohm}$ (antiparallel magnetic alignment, highest-resistance state). 
 
-As a result of this Wheatstone-bridge configuration, the largest change in $V_{\text{out}}$ is $\frac{V_{\text{DD}}}{3}$:
+As a result of this Wheatstone-bridge configuration, the largest change in $\left|V_{\text{out}} \right|$ is $\frac{V_{\text{DD}}}{3}$:
 \begin{equation}
-    \Delta V_{\text{out,max}} = \frac{V_{\text{DD}}}{3}
+   \left| \Delta V_{\text{out,max}} \right| = \frac{V_{\text{DD}}}{3}
 \end{equation}
-This maximum output swing is physically bounded by the internal TMR barrier resistance range ($R_{\min} \approx \SI{20}{\kilo\ohm}$ to $R_{\max} \approx \SI{40}{\kilo\ohm}$).
+This maximum output swing is bounded by each of the internal TMR element resistance range ($R_{\min} \approx \SI{20}{\kilo\ohm}$ to $R_{\max} \approx \SI{40}{\kilo\ohm}$).
 
 The voltage potentials at the two central output nodes, $X_1$ and $X_2$, as seen in Figure~\ref{fig:wheatstone_comparison}b are determined by the independent voltage divider ratios along the bridge:
 \begin{equation}
@@ -364,11 +368,15 @@ The general differential output voltage $V_{\text{out}}$ across nodes $X_1$ and 
     \label{eq:vout_general}
 \end{equation}
 
-At zero applied magnetic field ($B = \SI{0}{\tesla}$), all four TMR elements exhibit nominal, equal resistance ($R_1 = R_2 = R_3 = R_4$), yielding balanced potentials $X_1 = X_2 = \frac{V_{\text{DD}}}{2}$ and $V_{\text{out}} = \SI{0}{\volt}$. 
+At $B = \SI{0}{\tesla}$, all four TMR elements exhibit nominal, equal resistance ($R_1 = R_2 = R_3 = R_4$), yielding balanced potentials $X_1 = X_2 = \frac{V_{\text{DD}}}{2}$ and $V_{\text{out}} = \SI{0}{\volt}$. 
 
-When an external magnetic field is applied along the sensitive axis, diagonal element pairs shift in opposing directions. One diagonal pair ($R_1, R_4$) decreases toward $R_{\min}$ while the opposite pair ($R_2, R_3$) increases toward $R_{\max}$. At full magnetic saturation, the resistance values reach their operational limits:
+A key operational characteristic of the CT100 is that an external magnetic field applied along its sensitive axis drives opposing element pairs in opposite resistance directions. As one pair (\(R_1, R_4\)) decreases toward \(R_{\min}\), the complementary pair (\(R_2, R_3\)) increases toward \(R_{\max}\) or vice versa. This response is governed by the orientation of the pinned ferromagnetic reference layer within each TMR element: \(R_1\) and \(R_4\) share an identical reference layer alignment, whereas \(R_2\) and \(R_3\) are pinned in the opposite direction.
+
+ At full magnetic saturation, the opposing resistor pairs settle at either $R_{\min}$ and $R_{\max}$. For this derivation, an external magnetic field polarity is assumed such that:
+
 \begin{equation}
-    R_1 = R_4 = R_{\min}, \quad \text{and} \quad R_2 = R_3 = R_{\max}
+R_1 = R_4 = R_{\min}, \quad \text{and} \quad R_2 = R_3 = R_{\max}
+\label{eq:tmr-saturation-resistances}
 \end{equation}
 
 Substituting these saturation values into Equation~\ref{eq:node_voltages} gives the node potentials at full saturation:
@@ -387,7 +395,7 @@ Substituting the CT100 datasheet resistance values ($R_{\min} = \SI{20}{\kilo\oh
     V_{\text{out,sat}} = V_{\text{DD}} \left( \frac{\SI{40}{\kilo\ohm} - \SI{20}{\kilo\ohm}}{\SI{40}{\kilo\ohm} + \SI{20}{\kilo\ohm}} \right) = V_{\text{DD}} \left( \frac{20}{60} \right) = \frac{V_{\text{DD}}}{3}
 \end{equation}
 
-This  derivation proves that the maximum differential output voltage is  bound to $\frac{V_{\text{DD}}}{3}$. For a supply voltage of $V_{\text{DD}} = \SI{3.30}{\volt}$, the theoretical saturation output is $ \SI{1.10}{\volt}$, which aligns with the experimentally measured saturation output of $\SI{1.12}{\volt}$ reported in Section~\ref{sec:standalone-sat-recovery}.
+This  derivation proves that the maximum differential output voltage is  bound to  $\left| \Delta V_{\text{out,max}} \right| = \frac{V_{\text{DD}}}{3}$. For a supply voltage of $V_{\text{DD}} = \SI{3.30}{\volt}$, the theoretical saturation output  $\left|V_{\text{out,sat}} \right|$ is $ \SI{1.10}{\volt}$. This is experimentally validated in Section~\ref{sec:standalone-sat-recovery}.
 
 % 3. DEFINITION STATEMENT THIRD
 \textbf{Furthermore}, from this point forward in this report, the sensor's output voltage is defined as \textbf{$V_{\text{out}} = X_1 - X_2$}, which was applied  across all DMM, oscilloscope, and MCU measurement in this work.
@@ -412,29 +420,30 @@ Characterization and bench-top tests were conducted using the following laborato
 \subsection{PCB Design}
 \label{sec:standalone-pcb}
 
-A standalone sensor board was designed in Altium Designer containing only the CT100 sensor and a single \SI{0.1}{\micro\farad} decoupling capacitor.
+A standalone sensor board was designed in Altium Designer, the assembled boards were populated with just the CT100 sensor and a single \SI{0.1}{\micro\farad} decoupling capacitor.
 
-The board is driven directly from a laboratory power supply, with the  differential outputs ($X_1, X_2$) routed directly to a digital oscilloscope and digital multimeter (DMM). Signal amplification was deliberately excluded from this characterization topology. Although raw bridge differential voltages can be relatively small, avoiding amplifier stages eliminates amplifier constraints—such as slew rate and  bandwidth obscuring the true recovery time of the TMR bridge itself. Probing the unconditioned Wheatstone output directly establishes a true baseline of the sensor's native sensitivity and saturation recovery. This design was used in Daniel Tieu's work on Thermal Cycling.
-
-The PCB can be seen in Figure 3 below.
-
-
-\subsection{Saturation Testing Methodology}
-\label{sec:sat-test-methodology}
-
-For this board, saturation was induced using an external Neodymium magnet ($> \SI{110}{\milli\tesla}$), manually brought toward and away from the sensor. This was the simplest available stimulus for an initial characterisation but is not repeatable or automatable; its limitations, 
-
-\subsection{Sensor-Only Saturation and Recovery Behaviour}
-\label{sec:standalone-sat-recovery}
-
-With no applied field, the differential output ($V_{\text{out}} = X1-X2$) sits at a near-zero baseline of \SI{4.5087}{\milli\volt} (Figure~\ref{fig:scope}). As the field increases past approximately \SI{20.0}{\milli\tesla}, the bridge output plateaus at a fixed differential ceiling of \SI{1.12}{\volt}, matching the $V_{\text{CC}}/3$ derivation in Section~\ref{sec:bridge-topology}, and never rails to the $V_{\text{CC}}$ supply itself.
+The board is driven directly from a laboratory power supply, with the  differential outputs ($X_1, X_2$) measured by a digital oscilloscope and digital multimeter (DMM). Signal amplification was deliberately excluded from this characterization topology. Although raw bridge differential voltages can be relatively small, avoiding amplifier stages eliminates amplifier constraint such as slew rate and  bandwidth obscuring the true recovery time of the TMR bridge itself. Probing the unconditioned Wheatstone output directly establishes a true baseline of the sensor's native sensitivity and saturation recovery. This design was also used in Daniel Tieu's work on Thermal Cycling. The PCB can be seen in Figure~\ref{fig:standalone}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\textwidth]{TMR_RAD_COMPARE_page-0001.jpg}
 \caption{Standalone Sensor PCB}
-\label{fig:scope}
+\label{fig:standalone}
 \end{figure}
+
+
+\subsection{Saturation Testing Methodology}
+\label{sec:sat-test-methodology}
+
+For this board, saturation was induced using an external Neodymium magnet ($> \SI{110}{\milli\tesla}$), manually brought toward and away from the sensor. This was the simplest available stimulus for an initial characterisation but is not repeatable or automatable. 
+
+The Neodymium magnet was manually brought into close proximity along the sensor's to drive the internal TMR bridge elements into parallel/antiparallel saturation. The differential output voltage was monitored using a oscilloscope to confirm that it hit the saturation limit of \(\left| \Delta V_{\text{out,max}} \right| \approx V_{\text{CC}} / 3\) derived in Section~\ref{sec:bridge-topology}.  Once the output voltage was confirmed to be at saturation the magnet was rapidly removed,  we would then capture the time required for the output to settle back to its steady-state voltage under no external magnetic field excitation.
+
+\subsection{Sensor-Only Saturation and Recovery Behaviour}
+\label{sec:standalone-sat-recovery}
+
+With no applied field, the differential output $V_{\text{out}} = X1-X2$ sits at a baseline voltage of \SI{4.5087}{\milli\volt} (Figure~\ref{fig:scope}). As the field increases past approximately \SI{20.0}{\milli\tesla}, the bridge output plateaus at a fixed differential ceiling of \SI{1.12}{\volt}, matching the $V_{\text{CC}}/3$ derivation in Section~\ref{sec:bridge-topology}
+
 
 
 \begin{figure}[h]
@@ -453,24 +462,22 @@ Recovery time back to baseline after saturation was  quantified  ( \SI{82.3}{\mi
 \textbf{Hysteresis.} \todo{This subsection reports a finding stated during testing that has not yet been fully quantified or reconciled against the "instant return to baseline" observation above -- please confirm the following before it goes into a final submission.} Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward).} This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.
 
 
-
-
 \section{Integrated Board: Field Excitation and Design}
 \label{sec:integrated-board}
 
 \subsection{Integrated Board Design}
 \label{sec:integrated-design}
 
-To accurately characterize the sensor's sensitivity without relying solely on a handheld neodymium magnet, a repeatable and quantifiable test field was required.
+To accurately characterize the sensor's sensitivity without relying on a handheld neodymium magnet, a repeatable and quantifiable test field was required.
 
-A current-carrying PCB trace routed directly beneath the sensor die was selected. This DC current induces a magnetic field around the trace that acts upon the TMR sensor to generate a measurable voltage output. Its generated magnetic field is calculated analytically and simulated in Ansys Maxwell, serving as a theoretical benchmark for expected sensor output against practical results. The trace current can be swept up to the laboratory PSU's \SI{6.0}{\ampere} limit. 
+A current-carrying PCB trace routed directly beneath the sensor die was selected. This DC current induces a magnetic field around the trace that acts upon the TMR sensor to generate a measurable voltage output. It's generated magnetic field is calculated analytically and simulated in Ansys Maxwell, serving as a theoretical benchmark for expected sensor output against practical results. The trace current can be swept up to the laboratory PSU's \SI{6.0}{\ampere} limit. 
 
-While the upper limit of the PSU capability \SI{6.0}{\ampere}  does not generate a strong enough magnetic field to drive the CT100 into full saturation, it provides a linear sweep to determine the sensor's sensitivity. Establishing this sensitivity benchmark is critical as later in the characterization, when the sensor is deliberately driven to saturation, this baseline allows us to measure any resulting hysteresis, zero-point drift, or degradation in linearity.
+While the upper limit of the PSU capability \SI{6.0}{\ampere}  does not generate a strong enough magnetic field to drive the CT100 into saturation, it provides a linear sweep to determine the sensor's sensitivity. Establishing this sensitivity benchmark is critical as later in the characterization, this baseline allows us to measure any resulting hysteresis or degradation in linearity under saturation and/or radiation.
 
-The system architecture of the integrated board revolves around three core components to emulate the final operational environment and precisely back-calculate the applied magnetic field:
+The system architecture of the integrated board revolves around three core components:
 
 \begin{itemize}
-    \item \textbf{Microcontroller (MCU):} Ane STM32G431KBT6 was selected for its high-performance. The CT100 differential output pair feeds the MCU's internal differential ADC channels directly, sampled at \SI{1.0}{\kilo\hertz}. The MCU features a 12-bit ADC andl auto-calibration routines were run to minimise discrepancies between ADC's on MCU on different boards.
+    \item \textbf{Microcontroller (MCU):} An STM32G431KBT6 was selected for it's high-performance. The CT100 differential output pair feeds the MCU's internal differential ADC channels directly, sampled at \SI{1.0}{\kilo\hertz}. The MCU features a 12-bit ADC and auto-calibration routines were run to minimise discrepancies between ADC's on MCU on different boards.
     
     \item \textbf{Current Monitor (INA219):} Because the PSU's analog display was not trusted as precise means of determining current, a dedicated INA current-sense with a Kelvin-connected \( \SI{5.0}{\milli\ohm}\) shunt resistor. This was used to back-calculate the magnetic field generated by the trace current acting on the TMR sensor.
     
@@ -479,7 +486,7 @@ The system architecture of the integrated board revolves around three core compo
 \end{itemize}
 
 
-As shown in Figure~\ref{fig:board}, the current carrying trace is routed on the bottom layer (highlighted in blue). The corresponding circuit schematic clarifies the positive current ($+i$) sign convention adopted for all subsequent field calculations and experimental sweeps. The schematic for this design can be found in the Appendix A.
+As shown in Figure~\ref{fig:board}, the current carrying trace is routed on the bottom layer indicated by the blue polygon with a 2512 shunt resister in series. Figure~\ref{fig:excitation_circuit}'s  schematic denotes the positive current ($+i$) sign convention adopted for all subsequent field calculations and experimental sweeps. The Altium schematic for the integrated design can be found in the Appendix A.
 
 \begin{figure}[h]
 \centering
@@ -519,10 +526,14 @@ As shown in Figure~\ref{fig:board}, the current carrying trace is routed on the 
 \label{fig:excitation_schematic_v2}
 \end{figure}
 
+Note that while Figure~\ref{fig:excitation_circuit}'s models the excitation as an ideal current source \(i\), the physical setup employs a benchtop PSU operated in Constant Current (CC) mode with the current limit determining the current through \(R_{\text{shunt}}\) and the trace.
+
 \subsection{PCB Trace Design}
 \label{sec:pcb-trace}
 
-The current-carrying trace was routed on a custom four-layer PCB, with layer thicknesses and dielectric parameters detailed in Table~\ref{tab:stackup}. To avoid distorting the magnetic field induced by the current trace the TMR sensor, no copper pour was placed near the TMR sensor besides the PCB trace. The trace was routed such that current flow produces a field acting on the sensor's most senstiive axis. 
+The current-carrying trace was routed on a four-layer PCB, with layer thicknesses and dielectric parameters detailed in Table~\ref{tab:stackup}.The trace was routed such that current flow produces a field acting on the sensor's most senstive axis, where no copper planes placed near the TMR device and the current trace.
+
+The layout strategy aligns with standard magnetic sensor design like those including Hall Effect sensors. Avoiding copper planes directly beneath and adjacent to the sensor die ensures better magnetic field uniformity and prevents adjacent copper structures from unpredictably altering the local field geometry.
 
 \begin{table}[h]
 \centering
