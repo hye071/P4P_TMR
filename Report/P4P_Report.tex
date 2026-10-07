@@ -442,24 +442,87 @@ The Neodymium magnet was manually brought into close proximity along the sensor'
 \subsection{Sensor-Only Saturation and Recovery Behaviour}
 \label{sec:standalone-sat-recovery}
 
-With no applied field, the differential output $V_{\text{out}} = X1-X2$ sits at a baseline voltage of \SI{4.5087}{\milli\volt} (Figure~\ref{fig:scope}). As the field increases past approximately \SI{20.0}{\milli\tesla}, the bridge output plateaus at a fixed differential ceiling of \SI{1.12}{\volt}, matching the $V_{\text{CC}}/3$ derivation in Section~\ref{sec:bridge-topology}
+Two non-irradiated (Samples 1--2) were driven to saturation each driven to saturation in both field directions, driving both directions checks a specific prediction of the bridge model the saturation ceiling should be symmetric, $\pm V_{\text{CC}}/3$, since the same spin-tunnelling limit applies to either polarity. Table~\ref{tab:sat-ceiling-all} summarises all four trials. 
 
 
-
-\begin{figure}[h]
+\begin{table}[h]
 \centering
-\includegraphics[width=0.7\textwidth]{scope_x1-x2_compare_code.PNG}
-\caption{Isolated-board saturation characteristics}
-\label{fig:scope}
+\caption{Saturation ceiling and recovery time, all four samples, both polarities.}
+\label{tab:sat-ceiling-all}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Sample  & Ceiling (V) & Baseline (mV) & Swing $\Delta V$ (V) & Recovery (ms) \\
+\midrule
+1   & $-1.126$ & $-17.4$ & $1.108$ & 76.5 \\
+1   & $+1.125$ & $-12.5$ & $1.138$ & 74.0 \\
+2 & $-1.145$ & $-17.4$ & $1.128$ & 76.0 \\
+2   & $+1.125$ & $-12.5$ & $1.138$ & 67.5 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+To visually document the transient response across both polarities of saturation recovary, Figure~\ref{fig:scope-baseline} presents the oscilloscope captures for Samples 1 and 2. The traces highlight the response as the differential output transitions from the saturated ceiling back to the steady-state baseline once the Neodymium magnet is removed.
+
+\begin{figure}[H]
+    \centering
+    % Top Row: Sample 1
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1_satn.png}
+        \caption{Sample 1: Negative Saturation Recovery}
+        \label{fig:1_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1_satp.png} % Assuming this filename based on your convention
+        \caption{Sample 1: Positive Saturation Recovery}
+        \label{fig:1_satp}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Vertical spacing between rows
+    
+    % Bottom Row: Sample 2
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{2_satn.png}
+        \caption{Sample 2: Negative Saturation Recovery}
+        \label{fig:2_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{2_satp.png}
+        \caption{Sample 2: Positive Saturation Recovery}
+        \label{fig:2_satp}
+    \end{subfigure}
+    
+    \caption{Oscilloscope traces capturing the saturation ceiling and subsequent transient recovery for the non-irradiated baseline sensors across both field polarities.}
+    \label{fig:scope-baseline}
 \end{figure}
 
-Recovery time back to baseline after saturation was  quantified  ( \SI{82.3}{\milli\second}, \textasciitilde\SI{12.15}{\hertz}) 
+Across the four trials, the mean transient recovery time following abrupt field removal was ${t}_{\text{rec}} \approx \SI{73.5}{\milli\second}$, with a maximum recovery time $ t_{\text{rec,max}}\approx \SI{76.5}{\milli\second} $  To evaluate the operational significance of this recovery trajectory for spaceflight applications, this response time must be contextualized against typical CubeSat On-Board Computer (OBC) and Attitude Determination and Control System sampling time.
 
-\todo{add scope image of saturation response time
-} This recovery frequency is directly relevant to CubeSat operation: if the OBC's magnetometer sampling rate is high relative to the sensor's recovery frequency, a sample taken shortly after a magnetorquer pulse risks capturing the sensor mid-recovery rather than the true ambient field, so ADCS software must budget a guardband around any magnetorquer firing before trusting the next magnetometer reading. \todo{Insert a specific guardband calculation once a target OBC sampling frequency is defined.}
+In small satellite architectures, secondary magnetometers used for coarse attitude determination or payload monitoring are typically polled by the OBC  rates between \SI{1.0}{\hertz} and \SI{10.0}{\hertz} ($\Delta t_{\text{sample}} = \SI{100}{\milli\second} \text{ to } \SI{1000}{\milli\second}$). Because the worst-case TMR recovery duration (\SI{76.5}{\milli\second}) is strictly less than a standard \SI{10}{\hertz} sampling interval (\SI{100}{\milli\second}):
 
+\todo{add sources for this shit}
 
-\textbf{Hysteresis.} \todo{This subsection reports a finding stated during testing that has not yet been fully quantified or reconciled against the "instant return to baseline" observation above -- please confirm the following before it goes into a final submission.} Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward).} This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.
+\begin{equation}
+    t_{\text{rec,max}} < T_{\text{sample,ADCS}} \quad (\SI{76.5}{\milli\second} < \SI{100}{\milli\second})
+\end{equation}
+
+\begin{equation}
+    f_{\text{rec,min}} = \frac{1}{t_{\text{rec,max}}} = \frac{1}{\SI{76.5}{\milli\second}} \approx \SI{13.07}\hertz > \SI{10.0}\hertz
+\end{equation}
+
+For a magnetometer with an update rate of $f_s$, consecutive readings are spaced $T_s = 1/f_s$ apart. At a $\SI{10}{\hertz}$ update rate specified for a representative CubeSat magnetometer \cite{mag_sample}, $T_s = \SI{100}{\milli\second}$. Comparing this directly against the measured recovery time (Table~\ref{tab:sat-ceiling-all}) gives a margin of only $\SI{26.5}{\milli\second}$ ($26\%$ of $T_s$) using the mean recovery time ($\SI{73.5}{\milli\second}$), narrowing to $\SI{15}{\milli\second}$ ($15\%$) against the single worst trial observed ($\SI{85}{\milli\second}$).
+ 
+This margin is thinner than it first appears, and a simple comparison of recovery \emph{frequency} against sampling \emph{frequency} is not sufficient to assess it: a magnetorquer firing is not synchronised to the magnetometer's sampling clock, so it may occur at any point within a sampling interval. In the worst case, a firing occurs immediately before a scheduled sample, in which case that sample is taken before recovery has meaningfully begun, regardless of how short the recovery time is on average. Consequently, the relevant design question is not whether the \emph{average} recovery time is shorter than $T_s$, but what guard window is needed to cover the \emph{worst-case} recovery time with margin. Applying a conventional $1.5$--$2\times$ safety factor to the worst observed recovery time ($\SI{85}{\milli\second}$) gives a recommended guard window of $\SI{127.5}{}$--$\SI{170}{\milli\second}$, which \emph{exceeds} the $\SI{100}{\milli\second}$ sampling interval of this representative magnetometer.
+ 
+\textbf{Recommendation.} Rather than relying on recovery outrunning the sample rate, the OBC should explicitly discard (or down-weight) magnetometer readings for a fixed window after any commanded magnetorquer firing, sized to at least the worst-case recovery time with safety margin -- for this sensor and a $\SI{10}{\hertz}$ magnetometer, this corresponds to discarding the first one to two samples following every firing, not zero. This is a fixed guard window, not a recalibration: Section~\ref{sec:nonirr-characterisation} tests separately whether saturation itself leaves a lasting zero-point shift requiring recalibration, independent of this transient-recovery guard-window question.
+
 
 
 \section{Integrated Board: Field Excitation and Design}
@@ -626,7 +689,7 @@ On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\v
 \subsection{Current Sweep: Data and Sensitivity Fit}
 \label{sec:sensitivity-fit}
 
-The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately \SI{0.5}{\ampere} steps, all within a single session at $V_{\text{CC}} = \SI{3.30}{\volt}$ (Table~\ref{tab:sensitivity-unirr-full}).
+The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately \SI{0.5}{\ampere} steps, all within a single session at $V_{\text{CC}} = \SI{3.32}{\volt}$ (Table~\ref{tab:sensitivity-unirr-full}).
 
 \begin{table}[H]
     \centering
@@ -656,8 +719,8 @@ The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately
 \end{table}
 
 A linear fit of bridge output against trace current gives a sensitivity of
-\SI{1.356}{\milli\volt\per\ampere} on the DMM ($R^2 = 0.974$) and
-\SI{1.315}{\milli\volt\per\ampere} on the MCU ($R^2 = 0.981$).
+\SI{1.356}{\milli\volt\per\ampere} on the DMM and
+\SI{1.315}{\milli\volt\per\ampere} on the MCU.
 
 The CT100 datasheet specifies a typical full-bridge sensitivity of
 \SI{4.5}{\milli\volt\per\volt\per\milli\tesla}, with a specified range of
@@ -713,25 +776,7 @@ where $V_0$ is the zero-field output voltage. Figure~\ref{fig:voltage-cross-val}
 uses a $V_0$ value of \SI{12.980}{\milli\volt} to visually compare the voltage
 \emph{slope}; it is not a theoretical prediction of the CT100 offset voltage.
 
-For comparison with the measured slopes, the DMM result corresponds to
 
-\begin{equation}
-S_{\mathrm{DMM}}
-=
-\frac{\SI{1.356}{\milli\volt\per\ampere}}
-{\SI{0.1108}{\milli\tesla\per\ampere}
-\times \SI{3.30}{\volt}}
-=
-\SI{3.71}{\milli\volt\per\volt\per\milli\tesla},
-\end{equation}
-
-while the MCU result corresponds to
-\SI{3.60}{\milli\volt\per\volt\per\milli\tesla}. The DMM-based value is
-therefore approximately $17.6\%$ below the typical datasheet value of
-\SI{4.5}{\milli\volt\per\volt\per\milli\tesla}, while the MCU-based value
-is approximately $20.1\%$ below it. The DMM result is also only slightly
-below the datasheet's specified minimum of
-\SI{3.8}{\milli\volt\per\volt\per\milli\tesla}.
 
 \begin{figure}[H]
     \centering
@@ -785,14 +830,24 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
                 % to compare slope with the measured response.
                 % ------------------------------------------------
                 \addplot[
-                    color=black,
+                    color=purple,
                     dashed,
                     thick,
                     domain=-3000:3000,
                     samples=100
                 ]
                 {12.980+1.64538*(x/1000)};
-                \addlegendentry{Theoretical}
+                \addlegendentry{Theoretical for slope}
+
+                \addplot[
+                    color=black,
+                    dashed,
+                    thick,
+                    domain=-3000:3000,
+                    samples=100
+                ]
+                {1.64538*(x/1000)};
+           \addlegendentry{Theoretical}
 
                 % ------------------------------------------------
                 % DMM Data
@@ -1008,6 +1063,9 @@ response differed significantly. Consequently, oscilloscope measurements will no
 subsequent DC voltage or sensitivity checks. The oscilloscope will instead
 be reserved for transient measurements, where its time-domain capability
 provides information that cannot be obtained from the DMM.
+
+
+Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward).} This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.
 
 
 \section{Radiation Testing (Total Ionising Dose)}
@@ -1479,6 +1537,8 @@ Allegro MicroSystems, \emph{CT100 1D Linear TMR Sensor Datasheet}, CT100-DS Rev.
 \bibitem{tmr-bias-radiation} ``Radiation tolerance of tunneling magnetoresistance sensors under bias voltage,'' \emph{Science China / Springer}.
 
 \bibitem{tid-basics-lanl} ``Basic Mechanisms: Total Ionizing Dose,'' Los Alamos National Laboratory presentation.
+
+\bibitem{mag_sample} M.\ Bougherara et al., ``In-Orbit Attitude Determination of the UVSQ-SAT CubeSat Using TRIAD and MEKF,'' \emph{Sensors}, MDPI, vol. 21, no. 21, p. 7361, 2021.
 
 \end{thebibliography}
 
