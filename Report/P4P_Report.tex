@@ -447,7 +447,7 @@ Two non-irradiated (Samples 1--2) were driven to saturation each driven to satur
 
 \begin{table}[h]
 \centering
-\caption{Saturation ceiling and recovery time, all four samples, both polarities.}
+\caption{Saturation ceiling and recovery time, two samples}
 \label{tab:sat-ceiling-all}
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
@@ -463,7 +463,7 @@ Sample  & Ceiling (V) & Baseline (mV) & Swing $\Delta V$ (V) & Recovery (ms) \\
 \end{table}
 
 
-To visually document the transient response across both polarities of saturation recovary, Figure~\ref{fig:scope-baseline} presents the oscilloscope captures for Samples 1 and 2. The traces highlight the response as the differential output transitions from the saturated ceiling back to the steady-state baseline once the Neodymium magnet is removed.
+To visually document the transient response across both polarities of saturation recovary, Figure~\ref{fig:scope-baseline} presents the oscilloscope captures for Samples 1 and 2. The traces highlight the response as the differential output transitions from the saturated ceiling back to the steady-state baseline once the Neodymium magnet is removed.  The blue waveform ($M_1$) represents the differential output voltage ($V_{\text{out}} = X_1 - X_2$), while the yellow ($C_1$) and green ($C_2$) waveforms represent the individual $X_1$ and $X_2$ bridge terminal voltages, respectively.
 
 \begin{figure}[H]
     \centering
@@ -499,29 +499,33 @@ To visually document the transient response across both polarities of saturation
         \label{fig:2_satp}
     \end{subfigure}
     
-    \caption{Oscilloscope traces capturing the saturation ceiling and subsequent transient recovery for the non-irradiated baseline sensors across both field polarities.}
+    \caption{Oscilloscope traces capturing the saturation ceiling and subsequent transient recovery for the non-irradiated sensors.}
     \label{fig:scope-baseline}
 \end{figure}
+Across the four trials, the mean transient recovery time following abrupt field removal was ${t}_{\text{rec}} \approx \SI{73.5}{\milli\second}$, with a maximum recovery time $ t_{\text{rec,max}}\approx \SI{76.5}{\milli\second} $. To evaluate the operational significance of this recovery trajectory for spaceflight applications, this response time must be contextualized against typical CubeSat On-Board Computer (OBC) and Attitude Determination and Control System sampling time.
 
-Across the four trials, the mean transient recovery time following abrupt field removal was ${t}_{\text{rec}} \approx \SI{73.5}{\milli\second}$, with a maximum recovery time $ t_{\text{rec,max}}\approx \SI{76.5}{\milli\second} $  To evaluate the operational significance of this recovery trajectory for spaceflight applications, this response time must be contextualized against typical CubeSat On-Board Computer (OBC) and Attitude Determination and Control System sampling time.
 
-In small satellite architectures, secondary magnetometers used for coarse attitude determination or payload monitoring are typically polled by the OBC  rates between \SI{1.0}{\hertz} and \SI{10.0}{\hertz} ($\Delta t_{\text{sample}} = \SI{100}{\milli\second} \text{ to } \SI{1000}{\milli\second}$). Because the worst-case TMR recovery duration (\SI{76.5}{\milli\second}) is strictly less than a standard \SI{10}{\hertz} sampling interval (\SI{100}{\milli\second}):
+\todo{add more sources for this shit}
 
-\todo{add sources for this shit}
 
-\begin{equation}
-    t_{\text{rec,max}} < T_{\text{sample,ADCS}} \quad (\SI{76.5}{\milli\second} < \SI{100}{\milli\second})
-\end{equation}
+
+In small satellite architectures, secondary magnetometers used for coarse attitude determination or payload monitoring are typically polled by the OBC  rates between \SI{1.0}{\hertz} and \SI{10.0}{\hertz}. For a magnetometer with an update rate of $f_s$, consecutive readings are spaced $T_s = 1/f_s$ apart. At a $\SI{10}{\hertz}$ update rate specified for a representative CubeSat magnetometer \cite{mag_sample}, $T_s = \SI{100}{\milli\second}$. Comparing this directly against the measured recovery time (Table~\ref{tab:sat-ceiling-all}) gives a margin of only $\SI{26.5}{\milli\second}$ ($26\%$ of $T_s$) using the mean recovery time ($\SI{73.5}{\milli\second}$), narrowing to $\SI{15}{\milli\second}$ ($15\%$) against the single worst trial observed ($\SI{85}{\milli\second}$).
 
 \begin{equation}
     f_{\text{rec,min}} = \frac{1}{t_{\text{rec,max}}} = \frac{1}{\SI{76.5}{\milli\second}} \approx \SI{13.07}\hertz > \SI{10.0}\hertz
 \end{equation}
+ 
+This margin is thinner than it first appears, and a simple comparison of recovery \emph{frequency} against sampling \emph{frequency} is not sufficient to assess it. A magnetorquer firing may not be synchronised to the magnetometer's sampling clock, so it may occur at any point within a sampling interval. In the worst-case alignment, a magnetorquer deactivates immediately prior to a scheduled ADC sample tick. Under this condition, the sensor is sampled while under saturation recovary regardless of whether $f_{\text{rec,min}} > f_s$. Processing an unrecovered transient reading introduces an artificial impulse into onboard state estimators (e.g., Kalman Filters), which can trigger over corrections in attitude or control loop instability. 
 
-For a magnetometer with an update rate of $f_s$, consecutive readings are spaced $T_s = 1/f_s$ apart. At a $\SI{10}{\hertz}$ update rate specified for a representative CubeSat magnetometer \cite{mag_sample}, $T_s = \SI{100}{\milli\second}$. Comparing this directly against the measured recovery time (Table~\ref{tab:sat-ceiling-all}) gives a margin of only $\SI{26.5}{\milli\second}$ ($26\%$ of $T_s$) using the mean recovery time ($\SI{73.5}{\milli\second}$), narrowing to $\SI{15}{\milli\second}$ ($15\%$) against the single worst trial observed ($\SI{85}{\milli\second}$).
- 
-This margin is thinner than it first appears, and a simple comparison of recovery \emph{frequency} against sampling \emph{frequency} is not sufficient to assess it: a magnetorquer firing is not synchronised to the magnetometer's sampling clock, so it may occur at any point within a sampling interval. In the worst case, a firing occurs immediately before a scheduled sample, in which case that sample is taken before recovery has meaningfully begun, regardless of how short the recovery time is on average. Consequently, the relevant design question is not whether the \emph{average} recovery time is shorter than $T_s$, but what guard window is needed to cover the \emph{worst-case} recovery time with margin. Applying a conventional $1.5$--$2\times$ safety factor to the worst observed recovery time ($\SI{85}{\milli\second}$) gives a recommended guard window of $\SI{127.5}{}$--$\SI{170}{\milli\second}$, which \emph{exceeds} the $\SI{100}{\milli\second}$ sampling interval of this representative magnetometer.
- 
-\textbf{Recommendation.} Rather than relying on recovery outrunning the sample rate, the OBC should explicitly discard (or down-weight) magnetometer readings for a fixed window after any commanded magnetorquer firing, sized to at least the worst-case recovery time with safety margin -- for this sensor and a $\SI{10}{\hertz}$ magnetometer, this corresponds to discarding the first one to two samples following every firing, not zero. This is a fixed guard window, not a recalibration: Section~\ref{sec:nonirr-characterisation} tests separately whether saturation itself leaves a lasting zero-point shift requiring recalibration, independent of this transient-recovery guard-window question.
+Therefore, the critical design metric is establishing a time-domain guard window that guarantees complete baseline restoration with margin. Applying a standard $1.5\times$ to $2.0\times$ engineering safety factor to the worst-case observed recovery duration ($t_{\text{rec,max}} = \SI{85.0}{\milli\second}$) defines a recommended guard window of $\SI{127.5}{\milli\second}$ to $\SI{170.0}{\milli\second}$:
+
+\begin{equation}
+    T_{\text{guard}} = (1.5 \text{ to } 2.0) \times t_{\text{rec,max}} \approx \SI{127.5}{\milli\second} \text{ to } \SI{170.0}{\milli\second}
+\end{equation}
+
+Because $T_{\text{guard}}$ exceeds the single-frame sampling period ($T_s = \SI{100}{\milli\second}$), the flight software should not rely on transient recovery outrunning the sample clock. Instead, the OBC ADCS task must implement an explicit sample-blanking protocol, automatically discarding the first one to two magnetometer samples ($1\text{--}2 \times T_s$) following any magnetorquer firing event. 
+
+This is a fixed guard window, not a recalibration: Section~\ref{sec:nonirr-characterisation} tests separately whether saturation itself leaves a lasting zero-point shift requiring recalibration, independent of this transient-recovery guard-window question. Furthermore, this measure of ${t}_{\text{rec}}$ my not be a robust measure as my hand is removing the filed excication its not an automated system the sensor may actual response much quicker so another more deinite way of testing  should be explored.
 
 
 
@@ -618,7 +622,6 @@ Bottom Solder & Solder Mask (SM-001) & --- & \SI{0.0254}{\milli\metre} \\
 
 This stack-up yields a total conductive copper thickness of \SI{0.08799}{\milli\metre}, a dielectric core height of \SI{0.8382}{\milli\metre}, and an overall board thickness of \SI{0.97699}{\milli\metre}. The excitation trace is routed on the bottom layer with a track width \(w = \SI{3.5}{\milli\metre}\), capable of currents up to the PSU's \SI{6.0}{\ampere} limit.
 
-
 \subsection{Analytical Field Model}
 \label{sec:field-model}
 
@@ -627,7 +630,20 @@ The horizontal magnetic field at the TMR die height (\(d = \SI{0.4229}{\milli\me
 B_{\text{planar}} = \mu_0 \left[ \frac{I}{\pi w} \arctan\left( \frac{w}{2d} \right) \right].
 \label{eq:planar}
 \end{equation}
-Evaluated at a trace current of \(I = \SI{4.175}{\ampere}\), this analytical model yields a theoretical flux density of \SI{462.70}{\micro\tesla}.
+
+Normalizing Equation~\eqref{eq:planar} by the trace current $I$ yields the geometric field coupling coefficient $k_B$:
+\begin{equation}
+k_B = \frac{B_{\text{planar}}}{I} = \frac{\mu_0}{\pi w} \arctan\left( \frac{w}{2d} \right) \approx \SI{0.1108}{\milli\tesla\per\ampere}.
+\label{eq:field-coeff}
+\end{equation}
+
+Evaluated at a representative excitation current of \(I = \SI{4.175}{\ampere}\), this model yields a theoretical flux density of \SI{462.70}{\micro\tesla}. Combining this field response coefficient $k_B$ with the CT100 sensor's intrinsic sensitivity $S_V$ (\si{\volt\per\milli\tesla}) gives the expected differential voltage change per unit trace current:
+\begin{equation}
+\frac{\Delta V_{\text{out}}}{\Delta I} = k_B \cdot S_V.
+\label{eq:sensitivity-transfer}
+\end{equation}
+
+This analytical transfer ratio serves as the theoretical benchmark against which both the Ansys Maxwell finite-element simulations and empirical linear current sweeps are validated.
 
 \subsection{Simulated vs.\ Experimental Field Validation}
 \label{sec:field-validation}
@@ -671,7 +687,7 @@ A future PCB revision could integrate a hardware offset to bias the bridge's ref
 \subsection{Data Collection Method}
 \label{sec:data-collection}
 
-Current-sweep data was logged via the MCU's SWV output, exported, and processed in MATLAB. Rather than relying on single instantaneous readings, each current setting was captured over a 20-second window and averaged. A single-sample readings were found to be unreliable due to the  MCU ADC's quantisation behaviour where raw SWV data at a given current setting was observed hopping between a small number of discrete levels spaced at multiples of the \SI{1.61}{\milli\volt} LSB typically spanning 1--2 LSBs of scatter around the true mean.
+Current-sweep data was logged via the MCU's SWV output, exported, and processed in MATLAB. Rather than relying on single instantaneous readings, each current setting was captured over a 20-second window and averaged. A single-sample readings were found to be unreliable due to the  MCU ADC's quantisation behaviour where raw SWV data at a given current setting was observed hopping between a small number of discrete levels spaced at multiples of the \SI{1.61}{\milli\volt} LSB typically spanning 1--2 LSBs of scatter around the true mean. Note that for this non-irradiated integrated board the saturation recovery test was performed before the current-sweep test.
 
 
 \subsection{Saturation Recovery on the Integrated Board}
@@ -726,7 +742,7 @@ The CT100 datasheet specifies a typical full-bridge sensitivity of
 \SI{4.5}{\milli\volt\per\volt\per\milli\tesla}, with a specified range of
 \SI{3.8}{\milli\volt\per\volt\per\milli\tesla} to
 \SI{5.2}{\milli\volt\per\volt\per\milli\tesla}. At the
-\SI{3.30}{\volt} supply voltage used for this characterisation, the
+\SI{3.32}{\volt} supply voltage used for this characterisation, the
 corresponding theoretical voltage sensitivity is therefore
 
 \begin{equation}
@@ -735,9 +751,9 @@ S_{V,\mathrm{theory}}
 S_{\mathrm{CT100}}V_{\mathrm{DD}}
 =
 \left(\SI{4.5}{\milli\volt\per\volt\per\milli\tesla}\right)
-\left(\SI{3.30}{\volt}\right)
+\left(\SI{3.32}{\volt}\right)
 =
-\SI{14.85}{\milli\volt\per\milli\tesla}.
+\SI{14.94}{\milli\volt\per\milli\tesla}.
 \label{eq:ct100-voltage-sensitivity}
 \end{equation}
 
@@ -753,10 +769,10 @@ expected voltage change per unit trace current:
 S_{V,\mathrm{theory}}
 \frac{\mathrm{   \Delta}B}{\mathrm{   \Delta}I}
 =
-\left(\SI{14.85}{\milli\volt\per\milli\tesla}\right)
+\left(\SI{14.94}{\milli\volt\per\milli\tesla}\right)
 \left(\SI{0.1108}{\milli\tesla\per\ampere}\right)
 =
-\SI{1.645}{\milli\volt\per\ampere}.
+\SI{1.655}{\milli\volt\per\ampere}.
 \label{eq:ct100-voltage-current-slope}
 \end{equation}
 
@@ -768,7 +784,7 @@ V_{\mathrm{out,theory}}
 =
 V_0
 +
-\left(\SI{1.645}{\milli\volt\per\ampere}\right)I,
+\left(\SI{1.655}{\milli\volt\per\ampere}\right)I,
 \label{eq:ct100-expected-voltage}
 \end{equation}
 
@@ -836,8 +852,8 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
                     domain=-3000:3000,
                     samples=100
                 ]
-                {12.980+1.64538*(x/1000)};
-                \addlegendentry{Theoretical for slope}
+                {12.980+1.655*(x/1000)};
+                \addlegendentry{Theoretical ($V_O = 12.980mV$)}
 
                 \addplot[
                     color=black,
@@ -847,7 +863,7 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
                     samples=100
                 ]
                 {1.64538*(x/1000)};
-           \addlegendentry{Theoretical}
+           \addlegendentry{Theoretical ($V_O = 0mV$) }
 
                 % ------------------------------------------------
                 % DMM Data
@@ -929,8 +945,8 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
 
         \captionof{figure}{
             Voltage cross-validation during the non-irradiated, unshielded
-            current sweep. The dashed line shows the theoretical CT100
-            response.
+            current sweep. The dashed lines shows the theoretical CT100
+            responses.
         }
         \label{fig:voltage-cross-val}
 
@@ -1065,7 +1081,7 @@ be reserved for transient measurements, where its time-domain capability
 provides information that cannot be obtained from the DMM.
 
 
-Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward).} This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.
+Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward). This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.}
 
 
 \section{Radiation Testing (Total Ionising Dose)}
@@ -1081,13 +1097,82 @@ Crystalline MgO, the MTJ's insulating barrier, is expected to be substantially m
 
 Ten CT100's was exposed using a \SI{320}{\kilo\volt} tube potential (tungsten target, \SI{30}{\degree} anode angle, \SI{3}{\milli\metre} beryllium filter) at a beam current of \SI{10}{\milli\ampere}. The beam was seasoned (ramped up to full parameters) from 15:55 to 16:05 NZST on 22 July 2026, held at full \SI{320}{\kilo\volt}/\SI{10}{\milli\ampere} output until switch-off at 19:26 NZST, giving \SI{3}{\hour}~\SI{21}{\minute} (\SI{12060}{\second}) of full-power exposure.
 
-The dose rate at the sensor was calculated as \SI{0.0338}{\gray\per\second} (Si), based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)) -- below the \SI{100}{\kilo rad}(Si) threshold conventionally used to qualify a device as radiation-hardened (Section~\ref{sec:rad-tolerance-lit}), consistent with this exposure being framed as a preliminary tolerance data point rather than a full qualification-level test. This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative (slight under-) estimate.
+The dose rate at the sensor was calculated as \SI{0.0338}{\gray\per\second} (Si), based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)) -- below the \SI{100}{\kilo rad}(Si) threshold conventionally used to qualify a device as radiation-hardened (Section~\ref{sec:rad-tolerance-lit}). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
 
 
-\subsection{Sensor-Only Board Response Post-Irradiation}
+\subsection{Sensor-Only Board Saturation Response Post-Irradiation}
 \label{sec:rad-sensoronly-response}
 
-Following radiation, on the sensor was checked on its own (sensor-only) board using the external magnet and oscilloscope, and showed a clear response to field, confirming the sensor was not damaged outright by exposure. This was a qualitative aliveness check; the quantitative comparison follows below, once the sensor was transferred to an integrated (MCU) board for logging.
+To evaluate whether radiation exposure alters sensor saturation limits or transient recovery dynamics, two irradiated units (Samples 3 and 4) were driven to magnetic saturation following the methodology established in Section~\ref{sec:standalone-sat-recovery}. Table~\ref{tab:sat-ceiling-all} summarizes the saturation ceilings, baseline offsets, differential swings, and recovery times across all eight trials for both non-irradiated and irradiated sample groups for comparison.
+
+Figure~\ref{fig:scope-irradiated} shows the oscilloscope captures for the irradiated samples. Following the same trace colour assignment used in the non-irradiated characterization, the blue waveform ($M_1$) represents the differential output voltage ($V_{\text{out}} = X_1 - X_2$), while the yellow ($C_1$) and green ($C_2$) waveforms represent the individual $X_1$ and $X_2$ bridge terminal voltages, respectively.
+
+
+
+\begin{table}[h]
+\centering
+\caption{Saturation ceiling and recovery time, two irradiated samples.}
+\label{tab:sat-ceiling-all}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Sample  & Ceiling (V) & Baseline (mV) & Swing $\Delta V$ (V) & Recovery (ms) \\
+\midrule
+1   & $-1.126$ & $-17.4$ & $1.108$ & 76.5 \\
+1   & $+1.125$ & $-12.5$ & $1.138$ & 74.0 \\
+2 & $-1.145$ & $-17.4$ & $1.128$ & 76.0 \\
+2   & $+1.125$ & $-12.5$ & $1.138$ & 67.5 \\
+3       & $-1.131$ & $-22.3$ & $1.108$ & 70.5 \\
+3       & $+1.111$ & $-12.5$ & $1.123$ & 65.5 \\
+4      & $-1.145$ & $-22.3$ & $1.123$ & 78.0 \\
+4       & $+1.111$ & $-22.3$ & $1.133$ & 85.0 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    % Top Row: Sample 3
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3_satn.png}
+        \caption{Sample 3: Negative Saturation Recovery}
+        \label{fig:3_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3_satp.png}
+        \caption{Sample 3: Positive Saturation Recovery}
+        \label{fig:3_satp}
+    \end{subfigure}
+    
+    \vspace{0.4cm}
+    
+    % Bottom Row: Sample 4
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4_satn.png}
+        \caption{Sample 4: Negative Saturation Recovery}
+        \label{fig:4_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4_satp.png}
+        \caption{Sample 4 ): Positive Saturation Recovery}
+        \label{fig:4_satp}
+    \end{subfigure}
+    
+    \caption{Oscilloscope captures displaying post-irradiation saturation voltage clamping and transient relaxation trajectories for irradiated sensor board Samples 3 and 4 across both field polarities.}
+    \label{fig:scope-irradiated}
+\end{figure}
+
+Averaging across both polarities and units within each group, the non-irradiated group exhibits a mean saturation ceiling of $\SI{1.130}{\volt}$ compared to $\SI{1.124}{\volt}$ for the irradiated group, representing a $0.5\%$ difference. The mean recovery time across groups is $\SI{73.5}{\milli\second}$ non-irradiated versus $\SI{74.75}{\milli\second}$ irradiated, a $1.7\%$ difference.
+
+Because the performance difference between the non-irradiated and irradiated groups averages ($0.5\%$ on saturation ceiling and $1.7\%$ on recovery duration) falls strictly within the non-irradiated unit-to-unit spreads, the differences observed are attributable to manufacturing variance rather than total ionizing dose (TID) degradation. Consequently, neither the saturation voltage ceiling nor the transient recovery demonstrate detectable permanent radiation-induced degradation at the time of testing. Note, both irradiated and non-irradiated samples were testing in the same session on the 7th of October 2026.
+
 
 \subsection{Quantitative Sweep on the Integrated Board}
 \label{sec:rad-sweep}
@@ -1170,6 +1255,19 @@ Following transfer to a integrated board the same current-sweep experiment as Se
 \end{figure}
 
 The same linear-fit procedure gives a sensitivity of \SI{1.269}{\milli\volt\per\ampere} on the DMM ($R^2 = 0.995$) and \SI{1.312}{\milli\volt\per\ampere} on the MCU ($R^2 = 0.975$), corresponding to 93.6\% (DMM) and 99.8\% (MCU) of the unirradiated sensitivity (Section~\ref{sec:sensitivity-fit}). Both figures are well within the level of session-to-session variation already observed on unirradiated hardware (Section~\ref{sec:instr-validation}), with no consistent direction of change between the two independent instruments. \emph{No statistically significant change in sensitivity was found at the tested dose.} Given that this specific radiation configuration does not appear elsewhere in the TMR-sensor literature reviewed for this project (Section~\ref{sec:rad-tolerance-lit}, pending confirmation), this result is offered as a preliminary but novel data point for TMR radiation tolerance under this exposure regime, supporting the broader literature consensus on MTJ radiation tolerance (Section~\ref{sec:rad-tolerance-lit}).
+
+\subsection{Irradiated Saturation Recovery on the Integrated Board}
+\label{sec:sat-recovery-irradiated}
+
+On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\volt}$ and a TMR sensor supply of $V_{\text{DD}} = \SI{3.32}{\volt}$, the saturation-to-baseline voltage swing was $\Delta V = \SI{1.1521}{\volt}$, with a recovery time of $t_{\text{rec}} = \SI{82.3}{\milli\second}$, corresponding to a recovery frequency of $f \approx \SI{12.15}{\hertz}$ (Figure~\ref{fig:swv}).
+\todo{do radaition board saturation testing}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{response.png}
+\caption{Measured saturation recovery response on the integrated board (SWV trace, logged and plotted in MATLAB).}
+\label{fig:swv}
+\end{figure}
 
 \section{Magnetic Shielding}
 \label{sec:shielding}
@@ -1396,6 +1494,10 @@ The irradiated integrated board was subsequently tested inside the shielded encl
 
 A linear fit gives a sensitivity of \SI{1.342}{\milli\volt\per\ampere} ($R^2 = 0.975$), corresponding to approximately \SI{3.67}{\milli\volt\per\volt\per\milli\tesla}. This sits close to the unshielded-irradiated result (\SI{1.312}{\milli\volt\per\ampere}, Section~11.4, a 2.3\% difference) and noticeably closer to it than to the unirradiated-shielded result (\SI{1.4465}{\milli\volt\per\ampere}, Section~10.2, a 10\% boost from shielding). In other words, the shielding-driven sensitivity increase clearly observed on the unirradiated board (Section~10.2) was not clearly reproduced on the irradiated board here. \todo{This discrepancy is not yet explained -- possibilities include: the irradiated board's current range and sample spacing differ slightly from the unirradiated sweep (a genuine methodological difference, not yet controlled for); normal session-to-session/board-to-board variation, of the same 3--7\% scale documented throughout this report, happens to have worked in the opposite direction here; or shielding genuinely interacts differently with the irradiated sensor's response. Distinguishing between these needs at least one more shielded-irradiated repeat, ideally in the same session as a shielded-unirradiated control, before drawing a firm conclusion -- do not overstate this in the Discussion/Conclusion beyond \"not yet reproduced\" until that is done.} No statistically significant change in sensitivity attributable to radiation is apparent in either the shielded or unshielded comparison, which remains the primary, better-supported finding of this radiation strand (Section~11.4).
 
+\section{Quantitative Magnetic Hysteresis Testing}
+\label{sec:hysteresis}
+\todo{desolder tmr from non-irradted solder fresh no magnetic history tmr current sweep. the aturated it show it then current sweep it again and compare the 2 wave forms }
+
 \section{Discussion}
 \label{sec:discussion}
 
@@ -1410,6 +1512,8 @@ The experimental results confirm several of the CT100's key design properties an
 \textbf{Hysteresis.} The observation that saturation leaves a permanent, linear-but-offset baseline (Section~\ref{sec:standalone-sat-recovery}) is a practically important finding for any CubeSat deployment: it implies the sensor's zero-point cannot be assumed stable across the mission if it experiences even one strong saturating event, and would need either periodic re-calibration or a design that avoids saturating the sensor in the first place. \todo{This finding needs the quantification and reconciliation noted in Section~\ref{sec:standalone-sat-recovery} before it can be stated this firmly.}
 
 \textbf{Radiation tolerance.} The post-irradiation sensitivity sweep (Section~\ref{sec:rad-sweep}) measured 93.6\% (DMM) and 99.8\% (MCU) of the unirradiated sensitivity, with no consistent direction of change between two independent instruments, supporting the literature consensus that MTJ-based TMR sensors tolerate ionising radiation substantially better than conventional CMOS devices. A single irradiated unit, tested once, should still be presented as preliminary evidence; a second, independent irradiated replicate would substantially strengthen this conclusion (Section~\ref{sec:conclusions}).
+
+\todo{write about rdaition 100krad or whatever talk about litertry what they did what i did, kinda verfiyies what they did we did a smaller dose of a different radation and and did a COTS device}
 
 \begin{figure}[h]
 \centering
@@ -1489,7 +1593,19 @@ The experimental results confirm several of the CT100's key design properties an
 \label{fig:sensitivity-comparison-raw}
 \end{figure}
 
-\textbf{Limitations.} The hand-held Neodymium magnet used to drive saturation in Section~\ref{sec:sat-test-methodology} is not a repeatable or automatable stimulus (Section~\ref{sec:conclusions}). The irradiated sample underwent an additional desolder/resolder thermal cycle during transfer to its readout board, which the unirradiated reference sensor did not undergo; a dedicated process control was not performed given time constraints, so a small contribution from thermal rework to the observed pre/post-irradiation difference cannot be fully excluded.
+
+
+\subsection{Methodological Limitations and Future Experimental Refinements}
+
+\todo{ add radaition section values in and the get section names right}
+It should be noted that the measured transient recovery time ($t_{\text{rec}} \approx \SI{73.5}{\milli\second} \text{--} \SI{85.0}{\milli\second}$) for the non- irradated and xxxx trec for radiation in  Section~\ref{sec:sat-test-methodology} and  in Section~\ref{sec:sat-test-methodology} respectively is not a repeatable or automatable stimulus represents an upper bound dictated by the experimental setup rather than the intrinsic response limit of the TMR junction. Because the external magnet was removed manually, the observed decay trajectory is dominated by human operator speed and the resulting rate of field decay ($dB/dt$). In reality, the fundamental quantum spin-tunneling dynamics of Magnetic Tunnel Junctions operate on microsecond to nanosecond timescales, suggesting that the CT100's intrinsic response is substantially faster than observed.
+
+To isolate the sensor's physical relaxation kinetics from operator motion artifacts, future characterization requires an automated, high-bandwidth stimulus system. Recommended alternative methodologies include:
+
+\begin{itemize}
+    \item \textbf{Pulsed Trace Excitation:} Driving high-speed current pulses through the integrated PCB trace using a low-inductance MOSFET switching circuit to generate microsecond-scale magnetic step functions.
+    \item \textbf{Switched Helmholtz Coil:} Utilizing a low-inductance air-core Helmholtz coil driven by a pulse generator to deliver controlled, highly repeatable transient magnetic steps without mechanical motion.
+\end{itemize}
 
 \section{Conclusions and Future Work}
 \label{sec:conclusions}
