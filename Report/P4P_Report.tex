@@ -26,6 +26,7 @@
 \usepackage{pgfplots}
 \usepackage{caption}
 \pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
 
 
 \hypersetup{pdftitle={TMR Sensor Final Year Technical Report}, pdfauthor={Sam Ye}}
@@ -525,7 +526,7 @@ Therefore, the critical design metric is establishing a time-domain guard window
 
 Because $T_{\text{guard}}$ exceeds the single-frame sampling period ($T_s = \SI{100}{\milli\second}$), the flight software should not rely on transient recovery outrunning the sample clock. Instead, the OBC ADCS task must implement an explicit sample-blanking protocol, automatically discarding the first one to two magnetometer samples ($1\text{--}2 \times T_s$) following any magnetorquer firing event. 
 
-This is a fixed guard window, not a recalibration: Section~\ref{sec:nonirr-characterisation} tests separately whether saturation itself leaves a lasting zero-point shift requiring recalibration, independent of this transient-recovery guard-window question. Furthermore, this measure of ${t}_{\text{rec}}$ my not be a robust measure as my hand is removing the filed excication its not an automated system the sensor may actual response much quicker so another more deinite way of testing  should be explored.
+This is a fixed guard window, not a recalibration: Section~\ref{sec:nonirr-characterisation} tests separately whether saturation itself leaves a lasting zero-point shift requiring recalibration, independent of this transient-recovery guard-window question. Furthermore, this measure of ${t}_{\text{rec}}$ may not be a robust measure as my hand is removing the filed excication its not an automated system the sensor may actual response much quicker so another more definitive way of testing  should be explored.
 
 
 
@@ -598,9 +599,9 @@ Note that while Figure~\ref{fig:excitation_circuit}'s models the excitation as a
 \subsection{PCB Trace Design}
 \label{sec:pcb-trace}
 
-The current-carrying trace was routed on a four-layer PCB, with layer thicknesses and dielectric parameters detailed in Table~\ref{tab:stackup}.The trace was routed such that current flow produces a field acting on the sensor's most senstive axis, where no copper planes placed near the TMR device and the current trace.
+The current-carrying trace was routed on a four-layer PCB, with layer thicknesses and dielectric parameters detailed in Table~\ref{tab:stackup}. The trace was routed such that current flow produces a field acting on the sensor's most senstive axis, where no copper planes placed near the TMR device and the current trace.
 
-The layout strategy aligns with standard magnetic sensor design like those including Hall Effect sensors. Avoiding copper planes directly beneath and adjacent to the sensor die ensures better magnetic field uniformity and prevents adjacent copper structures from unpredictably altering the local field geometry.
+The layout strategy aligns with standard magnetic sensor design like those including Hall Effect sensors. Avoiding copper planes directly beneath and adjacent to the sensor die ensures better magnetic field uniformity and prevents adjacent copper structures from unpredictably altering the local field geometry.\todo{add source to back it up}
 
 \begin{table}[h]
 \centering
@@ -659,6 +660,7 @@ An experiment was conducted to compare any discrepancies between our analytical 
 \label{fig:ansys}
 \end{figure}
 
+\todo{check math and calcs}
 
 
 \subsection{Firmware}
@@ -1084,6 +1086,7 @@ provides information that cannot be obtained from the DMM.
 Once driven into saturation, the sensor was observed to return to a \emph{new}, offset baseline rather than the original zero-field value, with the output remaining linear about this new offset for subsequent field excursions. This is consistent with magnetic hysteresis in the free layer: after saturation, the free layer's magnetisation does not fully relax back to its original zero-field orientation, leaving a small permanent shift in the balance point of the bridge. \todo{Quantify the magnitude of this offset (mV), confirm whether it is stable over time/repeated cycles, and clarify which board/session this was observed on, since it appears to sit alongside an earlier record of the output returning "instantly" to the original linear baseline after saturation -- these two observations should be reconciled (e.g.\ the earlier note may have predated the sensor's first-ever saturation, with hysteresis only appearing from the first saturation event onward). This has a direct design implication aligns with current research state it and talk about implications of why it would be bad.}
 
 
+
 \section{Radiation Testing (Total Ionising Dose)}
 \label{sec:radiation-testing}
 
@@ -1097,7 +1100,7 @@ Crystalline MgO, the MTJ's insulating barrier, is expected to be substantially m
 
 Ten CT100's was exposed using a \SI{320}{\kilo\volt} tube potential (tungsten target, \SI{30}{\degree} anode angle, \SI{3}{\milli\metre} beryllium filter) at a beam current of \SI{10}{\milli\ampere}. The beam was seasoned (ramped up to full parameters) from 15:55 to 16:05 NZST on 22 July 2026, held at full \SI{320}{\kilo\volt}/\SI{10}{\milli\ampere} output until switch-off at 19:26 NZST, giving \SI{3}{\hour}~\SI{21}{\minute} (\SI{12060}{\second}) of full-power exposure.
 
-The dose rate at the sensor was calculated as \SI{0.0338}{\gray\per\second} (Si), based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)) -- below the \SI{100}{\kilo rad}(Si) threshold conventionally used to qualify a device as radiation-hardened (Section~\ref{sec:rad-tolerance-lit}). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
+The dose rate at the sensor was calculated as \SI{0.0338}{\gray\per\second} (Si), based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
 
 
 \subsection{Sensor-Only Board Saturation Response Post-Irradiation}
@@ -1171,7 +1174,7 @@ Sample  & Ceiling (V) & Baseline (mV) & Swing $\Delta V$ (V) & Recovery (ms) \\
 
 Averaging across both polarities and units within each group, the non-irradiated group exhibits a mean saturation ceiling of $\SI{1.130}{\volt}$ compared to $\SI{1.124}{\volt}$ for the irradiated group, representing a $0.5\%$ difference. The mean recovery time across groups is $\SI{73.5}{\milli\second}$ non-irradiated versus $\SI{74.75}{\milli\second}$ irradiated, a $1.7\%$ difference.
 
-Because the performance difference between the non-irradiated and irradiated groups averages ($0.5\%$ on saturation ceiling and $1.7\%$ on recovery duration) falls strictly within the non-irradiated unit-to-unit spreads, the differences observed are attributable to manufacturing variance rather than total ionizing dose (TID) degradation. Consequently, neither the saturation voltage ceiling nor the transient recovery demonstrate detectable permanent radiation-induced degradation at the time of testing. Note, both irradiated and non-irradiated samples were testing in the same session on the 7th of October 2026.
+Because the performance difference between the non-irradiated and irradiated groups averages ($0.5\%$ on saturation ceiling and $1.7\%$ on recovery duration) falls strictly within the non-irradiated unit-to-unit spreads, the differences observed are attributable to manufacturing variance rather than total ionizing dose (TID) degradation. Consequently, neither the saturation voltage ceiling nor the transient recovery demonstrate detectable permanent radiation-induced degradation at the time of testing. Note, both irradiated and non-irradiated samples were tested in the same session on the 7th of October 2026.
 
 
 \subsection{Quantitative Sweep on the Integrated Board}
@@ -1347,15 +1350,35 @@ To address the ambient-field discrepancy identified in Section~\ref{sec:field-di
 
 With MCU-DMM agreement already established across the full current range (Section~8), the shielded current sweep was conducted using MCU-only logging (no DMM or oscilloscope): the earlier cross-validation (Section~8) showed MCU and DMM readings agreeing to within a fraction of an ADC LSB across the unshielded sweep, so introducing the DMM into the shielded enclosure was judged to add setup complexity and added another source of possible stray magnetic field.
 
-\begin{figure}[H]
+The non-irradiated and irradiated integrated boards was tested inside the shielded enclosure under the same sweep procedure as in Section~\ref{sec:nonirr-characterisation}.  Note that the irradiated TMR sensor tested under this shielding condition had not previously been driven into saturation. 
+
+The raw measurement data for both the non-irradiated and irradiated shielded sweeps are detailed in Table~\ref{tab:sensitivity-shielded} and Table~\ref{tab:sensitivity-irr-shielded}, respectively. To visualize the effect of the magnetic shielding, Figure~\ref{fig:shielding-overlay} compares these shielded sweeps directly against their unshielded counterparts.
+
+Operating conditions are as follows, testing perfomed at a $V_{\text{DD}} = \SI{3.29}{\volt}$.
+
+
+
+\begin{table}[H]
     \centering
     
-    % Left side: The Table
-    \begin{minipage}[c]{0.38\textwidth}
+    % --- ROW 1: CAPTIONS ---
+    % Both minipages top-aligned [t] so the caption text starts at the exact same height
+    \begin{minipage}[t]{0.48\textwidth}
+        \caption{Shielded, non-irradiated current sweep (MCU only): bridge output vs.\ trace current.}
+        \label{tab:sensitivity-shielded}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \caption{Irradiated, shielded current sweep (MCU only): bridge output vs.\ trace current.}
+        \label{tab:sensitivity-irr-shielded}
+    \end{minipage}
+    
+    \vspace{0.3cm} % Small vertical buffer between captions and the tables
+    
+    % --- ROW 2: TABLES ---
+    % Both minipages top-aligned [t] so the tables start at the exact same height
+    \begin{minipage}[t]{0.48\textwidth}
         \centering
         \small
-        \captionof{table}{Shielded, non-irradiated current sweep (MCU only): bridge output vs.\ trace current.}
-        \label{tab:sensitivity-shielded}
         \begin{tabular}{@{}rr@{}}
             \toprule
             Current (mA) & MCU (mV) \\
@@ -1375,62 +1398,10 @@ With MCU-DMM agreement already established across the full current range (Sectio
             $2988.7$ & 16.474 \\
             \bottomrule
         \end{tabular}
-    \end{minipage}%
-    \hfill
-    % Right side: The Plot
-    \begin{minipage}[c]{0.58\textwidth}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \begin{tikzpicture}
-           \begin{axis}[
-                width=\textwidth,
-                height=6cm,
-                title={Bridge Output vs. Trace Current},
-                xlabel={Current (mA)},
-                ylabel={MCU (mV)},
-                grid=both,
-                grid style={line width=.1pt, draw=gray!20},
-                major grid style={line width=.2pt, draw=gray!50},
-                mark size=1.5pt,
-                % FIX: Rotate labels and remove the thousands comma
-                 label style={font=\small},
-                x tick label style={rotate=45, anchor=east},
-                /pgf/number format/1000 sep={}
-            ]
-                \addplot[color=cyan, thick, mark=*] coordinates {
-                    (-3043.4, 8.039)
-                    (-2522.5, 8.549)
-                    (-2057.7, 9.594)
-                    (-1540.3, 9.949)
-                    (-1040.2, 11.170)
-                    (-546.2, 11.319)
-                    (-6.3, 12.705)
-                    (535.4, 12.946)
-                    (996.2, 13.931)
-                    (1523.0, 14.530)
-                    (2038.1, 15.532)
-                    (2486.1, 16.103)
-                    (2988.7, 16.474)
-                };
-            \end{axis}
-        \end{tikzpicture}
-        \captionof{figure}{Plot of the shielded current sweep data detailed in Table~\ref{tab:sensitivity-shielded}.}
-        \label{fig:sensitivity-plot}
-    \end{minipage}
-\end{figure}
-
-\subsection{Combined Radiation and Shielding Results}
-
-The irradiated integrated board was subsequently tested inside the shielded enclosure (Section~10) under the same sweep procedure, on a sensor that had not previously been driven into saturation.
-
-\begin{figure}[H]
-    \centering
-    
-    % Left side: The Table
-    \begin{minipage}[c]{0.38\textwidth}
-        \centering
-        \small % <--- 1. ADD THIS: Reduces the table text size
-        \captionof{table}{Irradiated, shielded current sweep (MCU only): bridge output vs.\ trace current.}
-        \label{tab:sensitivity-irr-shielded}
+        \small 
         \begin{tabular}{@{}rr@{}}
             \toprule
             Current (mA) & MCU (mV) \\
@@ -1450,49 +1421,175 @@ The irradiated integrated board was subsequently tested inside the shielded encl
             $3025.4$ & 4.932 \\
             \bottomrule
         \end{tabular}
-    \end{minipage}%
-    \hfill
-    % Right side: The Plot
+    \end{minipage}
+    
+\end{table}
+
+
+% ============================================================
+% Preamble (if not already present):
+%   \usepackage{pgfplots}
+%   \usepgfplotslibrary{groupplots}
+%   \pgfplotsset{compat=1.18}
+% ============================================================
+% Shielded vs. unshielded overlaid on ONE figure, one panel per
+% sample condition. Both panels use the same vertical SPAN (14 mV)
+% so the gradients can be compared by eye even though the two
+% boards sit at different baselines. Raw MCU data, no table needed
+% (the tables already exist elsewhere in the report).
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=1.6cm},
+    width=0.48\textwidth, height=0.55\textwidth,
+    xlabel={Trace Current, $I$ (mA)},
+    xmin=-3200, xmax=3200,
+    xtick={-3000,-2000,-1000,0,1000,2000,3000},
+    xticklabel style={rotate=45, anchor=north east, /pgf/number format/1000 sep={}},
+    tick label style={font=\footnotesize},
+    label style={font=\small}, title style={font=\small},
+    grid=major, grid style={gray!25},
+    axis lines=box,
+    legend style={font=\scriptsize, draw=black, at={(0.5,-0.36)}, anchor=north, legend columns=1},
+]
+
+% ---------------- Panel (a): non-irradiated ----------------
+\nextgroupplot[title={(a) Non-irradiated}, ylabel={Bridge Output (mV)}, ymin=5, ymax=19]
+\addplot[color={rgb,255:red,0;green,115;blue,189}, mark=o, mark size=1.5pt, thick]
+    coordinates {
+    (-2991.0,8.069) (-2498.5,9.571) (-2029.0,9.584) (-1501.0,11.249)
+    (-1022.0,11.107) (-499.0,12.022) (-0.7,12.847) (499.0,13.628)
+    (1022.0,13.796) (1501.0,14.790) (2029.0,15.020) (2498.5,16.068)
+    (2991.0,16.088)};
+\addlegendentry{Unshielded (1.32 mV/A)}
+\addplot[color={rgb,255:red,0;green,153;blue,76}, mark=square*, mark size=1.4pt, thick, dashed]
+    coordinates {
+    (-3043.4,8.039) (-2522.5,8.549) (-2057.7,9.594) (-1540.3,9.949)
+    (-1040.2,11.170) (-546.2,11.319) (-6.3,12.705) (535.4,12.946)
+    (996.2,13.931) (1523.0,14.530) (2038.1,15.532) (2486.1,16.103)
+    (2988.7,16.474)};
+\addlegendentry{Shielded (1.45 mV/A)}
+
+% ---------------- Panel (b): irradiated ----------------
+\nextgroupplot[title={(b) Irradiated}, ymin=-7, ymax=7]
+\addplot[color={rgb,255:red,217;green,83;blue,25}, mark=triangle, mark size=1.8pt, thick]
+    coordinates {
+    (-2999.0,-3.258) (-2595.0,-2.803) (-1999.0,-1.748) (-1512.0,-0.044)
+    (-1017.0,-0.001) (-498.0,0.463) (-0.7,0.308) (498.0,1.749)
+    (1017.0,2.657) (1512.0,3.178) (1999.0,3.298) (2595.0,4.350)
+    (2999.0,4.834)};
+\addlegendentry{Unshielded (1.31 mV/A)}
+\addplot[color={rgb,255:red,125;green,46;blue,143}, mark=diamond*, mark size=1.8pt, thick, dashed]
+    coordinates {
+    (-3007.1,-3.287) (-2501.2,-2.769) (-2054.6,-1.130) (-1567.3,0.069)
+    (-1037.7,-0.001) (-532.1,0.107) (-6.3,1.318) (512.5,1.699)
+    (1011.4,2.837) (1557.8,3.241) (2048.6,3.933) (2560.6,4.807)
+    (3025.4,4.932)};
+\addlegendentry{Shielded (1.34 mV/A)}
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{Shielded vs.\ unshielded current sweeps (MCU readings) for (a) the non-irradiated and (b) the irradiated sample.}
+\label{fig:shielding-overlay}
+\end{figure}
+
+ Shielding changes the gradient by $+10\%$ on the non-irradiated board and $+2.3\%$ on the irradiated board.
+
+\subsection{Session-to-Session Variance}
+\label{sec:session-variance}
+
+To better quantify the expected measurement tolerance and validate earlier findings, a secondary current sweep was performed on the non-irradiated shielded MCU board on. This validation test was conducted at $V_{\text{DD}} = \SI{3.29}{\volt}$.
+
+The raw data logged for this secondary shielded sweep is detailed in Table~\ref{tab:variance-new-data}. Figure~\ref{fig:variance-overlay} visualizes this data alongside the initial shielded non-irradiated sweep to illustrate the session-to-session any offset and sensitivity drift. 
+
+\begin{figure}[H]
+    \centering
+    
+    % --- LEFT SIDE: THE TABLE ---
+    \begin{minipage}[c]{0.38\textwidth}
+        \centering
+        \small 
+        \captionof{table}{Validation Sweep: Non-Irradiated Shielded Board}
+        \label{tab:variance-new-data}
+        
+        \begin{tabular}{@{}cc@{}}
+            \toprule
+            INA Current (mA) & MCU (mV) \\
+            \midrule
+            \(-3046.47\) & 8.039 \\
+            \(-2492.64\) & 8.595 \\
+            \(-2009.76\) & 9.604 \\
+            \(-1493.87\) & 10.014 \\
+            \(-1037.81\) & 11.110 \\
+            \(-507.16\) & 11.312 \\
+            \(-4.58\) & 12.514 \\
+            $494.27$ & 12.888 \\
+            $1055.68$ & 13.579 \\
+            $1515.83$ & 14.455 \\
+            $2016.78$ & 14.890 \\
+            $2487.65$ & 15.978 \\
+            $3006.08$ & 16.192 \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}\hfill
+    % --- RIGHT SIDE: THE PLOT ---
     \begin{minipage}[c]{0.58\textwidth}
         \centering
         \begin{tikzpicture}
             \begin{axis}[
                 width=\textwidth,
-                height=6cm,
-                title={Bridge Output vs. Trace Current},
-                xlabel={Current (mA)},
-                ylabel={MCU (mV)},
+                height=6.5cm,
+                title={Session-to-Session Variance},
+                title style={align=center},
+                xlabel={Trace Current (mA)},
+                ylabel={Bridge Output (mV)},
                 grid=both,
                 grid style={line width=.1pt, draw=gray!20},
                 major grid style={line width=.2pt, draw=gray!50},
-                mark size=1.5pt,
-                label style={font=\small},
-                x tick label style={rotate=45, anchor=east},
-                /pgf/number format/1000 sep={}
+                xmin=-3200, xmax=3200,
+                ymin=7, ymax=17,
+                xtick={-3000,-2000,-1000,0,1000,2000,3000},
+                /pgf/number format/1000 sep={},
+                legend style={at={(0.5,-0.25)}, anchor=north, font=\scriptsize, legend columns=2, draw=none},
             ]
-                \addplot[color=cyan, thick, mark=*] coordinates {
-                    (-3007.1, -3.287)
-                    (-2501.2, -2.769)
-                    (-2054.6, -1.130)
-                    (-1567.3, 0.069)
-                    (-1037.7, -0.001)
-                    (-532.1, 0.107)
-                    (-6.3, 1.318)
-                    (512.5, 1.699)
-                    (1011.4, 2.837)
-                    (1557.8, 3.241)
-                    (2048.6, 3.933)
-                    (2560.6, 4.807)
-                    (3025.4, 4.932)
+                
+                % Initial Shielded Run
+                \addplot[
+                    color={rgb,255:red,0;green,153;blue,76}, 
+                    mark=square*, mark size=1.5pt, thick, dashed
+                ] coordinates {
+                    (-3043.4,8.039) (-2522.5,8.549) (-2057.7,9.594) (-1540.3,9.949)
+                    (-1040.2,11.170) (-546.2,11.319) (-6.3,12.705) (535.4,12.946)
+                    (996.2,13.931) (1523.0,14.530) (2038.1,15.532) (2486.1,16.103)
+                    (2988.7,16.474)
                 };
+                \addlegendentry{Initial Run (\(\sim\)1.45 mV/A)}
+
+                % Validation Run (25/09)
+                \addplot[
+                    color=purple, 
+                    mark=*, mark size=1.5pt, thick
+                ] coordinates {
+                    (-3046.47, 8.039) (-2492.64, 8.595) (-2009.76, 9.604) (-1493.87, 10.014)
+                    (-1037.81, 11.110) (-507.16, 11.312) (-4.58, 12.514) (494.27, 12.888)
+                    (1055.68, 13.579) (1515.83, 14.455) (2016.78, 14.890) (2487.65, 15.978)
+                    (3006.08, 16.192)
+                };
+                \addlegendentry{Validation Run (\(\sim\)1.35 mV/A)}
+
             \end{axis}
         \end{tikzpicture}
-        \captionof{figure}{Plot of the irradiated, shielded current sweep data detailed in Table~\ref{tab:sensitivity-irr-shielded}.}
-        \label{fig:sensitivity-irr-plot}
+        \captionof{figure}{Plots of two discrete testing sessions on the same shielded, non-irradiated board.}
+        \label{fig:variance-overlay}
     \end{minipage}
+    
 \end{figure}
 
-A linear fit gives a sensitivity of \SI{1.342}{\milli\volt\per\ampere} ($R^2 = 0.975$), corresponding to approximately \SI{3.67}{\milli\volt\per\volt\per\milli\tesla}. This sits close to the unshielded-irradiated result (\SI{1.312}{\milli\volt\per\ampere}, Section~11.4, a 2.3\% difference) and noticeably closer to it than to the unirradiated-shielded result (\SI{1.4465}{\milli\volt\per\ampere}, Section~10.2, a 10\% boost from shielding). In other words, the shielding-driven sensitivity increase clearly observed on the unirradiated board (Section~10.2) was not clearly reproduced on the irradiated board here. \todo{This discrepancy is not yet explained -- possibilities include: the irradiated board's current range and sample spacing differ slightly from the unirradiated sweep (a genuine methodological difference, not yet controlled for); normal session-to-session/board-to-board variation, of the same 3--7\% scale documented throughout this report, happens to have worked in the opposite direction here; or shielding genuinely interacts differently with the irradiated sensor's response. Distinguishing between these needs at least one more shielded-irradiated repeat, ideally in the same session as a shielded-unirradiated control, before drawing a firm conclusion -- do not overstate this in the Discussion/Conclusion beyond \"not yet reproduced\" until that is done.} No statistically significant change in sensitivity attributable to radiation is apparent in either the shielded or unshielded comparison, which remains the primary, better-supported finding of this radiation strand (Section~11.4).
+A linear estimation of the validation sweep data yields an approximate sensitivity of \SI{1.35}{\milli\volt\per\ampere}. When compared to the initial shielded run's sensitivity of \SI{1.45}{\milli\volt\per\ampere} (Section~\ref{sec:shielded-results}), this reveals an approximate 7\% discrepancy attributable to standard session-to-session environmental and setup variance.
+
+Crucially, this baseline session to session variance contextualizes the earlier shielding tests. The 2.3\% to 10\% sensitivity differences previously observed between unshielded and shielded states fall within this expected session to session tolerance. Consequently, the data does not demonstrate a distinct shielding effect, the observed deviations are likely artifacts of standard testing drift rather than a physical shift in the sensor's ambient response. Furthermore, no statistically significant change in sensitivity is apparent across either shielding condition.
 
 \section{Quantitative Magnetic Hysteresis Testing}
 \label{sec:hysteresis}
