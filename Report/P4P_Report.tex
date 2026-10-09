@@ -1095,12 +1095,24 @@ Once driven into saturation, the sensor was observed to return to a \emph{new}, 
 
 Crystalline MgO, the MTJ's insulating barrier, is expected to be substantially more radiation-tolerant than the amorphous SiO\textsubscript{2} gate oxide used in conventional silicon devices, for the reasons discussed in Section~\ref{sec:rad-tolerance-lit}. To test this without confounding the result with unrelated failure modes, only the passive CT100 sensor itself was irradiated by itself.
 
+
 \subsection{Experimental Setup}
 \label{sec:rad-setup}
 
-Ten CT100's was exposed using a \SI{320}{\kilo\volt} tube potential (tungsten target, \SI{30}{\degree} anode angle, \SI{3}{\milli\metre} beryllium filter) at a beam current of \SI{10}{\milli\ampere}. The beam was seasoned (ramped up to full parameters) from 15:55 to 16:05 NZST on 22 July 2026, held at full \SI{320}{\kilo\volt}/\SI{10}{\milli\ampere} output until switch-off at 19:26 NZST, giving \SI{3}{\hour}~\SI{21}{\minute} (\SI{12060}{\second}) of full-power exposure.
+Ten CT100 sensors were exposed using a \SI{320}{\kilo\volt} tube potential (tungsten target, \SI{30}{\degree} anode angle, \SI{3}{\milli\metre} beryllium filter) at a beam current of \SI{10}{\milli\ampere}. The beam was seasoned (ramped up to full parameters) from 15:55 to 16:05 NZST on 22 July 2026, and held at full \SI{320}{\kilo\volt}/\SI{10}{\milli\ampere} output until switch-off at 19:26 NZST, giving \SI{3}{\hour}~\SI{21}{\minute} (\SI{12060}{\second}) of full-power exposure.
 
-The dose rate at the sensor was calculated as \SI{0.0338}{\gray\per\second} (Si), based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
+The physical test setup inside the irradiation chamber is shown in Figure~\ref{fig:rad_testing_spec}. The dose rate at the sensor location was calculated as \SI{0.0338}{\gray\per\second} (Si), equal to \SI{3.38}{rad(Si)\per\second}, based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{rad_testing_spec}
+    \caption{ Comparison of the dose rates found in
+the radiation environments and the rates used in the testing of components
+for tolerance.}
+    \label{fig:rad_testing_spec}
+\end{figure}
+
+To contextualize the severity and relevance of this exposure, these parameters were evaluated against the radiation hardness assurance framework outlined by Poivey~\cite{poivey_rha}. Actual natural space environments, such as Low Earth Orbit (LEO) and Geosynchronous Equatorial Orbit (GEO), typically expose components to extremely low, continuous dose rates below \SI{e-3}{rad(Si)\per\second}[cite: 21]. The experimental dose rate of \SI{3.38}{rad(Si)\per\second} provides a robust accelerated testing environment that effectively simulates cumulative degradation over a practical laboratory timeframe[cite: 21]. Notably, this rate aligns directly with the SCC 22900 (European space) recommendations, which mandate testing dose rates between approximately 0.01 and \SI{10}{rad(Si)\per\second}[cite: 21]. Consequently, the accumulated \SI{40.76}{\kilo rad}(Si) represents a fully compliant and highly relevant benchmark for standard orbital spaceflight qualification.
 
 
 \subsection{Sensor-Only Board Saturation Response Post-Irradiation}
@@ -1278,7 +1290,19 @@ On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\v
 \subsection{Enclosure Design}
 \label{sec:shielding-enclosure}
 
-To address the ambient-field discrepancy identified in Section~\ref{sec:field-discrepancy}, a 3D-printed enclosure incorporating ferrite shielding material was designed. Mu-metal, though offering higher permeability, was not used due to cost constraints; ferrite was selected as a lower-cost alternative offering useful shielding performance. An initial informal test, manually covering and uncovering the sensor with a sheet of nanocrystalline shielding material while monitoring output ripple, showed a clear qualitative reduction in ripple while covered, motivating the purpose-built enclosure. The magnetic shielding progression—including the internal board placement (Figure~\ref{fig:box_pcb}) and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
+To address the possible ambient-field discrepancy identified in Section~\ref{sec:sensitivity-fit}, a 3D-printed enclosure incorporating ferrite shielding material was designed. The primary mechanism of magnetic shielding relies on enclosing the PCB with a high-permeability material, which provides a low-reluctance path that shunts external magnetic flux away from the device and thus influencing our TMR sensor readings. 
+
+Mu-metal, a nickel-iron alloy, is traditionally the gold standard for DC and low-frequency magnetic shielding due to its exceptionally high initial permeability (typically $\mu_i > 80,000$). However, it was not used for this enclosure due to strict cost constraints and its sensitivity to mechanical stress, which requires expensive re-annealing after shaping. \todo{add sources and whatever}
+
+Instead, a MnZn-based SIFERRIT material TDK N95 was selected as a cost-effective preliminary alternative. According to the manufacturer specifications, N95 ferrite offers an initial relative permeability ($\mu_i$) of 3000 at $25^{\circ}\text{C}$. While this is an order of magnitude lower than Mu-metal, it should still provides some flux-shunting capability. Six TDK N95 ferrite slabs, each measuring \SI{100}{\milli\metre} $\times$ \SI{100}{\milli\metre} $\times$ \SI{5}{\milli\metre}, were arranged to construct the  shielding walls. With a saturation flux density $B_S$ of \SI{525}{\milli\tesla} at room temperature, the \SI{5}{\milli\metre} the slabs are unlikely to saturation under our testing conditions so our permeability remains linear. 
+
+To enable continuous operation and data logging during testing, power and data connections via an ST-Link programmer must be routed to the enclosed PCB. Consequently, a physical cut-out was designed into the enclosures to accommodate this. However, any gap effects the reluctance of the shielding and allows for ambient magnetic flux to leak and impact the TMR readings.
+
+To mitigate this flux leakage, a flexible nanocrystalline shielding foil was used. This highly permeable material was used to cover cable cut-out.
+
+The magnetic shielding progression—including the printed chassis slots, the internal board placement (Figure~\ref{fig:box_pcb}), and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
+
+The magnetic shielding progression—including the printed chassis slots, the internal board placement (Figure~\ref{fig:box_pcb}), and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
 
 \begin{figure}[H]
     \centering
