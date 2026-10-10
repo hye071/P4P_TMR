@@ -686,28 +686,67 @@ A future PCB revision could integrate a hardware offset to bias the bridge's ref
 \section{Non-Irradiated Sensitivity and Saturation Characterisation}
 \label{sec:nonirr-characterisation}
 
-\subsection{Data Collection Method}
-\label{sec:data-collection}
-
-Current-sweep data was logged via the MCU's SWV output, exported, and processed in MATLAB. Rather than relying on single instantaneous readings, each current setting was captured over a 20-second window and averaged. A single-sample readings were found to be unreliable due to the  MCU ADC's quantisation behaviour where raw SWV data at a given current setting was observed hopping between a small number of discrete levels spaced at multiples of the \SI{1.61}{\milli\volt} LSB typically spanning 1--2 LSBs of scatter around the true mean. Note that for this non-irradiated integrated board the saturation recovery test was performed before the current-sweep test.
-
-
 \subsection{Saturation Recovery on the Integrated Board}
 \label{sec:sat-recovery-integrated}
 
-On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\volt}$ and a TMR sensor supply of $V_{\text{DD}} = \SI{3.32}{\volt}$, the saturation-to-baseline voltage swing was $\Delta V = \SI{1.1521}{\volt}$, with a recovery time of $t_{\text{rec}} = \SI{82.3}{\milli\second}$, corresponding to a recovery frequency of $f \approx \SI{12.15}{\hertz}$ (Figure~\ref{fig:swv}).
+On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\volt}$ and a TMR sensor supply of $V_{\text{DD}} = \SI{3.32}{\volt}$. 
 
-\begin{figure}[h]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{response.png}
-\caption{Measured saturation recovery response on the integrated board (SWV trace, logged and plotted in MATLAB).}
-\label{fig:swv}
+\caption{Integrated board, non-irradiated: saturation ceiling, baseline shift and recovery.}
+\label{tab:sat-ceiling-intl}
+\small
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Run & Direction & Ceiling (V) & \multicolumn{2}{c}{Baseline (mV)} & Swing (V) & $\tau$ (ms) & Recovery (ms) \\
+    &           &             & before & after & & & \\
+\midrule
+A & Negative & $-1.152$ & $-6.4$ & $-8.1$ & 1.144 & 13.1 & 65.2 \\
+B & Positive & $+1.138$ & $-8.1$ & $+12.9$ & 1.125 & 13.3 & 60.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.5cm, vertical sep=1.7cm},
+    width=0.48\textwidth, height=0.36\textwidth,
+    xmin=-20, xmax=150, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Non-irradiated, negative saturation recovery }, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2, xlabel={Time since rising edge (ms)}]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_neg.csv};
+\draw[dashed] (axis cs:65.2,-1.3) -- (axis cs:65.2,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:68,-0.55) {$t_{\text{rec}}=65.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:5,-1.1) {ceiling $-1.152$ V};
+
+\nextgroupplot[title={(b) Non-irradiated, positive saturation recovery }, ymin=-0.2, ymax=1.3, xlabel={Time since falling edge (ms)}]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_pos.csv};
+\draw[dashed] (axis cs:60.2,-0.2) -- (axis cs:60.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:63,0.45) {$t_{\text{rec}}=60.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:2,1.1) {ceiling $+1.138$ V};
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{Non-Irradiated Saturation recovery on the integrated board after the magnet is removed, for both field directions. }
+\label{fig:integrated-recovery}
 \end{figure}
+
+Comparing the saturation behaviour of the integrated board against the standalone sensor baselines (Section~\ref{sec:standalone-sat-recovery}) reveals highly consistent performance across both hardware configurations. In both test environments, the TMR elements exhibited symmetric saturation limits. The integrated board reached voltage ceilings of \SI{-1.152}{\volt} and \SI{+1.138}{\volt}, which closely match the \SI{-1.145}{\volt} and \SI{+1.125}{\volt} extremes observed in the standalone samples. 
+
+The transient recovery times demonstrate tight alignment between the two configurations. The integrated board achieved full baseline restoration slightly faster of $t_{\text{rec}} \approx 60.2\text{--}\SI{65.2}{\milli\second}$ than the standalone sensors $t_{\text{rec}} \approx 67.5\text{--}\SI{76.5}{\milli\second}$.  As noted in Section~\ref{sec:sat-test-methodology}, the physical removal of the Neodymium magnet was performed manually. 
 
 \subsection{Current Sweep: Data and Sensitivity Fit}
 \label{sec:sensitivity-fit}
 
-The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately \SI{0.5}{\ampere} steps, all within a single session at $V_{\text{CC}} = \SI{3.32}{\volt}$ (Table~\ref{tab:sensitivity-unirr-full}).
+Current-sweep data was logged via the MCU's SWV output, exported, and processed in MATLAB. Rather than relying on single instantaneous readings, each current setting was captured over a 20-second window and averaged. A single-sample readings were found to be unreliable due to the  MCU ADC's quantisation behaviour where raw SWV data at a given current setting was observed hopping between a small number of discrete levels spaced at multiples of the \SI{1.61}{\milli\volt} LSB typically spanning 1--2 LSBs of scatter around the true mean. Note that for this non-irradiated integrated board the saturation recovery test was performed before the current-sweep test.
+
+
+
+The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately \SI{0.5}{\ampere} steps, all within a single session at $V_{\text{DD}} = \SI{3.32}{\volt}$ (Table~\ref{tab:sensitivity-unirr-full}).
 
 \begin{table}[H]
     \centering
@@ -792,7 +831,7 @@ V_0
 
 where $V_0$ is the zero-field output voltage. Figure~\ref{fig:voltage-cross-val} below 
 uses a $V_0$ value of \SI{12.980}{\milli\volt} to visually compare the voltage
-\emph{slope}; it is not a theoretical prediction of the CT100 offset voltage.
+\emph{slope}; it is not a theoretical prediction of the CT100 offset voltage. Figure~\ref{fig:current-cross-val} plots how close the INA device follows the DMM measurement.
 
 
 
@@ -855,7 +894,8 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
                     samples=100
                 ]
                 {12.980+1.655*(x/1000)};
-                \addlegendentry{Theoretical ($V_O = 12.980mV$)}
+
+\addlegendentry{\shortstack{Theoretical \\ $V_O = 12.980mV$}}
 
                 \addplot[
                     color=black,
@@ -865,7 +905,7 @@ ytick={-20,-15,-10,-5,0,5,10,15,20},
                     samples=100
                 ]
                 {1.64538*(x/1000)};
-           \addlegendentry{Theoretical ($V_O = 0mV$) }
+           \addlegendentry{\shortstack{Theoretical \\ $V_O = 0\text{ mV}$}}
 
                 % ------------------------------------------------
                 % DMM Data
@@ -1112,7 +1152,7 @@ for tolerance.}
     \label{fig:rad_testing_spec}
 \end{figure}
 
-To contextualize the severity and relevance of this exposure, these parameters were evaluated against the radiation hardness assurance framework outlined by Poivey~\cite{poivey_rha}. Actual natural space environments, such as Low Earth Orbit (LEO) and Geosynchronous Equatorial Orbit (GEO), typically expose components to extremely low, continuous dose rates below \SI{e-3}{rad(Si)\per\second}[cite: 21]. The experimental dose rate of \SI{3.38}{rad(Si)\per\second} provides a robust accelerated testing environment that effectively simulates cumulative degradation over a practical laboratory timeframe[cite: 21]. Notably, this rate aligns directly with the SCC 22900 (European space) recommendations, which mandate testing dose rates between approximately 0.01 and \SI{10}{rad(Si)\per\second}[cite: 21]. Consequently, the accumulated \SI{40.76}{\kilo rad}(Si) represents a fully compliant and highly relevant benchmark for standard orbital spaceflight qualification.
+To contextualize the severity and relevance of this exposure, these parameters were evaluated against the radiation hardness assurance framework outlined by Poivey~\cite{poivey_rha}. Actual natural space environments, such as Low Earth Orbit (LEO) and Geosynchronous Equatorial Orbit (GEO), typically expose components to extremely low, continuous dose rates below \SI{e-3}{rad(Si)\per\second}. The experimental dose rate of \SI{3.38}{rad(Si)\per\second} provides a robust accelerated testing environment that effectively simulates cumulative degradation over a practical laboratory timeframe. Notably, this rate aligns directly with the SCC 22900 (European space) recommendations, which mandate testing dose rates between approximately 0.01 and \SI{10}{rad(Si)\per\second}[cite: 21]. Consequently, the accumulated \SI{40.76}{\kilo rad}(Si) represents a fully compliant and highly relevant benchmark for standard orbital spaceflight qualification.
 
 
 \subsection{Sensor-Only Board Saturation Response Post-Irradiation}
@@ -1192,7 +1232,7 @@ Because the performance difference between the non-irradiated and irradiated gro
 \subsection{Quantitative Sweep on the Integrated Board}
 \label{sec:rad-sweep}
 
-Following transfer to a integrated board the same current-sweep experiment as Section~\ref{sec:data-collection} was repeated (Table~\ref{tab:sensitivity-irr}). Note, the irradated sensor had not been exposed to saturating magnetic fields prior to irradiation, both pre- and post-irradiation sweeps were performed on a bridge with zero magnetic history. This ensured the sensitivity measurements were isolated from any confounding hysteresis effects (Section~\ref{sec:standalone-sat-recovery}).
+Following transfer to a integrated board the same current-sweep experiment as Section~\ref{sec:sensitivity-fit} was repeated results can be found in Table~\ref{tab:sensitivity-irr}. Note, the irradated sensor had not been exposed to saturating magnetic fields prior to irradiation, both pre- and post-irradiation sweeps were performed on a bridge with zero magnetic history. 
 
 \begin{figure}[H]
     \centering
@@ -1274,15 +1314,52 @@ The same linear-fit procedure gives a sensitivity of \SI{1.269}{\milli\volt\per\
 \subsection{Irradiated Saturation Recovery on the Integrated Board}
 \label{sec:sat-recovery-irradiated}
 
-On the integrated board, with a regulator input of $V_{\text{CC}} = \SI{4.97}{\volt}$ and a TMR sensor supply of $V_{\text{DD}} = \SI{3.32}{\volt}$, the saturation-to-baseline voltage swing was $\Delta V = \SI{1.1521}{\volt}$, with a recovery time of $t_{\text{rec}} = \SI{82.3}{\milli\second}$, corresponding to a recovery frequency of $f \approx \SI{12.15}{\hertz}$ (Figure~\ref{fig:swv}).
-\todo{do radaition board saturation testing}
+Following the \SI{40.76}{\kilo rad}(Si) Total Ionizing Dose (TID) exposure, the saturation recovery of the integrated board was evaluated with a regulator input of $V_{\text{CC}} = \SI{5.00}{\volt}$ and a measured TMR sensor supply of $V_{\text{DD}} = \SI{3.289}{\volt}$, the irradiated board was subjected to the same magnetic saturation procedure as in Section~\ref{sec:sat-recovery-integrated}. The resulting recovery waveforms are plotted in Figure~\ref{fig:integrated-recovery-sat} and the key metrics are summarized in Table~\ref{tab:sat-ceiling-iradl}. The following irradiated data was collected on the 9th of October 2026. 
+
+\begin{table}[h]
+\centering
+\caption{Integrated board, irradiated: saturation ceiling, baseline shift and recovery.}
+\label{tab:sat-ceiling-iradl}
+\small
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Run & Direction & Ceiling (V) & \multicolumn{2}{c}{Baseline (mV)} & Swing (V) & $\tau$ (ms) & Recovery (ms) \\
+    &           &             & before & after & & & \\
+\midrule
+A & Negative & $-1.146$ & $0.0$ & $0.0$ & 1.146 & 13.8 & 66.7 \\
+B & Positive & $+1.149$ & $0.0$ & $+1.6$ & 1.147 & 12.7 & 63.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.85\textwidth]{response.png}
-\caption{Measured saturation recovery response on the integrated board (SWV trace, logged and plotted in MATLAB).}
-\label{fig:swv}
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.5cm, vertical sep=1.7cm},
+    width=0.48\textwidth, height=0.36\textwidth,
+    xmin=-20, xmax=150, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Irradiated, negative saturation recovery}, xlabel={Time since rising edge (ms)}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_neg.csv};
+\draw[dashed] (axis cs:66.7,-1.3) -- (axis cs:66.7,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:70,-0.55) {$t_{\text{rec}}=66.7$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:5,-1.1) {ceiling $-1.146$ V};
+
+\nextgroupplot[title={(b) Irradiated, positive saturation recovery }, xlabel={Time since falling edge (ms)}, ymin=-0.2, ymax=1.3]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_pos.csv};
+\draw[dashed] (axis cs:63.2,-0.2) -- (axis cs:63.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:66,0.45) {$t_{\text{rec}}=63.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:3,1.1) {ceiling $+1.149$ V};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Irradiated Saturation recovery on the integrated board after the magnet is removed, for both field directions. }
+\label{fig:integrated-recovery-sat}
 \end{figure}
+
+
 
 \section{Magnetic Shielding}
 \label{sec:shielding}
@@ -1302,7 +1379,6 @@ To mitigate this flux leakage, a flexible nanocrystalline shielding foil was use
 
 The magnetic shielding progression—including the printed chassis slots, the internal board placement (Figure~\ref{fig:box_pcb}), and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
 
-The magnetic shielding progression—including the printed chassis slots, the internal board placement (Figure~\ref{fig:box_pcb}), and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
 
 \begin{figure}[H]
     \centering
@@ -1364,7 +1440,7 @@ The magnetic shielding progression—including the printed chassis slots, the in
         \label{fig:box_nano}
     \end{subfigure}
     
-    \caption{Development of the magnetic shielding enclosure. (a) The 3D-printed chassis. (b) The integrated sensor board mounted inside. (c) The assembled test configuration wrapped in shielding. Annotations indicate the placement of ferrite plates (\textbf{F}) and flexible nanocrystalline shielding (\textbf{N}).} Maybe say what kinda of ferrite and nano lol
+    \caption{Development of the magnetic shielding enclosure. (a) The 3D-printed chassis. (b) The integrated sensor board mounted inside. (c) The assembled test configuration wrapped in shielding. Annotations indicate the placement of ferrite plates (\textbf{F}) and flexible nanocrystalline shielding (\textbf{N}).} 
     \label{fig:shielding_enclosure}
 \end{figure}
     

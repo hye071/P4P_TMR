@@ -1,0 +1,73 @@
+% ============================================================
+% Preamble (if not already present):
+%   \usepackage{pgfplots}
+%   \usepgfplotslibrary{groupplots}
+%   \pgfplotsset{compat=1.18}
+% Put rec_*.csv and trace_*.csv in the same folder as main.tex.
+% ============================================================
+
+% ---------- Figure A: the four recovery transients ----------
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.5cm, vertical sep=1.7cm},
+    width=0.48\textwidth, height=0.36\textwidth,
+    xmin=-20, xmax=150, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Non-irradiated, negative}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_neg.csv};
+\draw[dashed] (axis cs:65.2,-1.3) -- (axis cs:65.2,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:68,-0.55) {$t_{\text{rec}}=65.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:25,-1.1) {ceiling $-1.152$ V};
+
+\nextgroupplot[title={(b) Non-irradiated, positive}, ymin=-0.2, ymax=1.3]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_pos.csv};
+\draw[dashed] (axis cs:60.2,-0.2) -- (axis cs:60.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:63,0.45) {$t_{\text{rec}}=60.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:25,1.1) {ceiling $+1.138$ V};
+
+\nextgroupplot[title={(c) Irradiated, negative}, xlabel={Time since falling edge (ms)}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_neg.csv};
+\draw[dashed] (axis cs:66.7,-1.3) -- (axis cs:66.7,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:70,-0.55) {$t_{\text{rec}}=66.7$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:25,-1.1) {ceiling $-1.146$ V};
+
+\nextgroupplot[title={(d) Irradiated, positive}, xlabel={Time since falling edge (ms)}, ymin=-0.2, ymax=1.3]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_pos.csv};
+\draw[dashed] (axis cs:63.2,-0.2) -- (axis cs:63.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:66,0.45) {$t_{\text{rec}}=63.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:25,1.1) {ceiling $+1.149$ V};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Saturation recovery on the integrated board after the magnet is removed, for both field directions, non-irradiated (top) and irradiated (bottom). Time zero is the falling edge. The dashed line marks the recovery time (output stays within 5\,mV of its final baseline).}
+\label{fig:integrated-recovery}
+\end{figure}
+
+% ---------- Figure B: baseline before and after each saturation ----------
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=1 by 2, vertical sep=1.6cm},
+    width=0.9\textwidth, height=0.30\textwidth,
+    ymin=-30, ymax=30, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+    unbounded coords=jump, restrict y to domain=-30:30,
+]
+\nextgroupplot[title={(a) Non-irradiated}, ylabel={$V_{\text{out}}$ (mV)}, xmin=0, xmax=18.2]
+\addplot[blue!70!black, thin] table[col sep=comma, x=t_s, y=v_mV] {trace_nonirr.csv};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:2,-20) {$-6.4$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:9,-20) {$-8.1$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:16,20) {$+12.9$ mV};
+\nextgroupplot[title={(b) Irradiated}, xlabel={Time (s)}, ylabel={$V_{\text{out}}$ (mV)}, xmin=0, xmax=32.2]
+\addplot[red!70!black, thin] table[col sep=comma, x=t_s, y=v_mV] {trace_irr.csv};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:3,-20) {$0.0$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:17,-20) {$0.0$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:30,20) {$+1.6$ mV};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Output baseline between saturation events (view clipped to $\pm 30$\,mV so the baseline is visible; the saturation excursions run off-scale). On the non-irradiated board the baseline steps from $-8.1$\,mV to $+12.9$\,mV after the positive saturation, a shift of $+20.9$\,mV. On the irradiated board the baseline moves by one ADC step (1.6\,mV) or less.}
+\label{fig:baseline-shift}
+\end{figure}

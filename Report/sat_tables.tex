@@ -1,0 +1,43 @@
+% ============================================================
+% Integrated-board saturation tables (replace your two placeholder
+% tables). Values come from the SWV exports no_rad_sat.txt and
+% rad_sat.txt.  Definitions (state these once in the text):
+%   ceiling   = largest output magnitude reached during the event
+%   baseline  = median output in a quiet window before / after the event
+%   swing     = |ceiling - baseline after|
+%   recovery  = time from the falling edge (output below 90% of the ceiling)
+%               until the output stays within 5 mV of the final baseline
+%   tau       = time constant of an exponential fit to the decay tail
+% ============================================================
+
+\begin{table}[h]
+\centering
+\caption{Integrated board, non-irradiated: saturation ceiling, baseline shift and recovery.}
+\label{tab:sat-ceiling-intl}
+\small
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Run & Direction & Ceiling (V) & \multicolumn{2}{c}{Baseline (mV)} & Swing (V) & $\tau$ (ms) & Recovery (ms) \\
+    &           &             & before & after & & & \\
+\midrule
+A & Negative & $-1.152$ & $-6.4$ & $-8.1$ & 1.144 & 13.1 & 65.2 \\
+B & Positive & $+1.138$ & $-8.1$ & $+12.9$ & 1.125 & 13.3 & 60.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Integrated board, irradiated: saturation ceiling, baseline shift and recovery.}
+\label{tab:sat-ceiling-iradl}
+\small
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Run & Direction & Ceiling (V) & \multicolumn{2}{c}{Baseline (mV)} & Swing (V) & $\tau$ (ms) & Recovery (ms) \\
+    &           &             & before & after & & & \\
+\midrule
+A & Negative & $-1.146$ & $0.0$ & $0.0$ & 1.146 & 13.8 & 66.7 \\
+B & Positive & $+1.149$ & $0.0$ & $+1.6$ & 1.147 & 12.7 & 63.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
