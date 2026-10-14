@@ -1,0 +1,2206 @@
+\documentclass[12pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\graphicspath{{figs/}}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage[nottoc]{tocbibind}
+\usepackage{siunitx} % For \SI{val}{unit} formatting
+\usepackage{cite}    % For \cite{} handling
+\usepackage{circuitikz} 
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{caption}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+
+
+\hypersetup{pdftitle={TMR Sensor Final Year Technical Report}, pdfauthor={Sam Ye}}
+
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% ============================================================
+% TITLE PAGE (excluded from page count)
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\large Department of Electrical, Computer, and Software Engineering \\ The University of Auckland \par}
+\vspace{2.5cm}
+{\Huge\bfseries Characterisation, Field Modelling, and Radiation Testing of a Commercial Tunnelling Magnetoresistance (TMR) Sensor for CubeSat Attitude Determination and Control \par}
+\vspace{2cm}
+{\Large Final Year Technical Report \par}
+\vspace{2.5cm}
+{\large\bfseries Sam Ye \par}
+\vspace{0.6cm}
+{\large Supervisor: Dariusz Kacprzak \par}
+\vspace{0.2cm}
+{\large Project Partner: Daniel Tieu \par}
+\vfill
+{\large \todo{insert submission date} \par}
+\end{titlepage}
+
+
+\clearpage
+\section*{Acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+The author thanks project supervisor Dariusz Kacprzak for guidance throughout this project, and project partner Daniel Tieu for his work on the parallel thermal-cycling test campaign. \todo{Add any further acknowledgements -- e.g.\ workshop/lab staff, the radiation-testing facility or operator, or funding sources -- once confirmed.}
+
+% Nitish, Aaron, Arnesh, Alex, jensen, Uzayr
+
+% fix formatting number an TOC
+
+\clearpage
+
+% ============================================================
+% ABSTRACT (excluded from page count)
+% ============================================================
+\pagenumbering{roman}
+\setcounter{page}{2}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+Tunnelling magnetoresistance (TMR) sensors offer chip-scale, high-sensitivity magnetic field detection that is attractive for CubeSat attitude determination and control, yet the technology has little space heritage, and little device-level data exists on how a commercial part behaves when it is saturated by a strong field or after irradiation. This report characterises a low-cost commercial TMR sensor, the CT100, using two custom printed circuit boards: a standalone board exposing the raw bridge output, and an integrated board that adds an STM32 microcontroller and an independent current-sense reference to drive and log a controlled test field from a PCB trace. The saturation ceiling was within about 5\% of $V_{\text{DD}}/3$ on every unit and symmetric about zero, and the output recovered from saturation in 40 to \SI{85}{\milli\second} as an exponential decay with a time constant of about 9 to \SI{14}{\milli\second}. At a \SI{10}{\hertz} magnetometer rate this requires the first one to two samples after a saturating event to be discarded. On a fresh sensor, saturation shifted the zero-field output by about \SI{16}{\milli\volt} (roughly \SI{1}{\milli\tesla}) while the gradient changed by only 0.5\% and the response stayed linear, so a one-point re-zeroing is needed after saturation. The measured current-to-output gradient was 77 to 87\% of the theoretical value, consistent with datasheet tolerance and field-model uncertainty. After a total ionising dose of \SI{40.76}{\kilo rad}(Si), no change attributable to radiation was found in the ceiling, recovery or gradient, and ferrite shielding produced no measurable change. The results suggest that the CT100 is a promising low-cost COTS candidate for CubeSat magnetometry, although its resolution at geomagnetic field levels remains to be demonstrated.
+
+\clearpage
+
+% ============================================================
+% TABLE OF CONTENTS (excluded from page count)
+% ============================================================
+\tableofcontents
+\clearpage
+
+% ============================================================
+% GLOSSARY OF TERMS
+% \todo Confirm with your rubric whether the Glossary counts toward
+% the 20-page limit -- see the note in Section 1.
+% ============================================================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section*{Glossary of Terms}
+\addcontentsline{toc}{section}{Glossary of Terms}
+
+\begin{description}[leftmargin=3.2cm, style=nextline]
+\item[ADCS] Attitude Determination and Control System
+\item[ADC] Analogue-to-Digital Converter
+\item[AMR] Anisotropic Magnetoresistance
+\item[COTS] Commercial-Off-The-Shelf
+\item[EPS] Electrical Power System
+\item[FEM] Finite Element Method
+\item[FGM] Fluxgate Magnetometer
+\item[GMR] Giant Magnetoresistance
+\item[HAL] Hardware Abstraction Layer (STM32 firmware library)
+\item[$\text{I}^2\text{C}$] Inter-Integrated Circuit (serial communication bus)
+\item[INA] Current-sense amplifier (current monitor IC)
+\item[krad(Si), Mrad(Si)] Kilorad / megarad of absorbed dose in silicon -- units of Total Ionising Dose
+\item[LDO] Low-Dropout (linear voltage regulator)
+\item[MCU] Microcontroller Unit
+\item[MgO] Magnesium Oxide (crystalline tunnel-barrier material)
+\item[MI] Magneto-Inductive (sensor technology)
+\item[MTJ] Magnetic Tunnel Junction
+\item[OBC] On-Board Computer
+\item[PCB] Printed Circuit Board
+\item[SWaP-C] Size, Weight, Power, and Cost
+\item[SWV] Serial Wire Viewer (ARM Cortex debug trace interface)
+\item[TID] Total Ionising Dose
+\item[TMR] Tunnelling Magnetoresistance
+\item[TRL] Technology Readiness Level
+\item[Rad-Hard] Radiation-Hardened
+\end{description}
+
+\clearpage
+
+% ============================================================
+% PAGE-COUNT RANGE START (Introduction -- Conclusions)
+% ============================================================
+
+\section{Introduction}
+\label{sec:intro}
+
+CubeSats are nanosatellites (1--10~kg) built from standardised 10~cm cubic units, offering low-cost, rapid access to space relative to traditional monolithic satellite missions. This miniaturisation is achieved at the expense of severe Size, Weight, Power, and Cost (SWaP-C) constraints, which particularly affect the Attitude Determination and Control System (ADCS): the subsystem responsible for orienting a CubeSat for communications, power generation, and payload pointing. Onboard magnetometers are the primary means by which a CubeSat senses its attitude relative to the Earth's magnetic field, so the choice of magnetometer technology is central to ADCS performance within a tightly constrained mass, volume, and power budget.
+
+Heritage fluxgate magnetometers offer excellent sensitivity but are too large and power-hungry for CubeSat platforms \cite{survey-magnetic-sensing}, which has motivated a shift toward chip-scale magnetoresistive sensors. Among these, Tunnelling Magnetoresistance (TMR) sensors offer higher sensitivity than AMR or GMR devices in a footprint of only a few millimetres square, but TMR remains comparatively immature for space use, typically cited at Technology Readiness Level (TRL) 3 \cite{alves-thesis}. Little characterisation data exists for how a commercial TMR part behaves under two space-relevant stresses: a strong magnetic field that drives it into saturation, and ionising radiation.
+
+This report documents the design, construction, and testing of a project evaluating a commercial-off-the-shelf (COTS) CT100 TMR sensor for CubeSat ADCS/EPS applications, carried out by the author. Two custom PCBs were developed: a primary board exposing the raw CT100 bridge output, and an integrated telemetry board combining the sensor with microcontroller-based logging and an independent current-based field reference. The work addresses four objectives:
+
+\begin{enumerate}[label=(\roman*)]
+\item characterise the CT100 sensor itself -- its operating principle, its Wheatstone-bridge topology, and its saturation and hysteresis behaviour;
+\item design and build hardware capable of generating a known, controllable test field and logging the sensor's response to it automatically;
+\item quantify the sensor's sensitivity, saturation-recovery time, and the accuracy of the field model used to drive it; and
+\item assess the sensor's tolerance to Total Ionising Dose (TID) radiation representative of the CubeSat orbital environment, with and without magnetic shielding.
+\end{enumerate}
+
+A parallel thermal-cycling test campaign investigating TMR temperature sensitivity and thermal-shock response was led by project partner Daniel Tieu and is reported separately; it is outside the scope of this report.
+
+The remainder of this report follows the project's own design and testing sequence. Section~\ref{sec:litreview} reviews the relevant literature and identifies the research gap, and Section~\ref{sec:research-question} states the research question and objectives. Section~\ref{sec:ct100} describes the CT100 sensor, Section~\ref{sec:instrumentation} the instrumentation, and Section~\ref{sec:standalone-board} the standalone sensor board with its sensor-only saturation tests. Section~\ref{sec:integrated-board} covers the integrated board and the field model used to drive it. Section~\ref{sec:nonirr-characterisation} presents the non-irradiated saturation recovery and current sweeps, and validates the instruments against each other. Section~\ref{sec:radiation-testing} reports the radiation testing, Section~\ref{sec:shielding} the magnetic shielding tests, and Section~\ref{sec:hysteresis} the test of how saturation shifts the sensor's output. Sections~\ref{sec:discussion} and~\ref{sec:conclusions} discuss the findings and conclude.
+
+\section{Literature Review}
+\label{sec:litreview}
+
+\subsection{Magnetometer Technologies for CubeSat ADCS}
+\label{sec:magnetometer-tech}
+
+Fluxgate magnetometers (FGMs) have been used in space exploration for decades: an alternating current drives a coil-wrapped permeable core toward saturation, and an external field produces a measurable imbalance between drive and sense coil currents. FGMs offer excellent sensitivity (of order \SI{10}{\pico\tesla\per\sqrt{\hertz}}) but are far too large and power-hungry for CubeSat platforms, typically weighing over \SI{1}{\kilo\gram} and drawing more than \SI{10}{\watt} \cite{survey-magnetic-sensing}. Magneto-inductive (MI) sensors, which sense an external field through the change it induces in the resonant frequency of an LR oscillator, trade sensitivity for a much smaller footprint and lower power draw \cite{survey-magnetic-sensing}.
+
+Hall-effect sensors are inexpensive and, because they contain no ferromagnetic material, immune to magnetic saturation. However, their comparatively low sensitivity confines them to detecting fields above roughly \SI{1}{\milli\tesla}, and while flux concentrators can improve their effective sensitivity, doing so reintroduces the mass and volume penalty that SWaP-C constraints are meant to avoid \cite{amr-gmr-hall-bridging}. Magnetoresistive sensors -- AMR, GMR, and TMR -- instead occupy the sub-milliTesla sensitivity range needed for geomagnetic-field sensing while remaining chip-scale. AMR sensors (typically permalloy thin films) achieve high resolution and bandwidth but saturate above roughly \SI{1}{\milli\tesla} and often require periodic magnetic reset \cite{amr-gmr-hall-bridging}. GMR sensors, based on a multilayer stack of alternating ferromagnetic and non-magnetic conductive layers, offer higher sensitivity again but are more prone to hysteresis-induced offset and can be permanently degraded by strong fields \cite{amr-gmr-hall-bridging}. Chip-scale magnetoresistive sensing has already reached flight heritage: the AMR-based MAGIC instrument, for example, has demonstrated a \SI{104}{\gram}, \SI{0.5}{\watt} dual-sensor vector magnetometer in orbit on the RadCube CubeSat \cite{magic-radcube}.
+
+TMR sensors extend this trend further. They are built from magnetic tunnel junctions, whose spin-dependent tunnelling through an ultra-thin barrier was first demonstrated by Julli\`ere \cite{julliere1975} and made practical at room temperature with crystalline MgO barriers \cite{parkin2004,yuasa2004}. TMR is the newest of the magnetoresistive technologies and is generally cited at TRL 3, compared with TRL 9 for AMR and GMR \cite{alves-thesis}. The specific device used in this project is described in Section~\ref{sec:ct100}.
+
+\subsection{Radiation Tolerance of TMR Sensors}
+\label{sec:rad-tolerance-lit}
+
+Because TMR is comparatively new to the space sector, published radiation-tolerance data is limited, though what exists is promising. Alves' assessment of magnetoresistive sensors for space applications supports the conclusion that TMR devices are radiation-hard \cite{alves-thesis}. Published testing of TMR magnetic sensors based on MTJ structures found their performance unchanged under bias voltages of $+5$, $0$, and $-5\,\text{V}$ after a Total Ionising Dose (TID) of \SI{5}{\mega rad}(Si) using $\gamma$-ray and X-ray sources \cite{tmr-bias-radiation}, and MTJs intended for a CubeSat magnetometer have been tested to \SI{100}{\kilo rad} \cite{nguyen2010}. These doses are well above the \SI{100}{\kilo rad}(Si) level typically used to qualify a device as radiation-hardened. The result is physically consistent with the crystalline MgO barrier at the heart of the MTJ: ionising radiation predominantly damages devices through electron-hole pairs that become trapped at defect sites, permanently shifting threshold voltages, a mechanism that primarily affects the \emph{amorphous} SiO\textsubscript{2} gate oxide used in conventional CMOS devices \cite{tid-basics-lanl}, and for which MgO's ordered crystal lattice offers far fewer trap sites.
+
+Commercial magnetometers are also routinely radiation-tested before use in space. Regoli et al.\ irradiated nine PNI RM3100 magnetometers, a COTS magneto-inductive sensor, to \SI{300}{\kilo rad}(Si) and found that most units tolerated the full dose \cite{regoli2020}, and a commercial CubeSat magnetometer is specified at a component-level TID of \SI{10}{\kilo rad} \cite{nss_magnetometer}. Testing several units of a low-cost COTS part is therefore an accepted approach. The tolerance of TMR junctions, however, has mostly been shown for the sensing element itself rather than for a packaged COTS part working in a circuit. This literature evidence motivated the TID testing described in Section~\ref{sec:radiation-testing}.
+
+\subsection{Strong Magnetic Fields on CubeSats and Offset Shift in TMR Sensors}
+\label{sec:strong-field-lit}
+
+CubeSat magnetometers sit close to magnetic sources, chiefly the magnetorquers used for attitude control, and are therefore usually mounted as far from the spacecraft as possible, ideally on a boom \cite{nss_magnetometer}. A typical CubeSat magnetorquer board has a nominal magnetic moment of about $\SI{0.2}{\ampere\metre\squared}$ and can sit inside the electronics stack \cite{isis_imtq}. Treating it as a point dipole, its on-axis field is $B = \mu_0 m / (2\pi r^3)$ \cite{jackson}, which gives about $\SI{5}{\milli\tesla}$ at $\SI{2}{\centi\metre}$, $\SI{1.5}{\milli\tesla}$ at $\SI{3}{\centi\metre}$ and $\SI{0.3}{\milli\tesla}$ at $\SI{5}{\centi\metre}$. These are roughly 5 to 100 times Earth's field of 25 to $\SI{65}{\micro\tesla}$ \cite{wmm}, but they are below the CT100's $\pm\SI{50}{\milli\tesla}$ operating range \cite{ct100_datasheet}. (The point-dipole estimate overstates the field at distances comparable to the coil size, so these values are an order-of-magnitude guide.) A correctly operating magnetorquer would therefore not normally saturate a TMR sensor, although it would swamp the geomagnetic signal unless the readings are timed around it. Saturation needs a much stronger or closer source, such as a permanent magnet near the sensor, a magnetorquer within about a centimetre, or magnetising equipment during ground handling and test. It is best treated as an off-nominal event, and the questions that matter are whether the sensor survives it and what it leaves behind.
+
+The manufacturer states that its XtremeSense TMR sensors survive any magnetic field amplitude, but notes that after a strong field the offset can shift, that this shift is stable and irreversible, and that, because such events are rare, an offset recalibration is typically recommended \cite{allegro_an133}. This confirms that the effect is expected, but it gives no magnitude for a specific part and does not consider a platform on which the sensor's signal is only a few tens of microtesla, where an offset of even one millitesla would dominate.
+
+\subsection{Research Gap}
+\label{sec:gap}
+
+Taken together, the literature establishes four things. TMR is among the most sensitive chip-scale magnetoresistive technologies suitable for CubeSat-class ADCS/EPS use (Section~\ref{sec:magnetometer-tech}). TMR junctions have been shown to tolerate radiation at the element level, and COTS magnetometers are routinely radiation-tested (Section~\ref{sec:rad-tolerance-lit}). Strong fields are an off-nominal hazard for a CubeSat magnetometer, and the manufacturer acknowledges a lasting offset shift after one (Section~\ref{sec:strong-field-lit}). Yet, in the sources found for this review, no study reports device-level data for a specific low-cost packaged COTS TMR sensor working inside a real circuit that covers (a) how quickly it recovers from saturation, in terms an on-board computer designer can use, (b) how large the lasting offset shift is and whether its gradient and linearity survive, and (c) its behaviour after irradiation, using a test method that can be reproduced with ordinary bench equipment. To the best of the author's knowledge no published study reports these for the CT100. This rests on a limited literature search and should be read with that caveat. This gap motivates the research question and objectives in Section~\ref{sec:research-question}.
+
+\section{Research Question, Aims, and Objectives}
+\label{sec:research-question}
+
+\textbf{Research question.} Is a low-cost, commercial-off-the-shelf TMR sensor (the CT100) operationally viable for CubeSat ADCS/EPS use, specifically with respect to (a) its behaviour when driven into saturation by an unexpectedly strong magnetic field and then recovered, including any lasting change to its output, and (b) any change in its sensing performance following Total Ionising Dose radiation exposure representative of the CubeSat orbital environment?
+
+This question follows directly from the gap identified in Section~\ref{sec:gap}: the literature supports TMR's theoretical suitability and likely radiation tolerance, and the manufacturer acknowledges an offset shift after strong fields, but it does not provide device-level evidence for a specific, inexpensive COTS part of the kind a resource-constrained CubeSat programme would actually select.
+
+\textbf{Aims.} This project aims to generate that device-level evidence for the CT100, and, in doing so, to build and validate a low-cost, automatable test methodology that could be reused for other candidate COTS TMR devices without requiring specialised space-qualification equipment.
+
+\textbf{Objectives.} The research question and aims above translate into the following concrete objectives, which structure the remainder of this report:
+\begin{enumerate}[label=(\roman*)]
+\item characterise the CT100 sensor itself -- its operating principle, its Wheatstone-bridge topology, and its saturation ceiling (Section~\ref{sec:ct100});
+\item design and build hardware capable of generating a known, controllable test field and logging the sensor's response to it automatically, without relying on specialised or costly space-test equipment (Sections~\ref{sec:instrumentation}--\ref{sec:integrated-board});
+\item quantify the sensor's sensitivity and saturation-recovery time, and the accuracy of the field model used to drive it, establishing a non-irradiated baseline cross-validated across instruments (Sections~\ref{sec:nonirr-characterisation} and~\ref{sec:instr-validation});
+\item measure, with a controlled before-and-after test on a fresh sensor, how saturation changes the sensor's output offset, gradient and linearity (Section~\ref{sec:hysteresis});
+\item evaluate whether low-cost ferrite shielding materially changes the measured response (Section~\ref{sec:shielding}); and
+\item assess the sensor's tolerance to Total Ionising Dose radiation representative of the CubeSat orbital environment, with and without magnetic shielding, against the same validated methodology (Section~\ref{sec:radiation-testing}).
+\end{enumerate}
+
+\section{The CT100 Sensor}
+\label{sec:ct100}
+
+\subsection{Device Overview}
+\label{sec:ct100-overview}
+
+The \mbox{CT100LW-FS6} Tunnel Magnetoresistance (TMR) sensor was selected primarily due to its thermal stability, differential output, small footprint, and cost. The device is rated for an operating temperature range of \SI{-40}{\degreeCelsius} to \SI{150}{\degreeCelsius} \cite{ct100_datasheet}, making it highly suitable for  thermal cycling  tests relevant to my partner Daniels Tieu's work. Also, its differential output architecture provided high Common-Mode Rejection Ratio (CMRR), mitigating common-mode noise across its magnetic dynamic range of $\pm50~\text{mT}$ with a low linearity error of $\pm0.5\%$ (between $-20~\text{mT}$ and $+20~\text{mT}$) \cite{ct100_datasheet}. 
+
+Integrated TMR sensor ICs were explored but ultimately were decided against as raw signal behavior of the sensor was desired,  discrete analog sensor enables direct characterization and isolated testing of the TMR elements itself and provided additional flexibility for system integration if needed. Furthermore, its SOT-23-6 package minimizes both PCB footprint and mass, aligning with  Size, Weight, and Power (SWaP) constraints typical of CubeSat applications. Sourced at a unit cost of \$0.92 via DigiKey (as of April 2026) \cite{digikey_ct100}, it provided a highly economical solution for our testing.
+
+The \mbox{CT100LW-FS6} supports a supply voltage range of \SI{1.0}{\volt} to \SI{5.5}{\volt} \cite{ct100_datasheet}. Because the sensor's differential output sensitivity scales proportionally with supply voltage ($S \propto V_{\text{DD}}$), operating at a higher $V_{\text{DD}}$ increases the full-scale differential output voltage swing per unit magnetic field ($\text{mV/T}$). This larger voltage swing enhances the signal-to-noise ratio (SNR). However, a supply voltage of $V_{\text{DD}} = \SI{3.30}{\volt}$ was selected to match the \SI{3.30}{\volt} operating voltage of a STM32 microcontroller. This eliminates the need for additional voltage regulators or signal conditioning level-shifters, simplifying the power electronics if system integration was required.
+
+\subsection{Physical Operating Principle}
+\label{sec:ct100-principle}
+
+The CT100LW-FS6, like other TMR devices is built around magnetic tunnel junctions (MTJs): a pinned ferromagnetic reference layer, an ultra-thin (\textasciitilde\SI{2}{\nano\metre}) insulating crystalline magnesium oxide (MgO) layer and a magnetically free ferromagnetic layer \cite{parkin2004,yuasa2004}. 
+
+Conduction through the junction is done under the quantum tunnelling property, in which electrons have a nonzero probability of passing through the MgO barrier. Figure~\ref{fig:mtj_equivalent_structure} denotes the MTJs equivalent circuit model.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{circuitikz}[american voltages, european resistors, scale=1.0, transform shape]
+    
+    % ==========================================
+    % LEFT CIRCUIT: Standard Variable Resistor
+    % ==========================================
+\draw (0,0) 
+      to[american voltage source, invert, l=$V_{\text{DD}}$] (0,3) 
+      to[short, i=$i$] (2.5,3)                              
+      to[vR,invert] (2.5,0) % Clean variable resistor (no auto-label)
+      -- (0,0);
+
+    % Custom manual node placed cleanly to the left of the resistor
+    \node[left] at (2.1, 1.5) {$R$};
+
+
+    % ==========================================
+    % EQUIVALENCE SYMBOL (Spaced to avoid overlap)
+    % ==========================================
+    \node at (4.0, 1.5) { $\equiv$};
+
+    % ==========================================
+    % RIGHT CIRCUIT: Physical MTJ 3-Layer Stack
+    % ==========================================
+   \draw (6,0) 
+      to[american voltage source, invert, l=$V_{\text{DD}}$] (6,3)
+      to[short, i=$i$] (8.5,3)
+      -- (8.5,2.2); % Top wire connects to center top of MTJ stack
+
+    % --- Top Ferromagnetic Layer ---
+    \draw[fill=blue!15, thick] (7.5, 1.7) rectangle (9.5, 2.2);
+    \node at (11.7, 1.95) {\small Top Ferromagnetic Layer};
+
+    % --- Middle MgO Insulating Barrier ---
+    \draw[fill=orange!25, thick] (7.5, 1.3) rectangle (9.5, 1.7);
+    \node at (11.5, 1.5) {\small MgO Layer};
+
+    % --- Bottom Ferromagnetic Layer ---
+    \draw[fill=blue!15, thick] (7.5, 0.8) rectangle (9.5, 1.3);
+    \node at (12, 1.05) {\small Bottom Ferromagnetic Layer };
+
+    % Connecting wire from bottom of MTJ stack back to source
+    \draw (8.5,0.8) -- (8.5,0) -- (6,0);
+
+    % Dynamic Resistance Label
+    \node[right] at (6.8, 1.5) {$R_{}$};
+
+  \end{circuitikz}
+  \caption{Equivalent electrical circuit model equating a standard variable resistor (left) to the physical three-layer Magnetic Tunnel Junction stack structure (right).}
+  \label{fig:mtj_equivalent_structure}
+\end{figure}
+
+The basic operation of the MTJ comes down to how easily electrons can pass through the MgO barrier placed between two ferromagnetic layers. The bottom layer serves as a fixed reference with a locked magnetic direction, while the top free layer can rotate its magnetic orientation $360^\circ$ to align an external magnetic field.
+
+When an external field aligns the free layer's direction  ($0^\circ$) with the bottom reference layer, electrons hop across the insulating barrier much more easily. Higher electron movement per unit of time represents a greater amount of electrical charge $\Delta Q$ passing through the barrier over time $\Delta t$. By definition, current is the rate of charge flow per unit of time:
+\begin{equation}
+    I = \frac{\Delta Q}{\Delta t}
+\end{equation}
+Therefore, this increased charge movement results in a higher current flow $I$ for a constant supply voltage $V_{\text{DD}}$, putting the sensor into its parallel, lowest resistance state $R = \frac{V_{\text{DD}}}{I}$. Conversely, when the field lines points in the opposite direction ($180^\circ$), fewer electrons can cross, restricting current flow and increasing resistance. If the external magnetic field is applied orthogonal to the fixed reference direction, the sensor cannot detect it, making the element effectively blind to perpendicular fields. Hence, a TMR element can be modelled as a variable resister where it's resistance varies dependant on the polarity and strength of an external magnetic field. 
+
+
+fix this othongal thing just means we don't know what axis the field is more towards parlell or anti parell kinda thing
+
+
+\subsection{Bridge Topology, Output Convention, and Saturation Ceiling}
+\label{sec:bridge-topology}
+
+
+
+
+The CT100LW-FS6 ( I will refer to the device as the CT100 ) arranges four such TMR elements in a passive Wheatstone bridge configuration as seen in Figure~\ref{fig:wheatstone_comparison}.
+
+
+\begin{figure}[htbp]
+  \centering
+  
+  % --- LEFT SIDE: Datasheet Image ---
+  \begin{minipage}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[height=6.5cm, keepaspectratio]{ct100-wheatstone.pdf.png}
+    \\[3mm]
+    \small (a) CT100 internal Wheatstone-bridge.
+  \end{minipage}% <-- % prevents line break between minipages
+  \hfill
+  % --- RIGHT SIDE: Matched Circuit Schematic ---
+  \begin{minipage}[b]{0.52\textwidth}
+    \centering
+    \begin{circuitikz}[american voltages, european resistors, scale=0.85, transform shape]
+      
+      % American DC Voltage Source (VDD) - 6 units tall
+      \draw (0,0) to[american voltage source, invert, l=$V_{\text{DD}}$] (0,6)
+            -- (2,6);
+      \draw (0,0) -- (2,0);
+
+      % Top & Bottom Rails with Connection Dots
+      \draw (2,6) to[short, *-] (4,6);
+      \draw (2,0) to[short, *-] (4,0);
+      \draw (2,0) node[sground] {};
+
+      % Left Bridge Leg (R1: 5.2 to 3.6, R3: 2.4 to 0.8)
+      \draw (2,6) -- (2,5.2)
+            to[R=$R_1$] (2,3.6)
+            -- (2,2.4)
+            to[R=$R_3$] (2,0.8)
+            -- (2,0);
+
+      % Right Bridge Leg (R2: 5.2 to 3.6, R4: 2.4 to 0.8)
+      \draw (4,6) -- (4,5.2)
+            to[R=$R_2$] (4,3.6)
+            -- (4,2.4)
+            to[R=$R_4$] (4,0.8)
+            -- (4,0);
+
+      % Output Line X1 (Tapped from left leg at y=3.2 with junction dot directly on x=2)
+      \draw (2,3.2) to[short, *-o] (5.5,3.2) node[right] {$X_1$};
+
+      % Output Line X2 (Tapped from right leg at y=2.8 with junction dot directly on x=4)
+      \draw (4,2.8) to[short, *-o] (5.5,2.8) node[right] {$X_2$};
+
+    \end{circuitikz}
+    \\[3mm]
+    \small (b) Equivalent bridge schematic.
+  \end{minipage}
+
+  \caption{Internal CT100 IC pin configuration alongside its labeled equivalent electrical schematic.}
+  \label{fig:wheatstone_comparison}
+\end{figure}
+
+
+% 2. MATHEMATICAL DERIVATION SECOND
+To predict the maximum differential output voltage prior to saturation, the CT100's internal TMR Wheatstone bridge (Figure~\ref{fig:wheatstone_comparison}a) was evaluated theoretically. An equivalent schematic with explicitly labeled internal elements is provided in Figure~\ref{fig:wheatstone_comparison}b to aid in following the derivation below.  According to the device datasheet \cite{ct100_datasheet}, the per-element resistance ranges from $R_{\min} \approx \SI{20}{\kilo\ohm}$ where the element experiences parallel magnetic alignment, lowest-resistance state) to $R_{\max} \approx \SI{40}{\kilo\ohm}$ (antiparallel magnetic alignment, highest-resistance state). 
+
+As a result of this Wheatstone-bridge configuration, the largest change in $\left|V_{\text{out}} \right|$ is $\frac{V_{\text{DD}}}{3}$:
+\begin{equation}
+   \left| \Delta V_{\text{out,max}} \right| = \frac{V_{\text{DD}}}{3}
+\end{equation}
+This maximum output swing is bounded by each of the internal TMR element resistance range ($R_{\min} \approx \SI{20}{\kilo\ohm}$ to $R_{\max} \approx \SI{40}{\kilo\ohm}$).
+
+The voltage potentials at the two central output nodes, $X_1$ and $X_2$, as seen in Figure~\ref{fig:wheatstone_comparison}b are determined by the independent voltage divider ratios along the bridge:
+\begin{equation}
+    X_1 = V_{\text{DD}} \cdot \left( \frac{R_3}{R_1 + R_3} \right), \qquad X_2 = V_{\text{DD}} \cdot \left( \frac{R_4}{R_2 + R_4} \right)
+    \label{eq:node_voltages}
+\end{equation}
+
+The general differential output voltage $V_{\text{out}}$ across nodes $X_1$ and $X_2$ is expressed as:
+\begin{equation}
+    V_{\text{out}} = X_1 - X_2 = V_{\text{DD}} \left( \frac{R_3}{R_1 + R_3} - \frac{R_4}{R_2 + R_4} \right)
+    \label{eq:vout_general}
+\end{equation}
+
+At $B = \SI{0}{\tesla}$, all four TMR elements exhibit nominal, equal resistance ($R_1 = R_2 = R_3 = R_4$), yielding balanced potentials $X_1 = X_2 = \frac{V_{\text{DD}}}{2}$ and $V_{\text{out}} = \SI{0}{\volt}$. 
+
+A key operational characteristic of the CT100 is that an external magnetic field applied along its sensitive axis drives opposing element pairs in opposite resistance directions. As one pair (\(R_1, R_4\)) decreases toward \(R_{\min}\), the complementary pair (\(R_2, R_3\)) increases toward \(R_{\max}\) or vice versa. This response is governed by the orientation of the pinned ferromagnetic reference layer within each TMR element: \(R_1\) and \(R_4\) share an identical reference layer alignment, whereas \(R_2\) and \(R_3\) are pinned in the opposite direction.
+
+ At full magnetic saturation, the opposing resistor pairs settle at either $R_{\min}$ and $R_{\max}$. For this derivation, an external magnetic field polarity is assumed such that:
+
+\begin{equation}
+R_1 = R_4 = R_{\min}, \quad \text{and} \quad R_2 = R_3 = R_{\max}
+\label{eq:tmr-saturation-resistances}
+\end{equation}
+
+Substituting these saturation values into Equation~\ref{eq:node_voltages} gives the node potentials at full saturation:
+\begin{equation}
+    X_{1,\text{sat}} = V_{\text{DD}} \cdot \left( \frac{R_{\max}}{R_{\min} + R_{\max}} \right), \qquad X_{2,\text{sat}} = V_{\text{DD}} \cdot \left( \frac{R_{\min}}{R_{\max} + R_{\min}} \right)
+\end{equation}
+
+Subtracting $X_{2,\text{sat}}$ from $X_{1,\text{sat}}$ yields the maximum theoretical differential output voltage $V_{\text{out,sat}}$:
+\begin{equation}
+    V_{\text{out,sat}} = X_{1,\text{sat}} - X_{2,\text{sat}} = V_{\text{DD}} \left( \frac{R_{\max} - R_{\min}}{R_{\max} + R_{\min}} \right)
+    \label{eq:vout_sat_derived}
+\end{equation}
+
+Substituting the CT100 datasheet resistance values \cite{ct100_datasheet} ($R_{\min} = \SI{20}{\kilo\ohm}$ and $R_{\max} = \SI{40}{\kilo\ohm}$):
+\begin{equation}
+    V_{\text{out,sat}} = V_{\text{DD}} \left( \frac{\SI{40}{\kilo\ohm} - \SI{20}{\kilo\ohm}}{\SI{40}{\kilo\ohm} + \SI{20}{\kilo\ohm}} \right) = V_{\text{DD}} \left( \frac{20}{60} \right) = \frac{V_{\text{DD}}}{3}
+\end{equation}
+
+This  derivation proves that the maximum differential output voltage is  bound to  $\left| \Delta V_{\text{out,max}} \right| = \frac{V_{\text{DD}}}{3}$. For a supply voltage of $V_{\text{DD}} = \SI{3.30}{\volt}$, the theoretical saturation output  $\left|V_{\text{out,sat}} \right|$ is $ \SI{1.10}{\volt}$. This is experimentally validated in Section~\ref{sec:standalone-sat-recovery}.
+
+The direction of the applied field along the sensitive axis decides which resistor pair moves to $R_{\min}$, so the bridge can saturate at either polarity. The two limits, $V_{\text{out}} = +V_{\text{DD}}/3$ and $V_{\text{out}} = -V_{\text{DD}}/3$, are called the \textbf{positive ceiling} and the \textbf{negative ceiling}. The negative ceiling follows from the derivation above by swapping $R_{\min}$ and $R_{\max}$. In this report, \emph{ceiling} means the saturation limit of $V_{\text{out}}$, and its sign states which of the two was reached.
+
+% 3. DEFINITION STATEMENT THIRD
+\textbf{Furthermore}, from this point forward in this report, the sensor's output voltage is defined as \textbf{$V_{\text{out}} = X_1 - X_2$}, which was applied  across all DMM, oscilloscope, and MCU measurement in this work.
+
+
+\section{Available Instrumentation}
+\label{sec:instrumentation}
+
+Characterization and bench-top tests were conducted using the following laboratory equipment to ensure power delivery and take measurements.
+
+\begin{itemize}
+    \item \textbf{Digital Oscilloscope:} Rohde \& Schwarz RTB2002 (\SI{2.5}{GS/s} sampling rate, 10-bit A/D converter) for transient analysis, step-response monitoring across nodes \(X_1\) and \(X_2\).
+    \item \textbf{ Digital Multimeter (DMM):} Keithley 2110 \(5\frac{1}{2}\) Digit Dual-Display Multimeter for DC Voltage and Current logging and cross-validating MCU reading accuracy.
+    
+    \item \textbf{DC Power Supply Unit (PSU):} Topward dual-tracking linear DC power supply capable of supplying up to \SI{6.0}{\ampere} continuously, providing supply voltage  and current excitation through the PCB test trace.
+    
+    \end{itemize}
+
+\section{Standalone Sensor Board}
+\label{sec:standalone-board}
+
+\subsection{PCB Design}
+\label{sec:standalone-pcb}
+
+A standalone sensor board was designed in Altium Designer, the assembled boards were populated with just the CT100 sensor and a single \SI{0.1}{\micro\farad} decoupling capacitor.
+
+The board is driven directly from a laboratory power supply, with the  differential outputs ($X_1, X_2$) measured by a digital oscilloscope and digital multimeter (DMM). Signal amplification was deliberately excluded from this characterization topology. Although raw bridge differential voltages can be relatively small, avoiding amplifier stages eliminates amplifier constraint such as slew rate and  bandwidth obscuring the true recovery time of the TMR bridge itself. Probing the unconditioned Wheatstone output directly establishes a true baseline of the sensor's native sensitivity and saturation recovery. This design was also used in Daniel Tieu's work on Thermal Cycling. The PCB can be seen in Figure~\ref{fig:standalone}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{TMR_RAD_COMPARE_page-0001.jpg}
+\caption{Standalone Sensor PCB}
+\label{fig:standalone}
+\end{figure}
+
+
+\subsection{Saturation Testing Methodology}
+\label{sec:sat-test-methodology}
+
+Saturation was induced using an external Neodymium magnet ($> \SI{110}{\milli\tesla}$), moved by hand toward and away from the sensor. This is far beyond the CT100's $\pm\SI{50}{\milli\tesla}$ operating range, so it drives the bridge fully into saturation, and it is intended to stay below the $\SI{200}{\milli\tesla}$ absolute-maximum rating \cite{ct100_datasheet}. \todo{Confirm that the magnet's field at the closest distance used stays below the datasheet's 200 mT maximum.} A hand-held magnet is the simplest stimulus available, but it is neither repeatable nor automatable; this limitation is discussed in Section~\ref{sec:disc-limitations}.
+
+The magnet was brought close to the sensor along its sensitive axis until the output stopped changing, confirming that the saturation limit derived in Section~\ref{sec:bridge-topology} had been reached. The magnet was then removed rapidly while the output was recorded, so that the time taken to settle back to the zero-field baseline could be measured. The sensor can saturate in either direction depending on which magnet pole faces it. The two limits are the positive ceiling and the negative ceiling defined in Section~\ref{sec:bridge-topology}, and both were tested for every sample.
+
+Every saturation result in this report is presented in the same table format, with the same definitions:
+\begin{itemize}
+\item \textbf{Sample:} the unit tested. Samples 1 to 4 are sensor-only boards (1 and 2 non-irradiated, 3 and 4 irradiated). Boards A, B and C are integrated boards (A non-irradiated, B irradiated, C a fresh sensor used for the hysteresis test in Section~\ref{sec:hysteresis}).
+\item \textbf{Ceiling (V):} the output voltage $V_{\text{out}}$ reached at saturation. Its sign shows which ceiling was reached, so each sample has one row per ceiling.
+\item \textbf{Baseline (mV):} the output once it has settled after the field is removed.
+\item \textbf{Swing (V):} the size of the drop from the ceiling to the baseline, $|{\rm ceiling} - {\rm baseline}|$.
+\item \textbf{Recovery (ms):} the time from the start of the fall until the output has settled at its baseline. On the oscilloscope this is read with cursors; for the MCU (SWV) traces it is the time until the output stays within $\SI{5}{\milli\volt}$ of its final baseline. Five millivolts is also about the oscilloscope's vertical resolution at $\SI{500}{\milli\volt}$/div, so the two definitions of ``settled'' are comparable.
+\end{itemize}
+
+\subsection{Sensor-Only Saturation and Recovery Behaviour}
+\label{sec:standalone-sat-recovery}
+
+Two non-irradiated sensor-only samples (Samples 1 and 2) were each driven to both ceilings. Testing both directions checks a prediction of the bridge model: the ceilings should be symmetric about zero, $\pm V_{\text{DD}}/3$ (Section~\ref{sec:bridge-topology}), because the same spin-tunnelling limit applies to either polarity. The extracted values are listed in Table~\ref{tab:sat-nonirr-sensoronly}, and the oscilloscope captures they come from are shown in Figure~\ref{fig:scope-baseline}.
+
+\begin{table}[H]
+\centering
+\caption{Saturation recovery results, non-irradiated sensor-only samples.}
+\label{tab:sat-nonirr-sensoronly}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sample & Ceiling (V) & Baseline (mV) & Swing (V) & Recovery (ms) \\
+\midrule
+1 & $-1.126$ & $-17.4$ & 1.108 & 76.5 \\
+1 & $+1.125$ & $-12.5$ & 1.138 & 74.0 \\
+2 & $-1.145$ & $-17.4$ & 1.128 & 76.0 \\
+2 & $+1.125$ & $-12.5$ & 1.138 & 67.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The four ceilings lie between 1.125 and $\SI{1.145}{\volt}$ in magnitude (mean $\SI{1.130}{\volt}$), about 2 to 4\% above the predicted $V_{\text{DD}}/3 = \SI{1.10}{\volt}$ for $V_{\text{DD}} = \SI{3.30}{\volt}$. The positive and negative ceilings differ by 0.9\% on average, confirming the expected symmetry. The baseline column takes only two values ($-12.5$ and $\SI{-17.4}{\milli\volt}$), which are $\SI{4.9}{\milli\volt}$ apart. This is consistent with the oscilloscope's vertical resolution at $\SI{500}{\milli\volt}$/div rather than a real difference between runs, so the baselines in the sensor-only tables are not interpreted, and the swing carries an uncertainty of roughly $\pm\SI{5}{\milli\volt}$. Recovery times range from 67.5 to $\SI{76.5}{\milli\second}$ with a mean of $\SI{73.5}{\milli\second}$.
+
+To document the transients behind these numbers, Figure~\ref{fig:scope-baseline} shows the oscilloscope captures for Samples 1 and 2. Each trace shows the output moving from the saturated ceiling back to the baseline once the magnet is removed. The blue waveform ($M_1$) is the differential output voltage ($V_{\text{out}} = X_1 - X_2$), while the yellow ($C_1$) and green ($C_2$) waveforms are the individual $X_1$ and $X_2$ bridge terminal voltages.
+
+\begin{figure}[H]
+    \centering
+    % Top Row: Sample 1
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1_satn.png}
+        \caption{Sample 1: Saturation Recovery (negative ceiling)}
+        \label{fig:1_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1_satp.png} % Assuming this filename based on your convention
+        \caption{Sample 1: Saturation Recovery (positive ceiling)}
+        \label{fig:1_satp}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Vertical spacing between rows
+    
+    % Bottom Row: Sample 2
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{2_satn.png}
+        \caption{Sample 2: Saturation Recovery (negative ceiling)}
+        \label{fig:2_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{2_satp.png}
+        \caption{Sample 2: Saturation Recovery (positive ceiling)}
+        \label{fig:2_satp}
+    \end{subfigure}
+    
+    \caption{Saturation recovery of the non-irradiated sensor-only samples (Samples 1 and 2), oscilloscope captures after the magnet is removed.}
+    \label{fig:scope-baseline}
+\end{figure}
+
+Across the four captures the mean recovery time is $\SI{73.5}{\milli\second}$ (maximum $\SI{76.5}{\milli\second}$). The magnet was withdrawn by hand, so these times include the effect of the withdrawal speed, which was not controlled. What this recovery time means for a spacecraft magnetometer, and how the measurement could be improved, are discussed in Sections~\ref{sec:disc-recovery} and~\ref{sec:disc-limitations}.
+
+
+\section{Integrated Board: Field Excitation and Design}
+\label{sec:integrated-board}
+
+\subsection{Integrated Board Design}
+\label{sec:integrated-design}
+
+To accurately characterize the sensor's sensitivity without relying on a handheld neodymium magnet, a repeatable and quantifiable test field was required.
+
+A current-carrying PCB trace routed directly beneath the sensor die was selected. This DC current induces a magnetic field around the trace that acts upon the TMR sensor to generate a measurable voltage output. It's generated magnetic field is calculated analytically and simulated in Ansys Maxwell, serving as a theoretical benchmark for expected sensor output against practical results. The trace current can be swept up to the laboratory PSU's \SI{6.0}{\ampere} limit. 
+
+While the upper limit of the PSU capability \SI{6.0}{\ampere}  does not generate a strong enough magnetic field to drive the CT100 into saturation, it provides a linear sweep to determine the sensor's sensitivity. Establishing this sensitivity benchmark is critical as later in the characterization, this baseline allows us to measure any resulting hysteresis or degradation in linearity under saturation and/or radiation.
+
+The system architecture of the integrated board revolves around three core components:
+
+\begin{itemize}
+    \item \textbf{Microcontroller (MCU):} An STM32G431KBT6 was selected for it's high-performance. The CT100 differential output pair feeds the MCU's internal differential ADC channels directly, sampled at \SI{1.0}{\kilo\hertz}. The MCU features a 12-bit ADC \cite{stm32g4_rm} and auto-calibration routines were run to minimise discrepancies between ADC's on MCU on different boards.
+    
+    \item \textbf{Current Monitor (INA219)~\cite{ina219_datasheet}:} Because the PSU's analog display was not trusted as precise means of determining current, a dedicated INA current-sense with a Kelvin-connected \( \SI{5.0}{\milli\ohm}\) shunt resistor. This was used to back-calculate the magnetic field generated by the trace current acting on the TMR sensor.
+    
+    \item \textbf{Low-Dropout (LDO) regulator:} The board is powered via a \SI{5.0}{\volt} input rail which is fed into into a LDO regulator to provide a clean \SI{3.30}{\volt} supply to both the sensor and MCU. This LDO also provides a high Power Supply Rejection Ratio (PSRR) and sets the subsequent resolution of the TMR sensor. 
+    
+\end{itemize}
+
+
+As shown in Figure~\ref{fig:board}, the current carrying trace is routed on the bottom layer indicated by the blue polygon with a 2512 shunt resister in series. Figure~\ref{fig:excitation_circuit}'s  schematic denotes the positive current ($+i$) sign convention adopted for all subsequent field calculations and experimental sweeps. The Altium schematic for the integrated design can be found in the Appendix A.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.47\textwidth]{magsat_layout.png}\hfill
+\includegraphics[width=0.47\textwidth]{magsat_pcb_front.png}
+\caption{Integrated board layout (left) and rendered assembly view (right).}
+\label{fig:board}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+
+\begin{circuitikz}[scale=1.1, transform shape]
+    % Terminals on the right using standard path poles (-o)
+    \draw (3,3) to[short, -o] (5,3) node[right] {\textbf{\(V_{\text{IN}}^+\)}};
+    \draw (3,0) to[short, -o] (5,0) node[right] {\textbf{\(V_{\text{IN}}^-\)}};
+
+    % Top horizontal rail with leftward positive current arrow (+i)
+    \draw (3,3) to[short, i_=\(+i\)] (0,3);
+
+    % Bottom horizontal rail
+    \draw (0,0) -- (3,0);
+
+    % Middle vertical branch: Upward Current Source (i)
+    \draw (3,0) to[american current source, l_=\(i\)] (3,3);
+
+    % Junction nodes at the T-connections (filled dots)
+    \node[circ] at (3,3) {};
+    \node[circ] at (3,0) {};
+
+    % Far-left branch: European Resistor R_shunt
+    \draw (0,3) to[R, european, l_=\(R_{\text{shunt}}\)] (0,0);
+
+\end{circuitikz}
+\caption{Field excitation circuit schematic and positive trace current convention (\(+i\)).}
+\label{fig:excitation_circuit}
+\end{figure}
+
+Note that while Figure~\ref{fig:excitation_circuit}'s models the excitation as an ideal current source \(i\), the physical setup employs a benchtop PSU operated in Constant Current (CC) mode with the current limit determining the current through \(R_{\text{shunt}}\) and the trace.
+
+\subsection{PCB Trace Design}
+\label{sec:pcb-trace}
+
+The current-carrying trace was routed on a four-layer PCB, with layer thicknesses and dielectric parameters detailed in Table~\ref{tab:stackup}. The trace was routed such that current flow produces a field acting on the sensor's most senstive axis, where no copper planes placed near the TMR device and the current trace.
+
+The layout strategy aligns with standard magnetic sensor design like those including Hall Effect sensors. Avoiding copper planes directly beneath and adjacent to the sensor die ensures better magnetic field uniformity and prevents adjacent copper structures from unpredictably altering the local field geometry.\todo{add source to back it up}
+
+\begin{table}[h]
+\centering
+\caption{Four-layer PCB stack-up specification.}
+\label{tab:stackup}
+\begin{tabular}{@{}lllr@{}}
+\toprule
+Layer & Material & Copper Weight & Thickness \\
+\midrule
+Top Solder & Solder Mask (SM-001) & --- & \SI{0.0254}{\milli\metre} \\
+Top Layer & Signal Conductor (CF-004) & 1.0 oz & \SI{0.0350}{\milli\metre} \\
+Layer 2 (GND) & Signal Conductor (CF-001) & 0.25 oz & \SI{0.0090}{\milli\metre} \\
+Layer 3 (PWR) & Signal Conductor (CF-001) & 0.25 oz & \SI{0.0090}{\milli\metre} \\
+Bottom Layer & Signal Conductor (CF-004) & 1.0 oz & \SI{0.0350}{\milli\metre} \\
+Bottom Solder & Solder Mask (SM-001) & --- & \SI{0.0254}{\milli\metre} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This stack-up yields a total conductive copper thickness of \SI{0.08799}{\milli\metre}, a dielectric core height of \SI{0.8382}{\milli\metre}, and an overall board thickness of \SI{0.97699}{\milli\metre}. The excitation trace is routed on the bottom layer with a track width \(w = \SI{3.5}{\milli\metre}\), capable of currents up to the PSU's \SI{6.0}{\ampere} limit.
+
+\subsection{Analytical Field Model}
+\label{sec:field-model}
+
+The horizontal magnetic field at the TMR die height (\(d = \SI{0.4229}{\milli\metre}\)) beneath the centre of the trace (\(w = \SI{3.5}{\milli\metre}\)) is modelled using the field of a flat strip conductor, obtained by integrating the Biot--Savart field of thin filaments across the strip width \cite{jackson}: \todo{Check the value of $d$. With $d = \SI{0.4229}{\milli\metre}$ and $w = \SI{3.5}{\milli\metre}$, Equation~\eqref{eq:planar} gives $k_B = \SI{0.1524}{\milli\tesla\per\ampere}$ (\SI{636}{\micro\tesla} at \SI{4.175}{\ampere}), not the \SI{0.1108}{\milli\tesla\per\ampere} (\SI{462.7}{\micro\tesla}) used below, which corresponds to $d \approx \SI{1.19}{\milli\metre}$. With the trace on the bottom layer and the sensor on the top, the distance from trace to die should be at least the board thickness (\SI{0.977}{\milli\metre}), so $d \approx \SI{1.19}{\milli\metre}$ looks more plausible. Confirm which is correct and state how $d$ was obtained.}
+\begin{equation}
+B_{\text{planar}} = \mu_0 \left[ \frac{I}{\pi w} \arctan\left( \frac{w}{2d} \right) \right].
+\label{eq:planar}
+\end{equation}
+
+Normalizing Equation~\eqref{eq:planar} by the trace current $I$ yields the geometric field coupling coefficient $k_B$:
+\begin{equation}
+k_B = \frac{B_{\text{planar}}}{I} = \frac{\mu_0}{\pi w} \arctan\left( \frac{w}{2d} \right) \approx \SI{0.1108}{\milli\tesla\per\ampere}.
+\label{eq:field-coeff}
+\end{equation}
+
+Evaluated at a representative excitation current of \(I = \SI{4.175}{\ampere}\), this model yields a theoretical flux density of \SI{462.70}{\micro\tesla}. Combining this field response coefficient $k_B$ with the CT100 sensor's intrinsic sensitivity $S_V$ (\si{\volt\per\milli\tesla}) gives the expected differential voltage change per unit trace current:
+\begin{equation}
+\frac{\Delta V_{\text{out}}}{\Delta I} = k_B \cdot S_V.
+\label{eq:sensitivity-transfer}
+\end{equation}
+
+This analytical transfer ratio serves as the theoretical benchmark against which both the Ansys Maxwell finite-element simulations and empirical linear current sweeps are validated.
+
+\subsection{Simulated vs.\ Experimental Field Validation}
+\label{sec:field-validation}
+
+The analytical field model was cross-checked against a finite-element simulation in Ansys Maxwell. The simulation resolves the full 3D near-field map around the trace rather than the simplified 2D geometry assumed by Equation~\eqref{eq:planar} the Ansys model can be seen in  Figure~\ref{fig:ansys}. The two models align closely the simulation outputted \(\approx\SI{500}{\micro\tesla}\) simulated at \SI{4.175}{\ampere} while the analytical solution gave \SI{462.70}{\micro\tesla} analytically, the formula appears to be a close approximation for the 3D simulation at this geometry. 
+
+The model was then compared with measurement. The output voltage measured with the DMM at $\SI{4.175}{\ampere}$ was about $\SI{16}{\milli\volt}$, while the Ansys-based prediction is a field of about $\SI{500}{\micro\tesla}$, or about $\SI{7.4}{\milli\volt}$ of output change. These two numbers cannot be compared directly: the measured value includes the sensor's zero-field offset (about $\SI{10}{\milli\volt}$ or more on the non-irradiated board, Section~\ref{sec:sensitivity-fit}), whereas the prediction is only the change caused by the trace field. A like-for-like comparison uses the gradient of output against current, which is unaffected by a fixed offset. That comparison is made in Section~\ref{sec:sensitivity-fit}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{anys_trace.png}
+\caption{Ansys near-field simulation of the current trace.}
+\label{fig:ansys}
+\end{figure}
+
+
+
+\subsection{Firmware}
+\label{sec:firmware}
+
+The firmware is built upon the STM32 Hardware Abstraction Layer (HAL). The MCU's ADC is configured in differential-pair mode, sampling \(X_1 - X_2\) directly and converting the raw 12-bit value to volts via:
+\begin{equation}
+X_1 - X_2 = \left( \frac{\text{ADC}_{\text{raw}} - 2048}{2048} \right) \times V_{\text{DD}}
+\label{eq:adcconv}
+\end{equation}
+where 2048 is the mid-scale ADC code corresponding to the zero-differential (balanced-bridge) midpoint. Hardware ADC self-calibration (\texttt{HAL\_ADCEx\_Calibration\_Start}) is executed automatically on every boot before any conversions occur. The MCU continuously polls the INA219 over \(\text{I}^2\text{C}\) for trace current and streams both the current and voltage values out in real time over the Serial Wire Viewer (SWV) debug channel for offline analysis in MATLAB. The code can be found in Appendix B.
+
+
+\subsection{Design Note for Future PCB Revisions}
+\label{sec:future-pcb-note}
+
+Because the sensor bridge is nominally balanced at \(V_{\text{DD}}/2\) (Section~\ref{sec:bridge-topology}), the ADC channel monitoring it spends its full dynamic range on either side of that midpoint. Any measurement taken near the zero-differential code inherits the ADC's own quantization and calibration uncertainty around that center point (one ADC step is $\SI{1.61}{\milli\volt}$, Section~\ref{sec:firmware}). 
+
+A future PCB revision could integrate a hardware offset to bias the bridge's reference point to a non-zero value. This is expected to (i) reduce measurement error introduced by operating close to the ADC's most quantization-sensitive midpoint code, and (ii) artificially reduce the external magnetic field magnitude required to drive the sensor to its effective saturation bounds for testing purposes. \todo{This is currently a design intention rather than a tested result -- expand with the specific biasing approach and expected numbers if it is implemented on a future board revision.}
+
+
+
+\section{Non-Irradiated Sensitivity and Saturation Characterisation}
+\label{sec:nonirr-characterisation}
+
+\subsection{Saturation Recovery on the Integrated Board}
+\label{sec:sat-recovery-integrated}
+
+The saturation procedure (Section~\ref{sec:sat-test-methodology}) was repeated on the non-irradiated integrated board (Board A), with a regulator input of $V_{\text{CC}} = \SI{4.97}{\volt}$ and a sensor supply of $V_{\text{DD}} = \SI{3.32}{\volt}$. On this board the output was logged by the MCU over SWV instead of being read from the oscilloscope. Table~\ref{tab:sat-ceiling-intl} lists the extracted values in the same format as the sensor-only results, and Figure~\ref{fig:integrated-recovery} shows the two recovery transients.
+
+\begin{table}[H]
+\centering
+\caption{Saturation recovery results, non-irradiated integrated board (Board A).}
+\label{tab:sat-ceiling-intl}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sample & Ceiling (V) & Baseline (mV) & Swing (V) & Recovery (ms) \\
+\midrule
+A & $-1.152$ & $-8.1$ & 1.144 & 65.2 \\
+A & $+1.138$ & $+12.9$ & 1.125 & 60.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.5cm, vertical sep=1.7cm},
+    width=0.48\textwidth, height=0.36\textwidth,
+    xmin=-20, xmax=150, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Saturation recovery, negative ceiling}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2, xlabel={Time since start of recovery (ms)}]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_neg.csv};
+\draw[dashed] (axis cs:65.2,-1.3) -- (axis cs:65.2,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:68,-0.55) {$t_{\text{rec}}=65.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:5,-1.1) {ceiling $-1.152$ V};
+
+\nextgroupplot[title={(b) Saturation recovery, positive ceiling}, ymin=-0.2, ymax=1.3, xlabel={Time since start of recovery (ms)}]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_nonirr_pos.csv};
+\draw[dashed] (axis cs:60.2,-0.2) -- (axis cs:60.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:63,0.45) {$t_{\text{rec}}=60.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:2,1.1) {ceiling $+1.138$ V};
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{Saturation recovery of the non-irradiated integrated board (Board A) after the magnet is removed. Time zero is the start of the fall from the ceiling, and the dashed line marks the recovery time.}
+\label{fig:integrated-recovery}
+\end{figure}
+
+The ceilings of Board A are $-1.152$ and $+\SI{1.138}{\volt}$ (mean magnitude $\SI{1.145}{\volt}$), about 3\% above the predicted $V_{\text{DD}}/3 = \SI{1.107}{\volt}$ at this supply voltage. Recovery took 65.2 and $\SI{60.2}{\milli\second}$. Fitting an exponential decay to the tail of each transient gives a time constant $\tau$ of 13.1 and $\SI{13.3}{\milli\second}$, so the output returns to baseline as a simple exponential decay. The time constant is a useful companion to the recovery time because it does not depend on how close to the baseline the output must be before it is called settled. Unlike the sensor-only table, the baselines here come from the MCU, which resolves steps of $\SI{1.61}{\milli\volt}$, so the difference between the two baselines ($-8.1$ and $+\SI{12.9}{\milli\volt}$) is a real shift in the zero-field output caused by the saturation. This shift is examined in Section~\ref{sec:hysteresis} (Table~\ref{tab:baseline-shift}).
+
+Compared with the sensor-only samples (Section~\ref{sec:standalone-sat-recovery}), the mean ceiling magnitude of Board A (1.145 V) is 1.3\% higher than that of Samples 1 and 2 (1.130 V), and both sit close to $V_{\text{DD}}/3$. Recovery on Board A (60.2 to $\SI{65.2}{\milli\second}$) is slightly faster than on the sensor-only samples (67.5 to $\SI{76.5}{\milli\second}$). In both cases the magnet was removed by hand (Section~\ref{sec:sat-test-methodology}), so part of this difference may come from the withdrawal speed rather than the hardware.
+
+\subsection{Current Sweep: Data and Sensitivity Fit}
+\label{sec:sensitivity-fit}
+
+Current-sweep data was logged via the MCU's SWV output, exported, and processed in MATLAB. Rather than relying on single instantaneous readings, each current setting was captured over a 20-second window and averaged. A single-sample readings were found to be unreliable due to the  MCU ADC's quantisation behaviour where raw SWV data at a given current setting was observed hopping between a small number of discrete levels spaced at multiples of the \SI{1.61}{\milli\volt} LSB typically spanning 1--2 LSBs of scatter around the true mean. Note that for this non-irradiated integrated board the saturation recovery test was performed before the current-sweep test.
+
+
+
+The trace current was swept from $-3.0$ to $+\SI{3.0}{\ampere}$ in approximately \SI{0.5}{\ampere} steps, all within a single session at $V_{\text{DD}} = \SI{3.32}{\volt}$ (Table~\ref{tab:sensitivity-unirr-full}).
+
+\begin{table}[H]
+    \centering
+    \small 
+    \caption{Non-Irradiated \&\ No Shielding Current Sweep Data}
+    \label{tab:sensitivity-unirr-full}
+    % CHANGED: 'ccccc' forces all columns to center alignment
+    \begin{tabular}{@{}ccccc@{}}
+        \toprule
+        DMM Current (mA) & INA Current (mA) & DMM (mV) & MCU (mV) & Scope (mV) \\
+        \midrule
+        \(-2991.0\) & \(-2966.7\) & 8.634 & 8.069 & \(-12.207\) \\
+        \(-2498.5\) & \(-2478.2\) & 9.860 & 9.571 & \(-10.986\) \\
+        \(-2029.0\) & \(-2012.6\) & 9.950 & 9.584 & \(-10.376\) \\
+        \(-1501.0\) & \(-1487.7\) & 11.690 & 11.249 & \(-9.766\) \\
+        \(-1022.0\) & \(-1016.6\) & 11.250 & 11.107 & \(-9.308\) \\
+        \(-499.0\) & \(-498.2\) & 12.650 & 12.022 & \(-10.681\) \\
+        \(-0.7\) & \(-6.3\) & 12.980 & 12.847 & \(-8.594\) \\
+        $499.0$ & 487.8 & 14.450 & 13.628 & \(-7.477\) \\
+        $1022.0$ & 1005.2 & 14.210 & 13.796 & \(-5.035\) \\
+        $1501.0$ & 1477.2 & 15.697 & 14.790 & \(-6.104\) \\
+        $2029.0$ & 2002.1 & 15.720 & 15.020 & \(-3.516\) \\
+        $2498.5$ & 2466.4 & 16.500 & 16.068 & \(-3.906\) \\
+        $2991.0$ & 2954.8 & 16.570 & 16.088 & \(-5.030\) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+A linear fit of $V_{\text{out}}$ against trace current gives a gradient (the sensitivity to trace current) of
+\SI{1.356}{\milli\volt\per\ampere} on the DMM and
+\SI{1.315}{\milli\volt\per\ampere} on the MCU.
+
+The CT100 datasheet \cite{ct100_datasheet} specifies a typical full-bridge sensitivity of
+\SI{4.5}{\milli\volt\per\volt\per\milli\tesla}, with a specified range of
+\SI{3.8}{\milli\volt\per\volt\per\milli\tesla} to
+\SI{5.2}{\milli\volt\per\volt\per\milli\tesla}. At the
+\SI{3.32}{\volt} supply voltage used for this characterisation, the
+corresponding theoretical voltage sensitivity is therefore
+
+\begin{equation}
+S_{V,\mathrm{theory}}
+=
+S_{\mathrm{CT100}}V_{\mathrm{DD}}
+=
+\left(\SI{4.5}{\milli\volt\per\volt\per\milli\tesla}\right)
+\left(\SI{3.32}{\volt}\right)
+=
+\SI{14.94}{\milli\volt\per\milli\tesla}.
+\label{eq:ct100-voltage-sensitivity}
+\end{equation}
+
+The analytical field model in Equation~\eqref{eq:planar} gives a field
+coefficient of approximately
+\SI{0.1108}{\milli\tesla\per\ampere} for the trace geometry used in the
+test. Combining this field response with the CT100 sensitivity gives the
+expected voltage change per unit trace current:
+
+\begin{equation}
+\frac{\mathrm{   \Delta}V_{\mathrm{out}}}{\mathrm{   \Delta}I}
+=
+S_{V,\mathrm{theory}}
+\frac{\mathrm{   \Delta}B}{\mathrm{   \Delta}I}
+=
+\left(\SI{14.94}{\milli\volt\per\milli\tesla}\right)
+\left(\SI{0.1108}{\milli\tesla\per\ampere}\right)
+=
+\SI{1.655}{\milli\volt\per\ampere}.
+\label{eq:ct100-voltage-current-slope}
+\end{equation}
+
+Thus, for a given trace current, the theoretical sensor output can be
+written as
+
+\begin{equation}
+V_{\mathrm{out,theory}}
+=
+V_0
++
+\left(\SI{1.655}{\milli\volt\per\ampere}\right)I,
+\label{eq:ct100-expected-voltage}
+\end{equation}
+
+where $V_0$ is the zero-field output voltage. Figure~\ref{fig:voltage-cross-val} below 
+uses a $V_0$ value of \SI{12.980}{\milli\volt} to visually compare the voltage
+\emph{slope}; it is not a theoretical prediction of the CT100 offset voltage. Figure~\ref{fig:current-cross-val} plots how close the INA device follows the DMM measurement.
+
+
+
+\begin{figure}[H]
+    \centering
+
+    % ============================================================
+    % LEFT: Voltage Plot
+    % ============================================================
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                height=6cm,
+                title={$V_{\text{out}}$ vs.\ Trace Current},
+                xlabel={Trace current, $I$ (mA)},
+                ylabel={$V_{\text{out}}$ (mV)},
+                grid=both,
+                grid style={line width=.1pt, draw=gray!20},
+                major grid style={line width=.2pt, draw=gray!50},
+                mark size=1.2pt,
+                xtick={-3000,-2000,-1000,0,1000,2000,3000},
+                x tick label style={rotate=45, anchor=east},
+                /pgf/number format/1000 sep={},
+                label style={font=\small},
+                tick label style={font=\small},
+                legend style={
+                    at={(0.5,-0.23)},
+                    anchor=north,
+                    font=\scriptsize,
+                    legend columns=2,
+                    /tikz/column sep=0.5cm,
+                    draw=none
+                },
+          ymin=-20,
+ymax=20,
+ytick={-20,-15,-10,-5,0,5,10,15,20},
+            ]
+
+                % ------------------------------------------------
+                % Theoretical response
+                %
+                % CT100 sensitivity = 4.5 mV/V/mT
+                % VDD = 3.30 V
+                % Analytical field coefficient = 0.1108 mT/A
+                %
+                % dV/dI = 4.5 x 3.30 x 0.1108
+                %       = 1.645 mV/A
+                %
+                % 12.980 mV is used only as a visual intercept
+                % to compare slope with the measured response.
+                % ------------------------------------------------
+                \addplot[
+                    color=purple,
+                    dashed,
+                    thick,
+                    domain=-3000:3000,
+                    samples=100
+                ]
+                {12.980+1.655*(x/1000)};
+
+\addlegendentry{\shortstack{Theoretical \\ $V_O = 12.980mV$}}
+
+                \addplot[
+                    color=black,
+                    dashed,
+                    thick,
+                    domain=-3000:3000,
+                    samples=100
+                ]
+                {1.64538*(x/1000)};
+           \addlegendentry{\shortstack{Theoretical \\ $V_O = 0\text{ mV}$}}
+
+                % ------------------------------------------------
+                % DMM Data
+                % ------------------------------------------------
+                \addplot[
+                    color=blue,
+                    thick,
+                    mark=*
+                ]
+                coordinates {
+                    (-2991.0, 8.634)
+                    (-2498.5, 9.860)
+                    (-2029.0, 9.950)
+                    (-1501.0, 11.690)
+                    (-1022.0, 11.250)
+                    (-499.0, 12.650)
+                    (-0.7, 12.980)
+                    (499.0, 14.450)
+                    (1022.0, 14.210)
+                    (1501.0, 15.697)
+                    (2029.0, 15.720)
+                    (2498.5, 16.500)
+                    (2991.0, 16.570)
+                };
+                \addlegendentry{DMM}
+
+                % ------------------------------------------------
+                % MCU Data
+                % ------------------------------------------------
+                \addplot[
+                    color=cyan,
+                    thick,
+                    mark=*
+                ]
+                coordinates {
+                    (-2991.0, 8.069)
+                    (-2498.5, 9.571)
+                    (-2029.0, 9.584)
+                    (-1501.0, 11.249)
+                    (-1022.0, 11.107)
+                    (-499.0, 12.022)
+                    (-0.7, 12.847)
+                    (499.0, 13.628)
+                    (1022.0, 13.796)
+                    (1501.0, 14.790)
+                    (2029.0, 15.020)
+                    (2498.5, 16.068)
+                    (2991.0, 16.088)
+                };
+                \addlegendentry{MCU}
+
+                % ------------------------------------------------
+                % Scope Data
+                % ------------------------------------------------
+                \addplot[
+                    color=red,
+                    thick,
+                    mark=*
+                ]
+                coordinates {
+                    (-2991.0, -12.207)
+                    (-2498.5, -10.986)
+                    (-2029.0, -10.376)
+                    (-1501.0, -9.766)
+                    (-1022.0, -9.308)
+                    (-499.0, -10.681)
+                    (-0.7, -8.594)
+                    (499.0, -7.477)
+                    (1022.0, -5.035)
+                    (1501.0, -6.104)
+                    (2029.0, -3.516)
+                    (2498.5, -3.906)
+                    (2991.0, -5.030)
+                };
+                \addlegendentry{Scope}
+
+            \end{axis}
+        \end{tikzpicture}
+
+        \captionof{figure}{
+            Voltage cross-validation during the non-irradiated, unshielded
+            current sweep. The dashed lines shows the theoretical CT100
+            responses.
+        }
+        \label{fig:voltage-cross-val}
+
+    \end{minipage}%
+    \hfill
+    % ============================================================
+    % RIGHT: Current Cross-Validation
+    % ============================================================
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                height=6cm,
+                title={Current Cross-Validation},
+                xlabel={Measurement Instance},
+                ylabel={Current (mA)},
+                grid=both,
+                grid style={line width=.1pt, draw=gray!20},
+                major grid style={line width=.2pt, draw=gray!50},
+                mark size=1.2pt,
+                xmin=1,
+                xmax=13,
+                xtick={1,3,5,7,9,11,13},
+                /pgf/number format/1000 sep={},
+                label style={font=\small},
+                tick label style={font=\small},
+                legend style={
+                    at={(0.5,-0.23)},
+                    anchor=north,
+                    font=\scriptsize,
+                    legend columns=2,
+                    /tikz/column sep=0.5cm,
+                    draw=none
+                },
+                ymin=-3100,
+                ymax=3100
+            ]
+
+                % ------------------------------------------------
+                % DMM Current
+                % ------------------------------------------------
+                \addplot[
+                    color=blue,
+                    thick,
+                    mark=square*
+                ]
+                coordinates {
+                    (1,-2991.0)
+                    (2,-2498.5)
+                    (3,-2029.0)
+                    (4,-1501.0)
+                    (5,-1022.0)
+                    (6,-499.0)
+                    (7,-0.7)
+                    (8,499.0)
+                    (9,1022.0)
+                    (10,1501.0)
+                    (11,2029.0)
+                    (12,2498.5)
+                    (13,2991.0)
+                };
+                \addlegendentry{DMM}
+
+                % ------------------------------------------------
+                % INA219 Current
+                % ------------------------------------------------
+                \addplot[
+                    color=orange,
+                    thick,
+                    mark=*
+                ]
+                coordinates {
+                    (1,-2966.7)
+                    (2,-2478.2)
+                    (3,-2012.6)
+                    (4,-1487.7)
+                    (5,-1016.6)
+                    (6,-498.2)
+                    (7,-6.3)
+                    (8,487.8)
+                    (9,1005.2)
+                    (10,1477.2)
+                    (11,2002.1)
+                    (12,2466.4)
+                    (13,2954.8)
+                };
+                \addlegendentry{INA219}
+
+
+
+            \end{axis}
+        \end{tikzpicture}
+
+        \captionof{figure}{
+            Current cross-validation across the 13-point sweep. 
+        }
+        \label{fig:current-cross-val}
+
+    \end{minipage}
+\end{figure}
+
+The theoretical current-to-voltage gradient at $V_{\text{DD}} = \SI{3.32}{\volt}$ is $\SI{1.655}{\milli\volt\per\ampere}$, which is greater than both measured gradients. The measured DMM gradient (\SI{1.356}{\milli\volt\per\ampere}) is 81.9\% of the theoretical value, a deficit of 18.1\%, and the MCU gradient (\SI{1.315}{\milli\volt\per\ampere}) is 79.5\%. The two instruments agree with each other and deviate from theory by a similar amount, so the shortfall is not an instrument-specific effect. A fixed zero-field offset cannot explain it either, because an offset does not change a gradient. The datasheet sensitivity range of 3.8 to $\SI{5.2}{\milli\volt\per\volt\per\milli\tesla}$ corresponds to a theoretical gradient of $\SI{1.40}{}$ to $\SI{1.92}{\milli\volt\per\ampere}$ at this supply voltage, so the measured gradient lies just below the lower end of the specified range. The field-model constant $k_B$ is also uncertain (Section~\ref{sec:field-model}), so a shortfall of this size is within what the model and the part tolerance can account for, and the implications are discussed in Section~\ref{sec:disc-model}.
+
+\subsection{Instrumentation Validation}
+\label{sec:instr-validation}
+
+The sweep above also compares the three instruments against each other, using Figure~\ref{fig:voltage-cross-val} for voltage and Figure~\ref{fig:current-cross-val} for current. The DMM and MCU voltage readings closely track one another: across the 13 points the mean difference is about $\SI{0.5}{\milli\volt}$ and the largest is $\SI{0.9}{\milli\volt}$, which is less than one ADC step ($\SI{1.61}{\milli\volt}$). The oscilloscope, in contrast, shows a different, current-dependent response. A likely cause is that its two channels are referenced to separate ground clips, so ground-return voltage drops that scale with the trace current appear differently on each channel before the channels are subtracted. This was not investigated further because the DMM and MCU already agree.
+The current-measurement cross-validation showed that the INA219 tracked
+the DMM closely across the full current sweep, with a near-unity linear
+relationship and a maximum difference of only \SI{36.2}{\milli\ampere}.
+The INA219 therefore provides sufficient accuracy for the current checks
+required in the subsequent testing. As the INA219 is already integrated
+into the measurement system, it will be used as the primary current
+measurement for future sweeps. This removes the need to repeat each
+current measurement using the external DMM and reduces the time required
+for data collection while maintaining a validated measurement reference.
+
+The oscilloscope measurements were not consistent with the DMM and MCU voltage measurements during the DC current sweep, showing a substantially different response and negative output values. Since the DMM and MCU agreed closely with one another, oscilloscope measurements are not used for subsequent DC voltage or sensitivity checks. The oscilloscope is reserved for transient measurements, where its time-domain capability provides information that cannot be obtained from the DMM.
+voltage measurements during the DC  current sweep, showing a substantially
+different response and negative output values. Since the DMM and MCU
+measurements agreed closely with one another, while the oscilloscope
+response differed significantly. Consequently, oscilloscope measurements will not be used for
+subsequent DC voltage or sensitivity checks. The oscilloscope will instead
+be reserved for transient measurements, where its time-domain capability
+provides information that cannot be obtained from the DMM.
+
+
+The saturation events were also found to move the zero-field baseline of the sensor. This is quantified in a dedicated before-and-after test in Section~\ref{sec:hysteresis}, and its consequences are discussed in Section~\ref{sec:disc-hysteresis}.
+
+
+
+\section{Radiation Testing (Total Ionising Dose)}
+\label{sec:radiation-testing}
+
+\subsection{Rationale and Test Isolation Strategy}
+\label{sec:rad-rationale}
+
+Crystalline MgO, the MTJ's insulating barrier, is expected to be substantially more radiation-tolerant than the amorphous SiO\textsubscript{2} gate oxide used in conventional silicon devices, for the reasons discussed in Section~\ref{sec:rad-tolerance-lit}. To test this without confounding the result with unrelated failure modes, only the passive CT100 sensor was irradiated, on its own and away from the microcontroller and current-sense IC.
+
+
+\subsection{Experimental Setup}
+\label{sec:rad-setup}
+
+Ten CT100 sensors were exposed using a \SI{320}{\kilo\volt} tube potential (tungsten target, \SI{30}{\degree} anode angle, \SI{3}{\milli\metre} beryllium filter) at a beam current of \SI{10}{\milli\ampere}. The beam was seasoned (ramped up to full parameters) from 15:55 to 16:05 NZST on 22 July 2026, and held at full \SI{320}{\kilo\volt}/\SI{10}{\milli\ampere} output until switch-off at 19:26 NZST, giving \SI{3}{\hour}~\SI{21}{\minute} (\SI{12060}{\second}) of full-power exposure. The sensors were not monitored during exposure and were only measured afterwards, so any effect that appears only while the dose is being delivered, and anneals afterwards, was not observed. \todo{State whether the sensors were powered or unpowered (and how the pins were connected) during irradiation, since bias affects the total-dose response.}
+
+The physical test setup inside the irradiation chamber is shown in Figure~\ref{fig:rad_testing_spec}. The dose rate at the sensor location was calculated as \SI{0.0338}{\gray\per\second} (Si), equal to \SI{3.38}{rad(Si)\per\second}, based on the beam path approximated as \SI{315}{\milli\metre} of air followed by \SI{5}{\milli\metre} of aluminium attenuation before reaching the TMR sensor, itself modelled as a silicon block for absorption purposes. Applied over the \SI{12060}{\second} full-power exposure window, this gives a total absorbed dose of \SI{407.6}{\gray} (\SI{40.76}{\kilo rad}(Si)). This dose figure does not include the lower, ramping dose accumulated during the 15:55--16:05 seasoning period, so the total absorbed dose reported here is a conservative estimate.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{rad_testing_spec}
+    \caption{ Comparison of the dose rates found in
+the radiation environments and the rates used in the testing of components
+for tolerance.}
+    \label{fig:rad_testing_spec}
+\end{figure}
+
+To put this exposure in context, the dose and dose rate were compared with the radiation hardness assurance framework given by Poivey \cite{poivey_rha} (Figure~\ref{fig:rad_testing_spec}). Natural space environments such as Low Earth Orbit (LEO) and Geosynchronous Equatorial Orbit (GEO) deliver dose at very low rates, below \SI{e-3}{rad(Si)\per\second}, whereas the laboratory source delivers \SI{3.38}{rad(Si)\per\second}, so the test is an accelerated one that reaches a large dose in a few hours. The ESCC 22900 test method \cite{escc22900} sets the dose-rate windows and conditions for total-dose steady-state testing of components. \todo{Check the dose-rate window of the ESCC 22900 issue you used against the \SI{3.38}{rad(Si)\per\second} used here and state whether this exposure sits inside or above it. In Issue 4 the low-rate window is 36 to 360 rad(Si)/h, i.e. 0.01 to 0.1 rad(Si)/s. The earlier wording that this exposure was ``fully compliant'' has been removed because this was a single dose step with no intermediate measurements.} The accumulated \SI{40.76}{\kilo rad}(Si) is above the \SI{10}{\kilo rad} component-level TID quoted for a commercial CubeSat magnetometer \cite{nss_magnetometer} and below the \SI{100}{\kilo rad}(Si) used to qualify radiation-hardened parts, so it should be read as an indicative dose, not as a qualification result.
+
+
+\subsection{Sensor-Only Board Saturation Response Post-Irradiation}
+\label{sec:rad-sensoronly-response}
+
+To test whether radiation changes the saturation limits or the recovery dynamics, two irradiated sensor-only samples (Samples 3 and 4) were driven to both ceilings using the procedure in Section~\ref{sec:sat-test-methodology}, in the same session as Samples 1 and 2 (7 October 2026). Table~\ref{tab:sat-irr-sensoronly} lists the irradiated results in the same format as Table~\ref{tab:sat-nonirr-sensoronly}, and Figure~\ref{fig:scope-irradiated} shows the oscilloscope captures behind them.
+
+Figure~\ref{fig:scope-irradiated} shows the oscilloscope captures for the irradiated samples. Following the same trace colour assignment used in the non-irradiated characterization, the blue waveform ($M_1$) represents the differential output voltage ($V_{\text{out}} = X_1 - X_2$), while the yellow ($C_1$) and green ($C_2$) waveforms represent the individual $X_1$ and $X_2$ bridge terminal voltages, respectively.
+
+
+
+\begin{table}[H]
+\centering
+\caption{Saturation recovery results, irradiated sensor-only samples.}
+\label{tab:sat-irr-sensoronly}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sample & Ceiling (V) & Baseline (mV) & Swing (V) & Recovery (ms) \\
+\midrule
+3 & $-1.131$ & $-22.3$ & 1.108 & 70.5 \\
+3 & $+1.111$ & $-12.5$ & 1.123 & 65.5 \\
+4 & $-1.145$ & $-22.3$ & 1.123 & 78.0 \\
+4 & $+1.111$ & $-22.3$ & 1.133 & 85.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    % Top Row: Sample 3
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3_satn.png}
+        \caption{Sample 3: Saturation Recovery (negative ceiling)}
+        \label{fig:3_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3_satp.png}
+        \caption{Sample 3: Saturation Recovery (positive ceiling)}
+        \label{fig:3_satp}
+    \end{subfigure}
+    
+    \vspace{0.4cm}
+    
+    % Bottom Row: Sample 4
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4_satn.png}
+        \caption{Sample 4: Saturation Recovery (negative ceiling)}
+        \label{fig:4_satn}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4_satp.png}
+        \caption{Sample 4: Saturation Recovery (positive ceiling)}
+        \label{fig:4_satp}
+    \end{subfigure}
+    
+    \caption{Oscilloscope captures displaying post-irradiation saturation voltage clamping and transient relaxation trajectories for irradiated sensor board Samples 3 and 4 across both field polarities.}
+    \label{fig:scope-irradiated}
+\end{figure}
+
+Averaging over both ceilings and both samples in each group, the mean ceiling magnitude is $\SI{1.130}{\volt}$ for the non-irradiated samples and $\SI{1.124}{\volt}$ for the irradiated samples, a 0.5\% difference. The mean recovery time is $\SI{73.5}{\milli\second}$ and $\SI{74.75}{\milli\second}$ respectively, a 1.7\% difference.
+
+Both differences are smaller than the spread within the non-irradiated group alone (ceilings 1.125 to $\SI{1.145}{\volt}$, recovery 67.5 to $\SI{76.5}{\milli\second}$), so neither the saturation ceiling nor the recovery time shows a change that can be attributed to irradiation at this dose. With two samples per group this is a small data set, and the sensors were not monitored during irradiation (Section~\ref{sec:rad-setup}), so the result applies to permanent changes only. As for the non-irradiated samples, the baseline column is limited by the oscilloscope's resolution (the irradiated baselines differ by multiples of the same $\approx\SI{4.9}{\milli\volt}$ step) and is not interpreted.
+
+
+\subsection{Quantitative Sweep on the Integrated Board}
+\label{sec:rad-sweep}
+
+After transfer to an integrated board, the same current-sweep experiment as in Section~\ref{sec:sensitivity-fit} was repeated, and the results are in Table~\ref{tab:sensitivity-irr} and Figure~\ref{fig:sensitivity-irr-dual-plot}. Note that the irradiated sensor had not been exposed to a saturating field before its sweep, whereas the non-irradiated board it is compared against had been saturated beforehand (Section~\ref{sec:sat-recovery-integrated}). The comparison is therefore between two different units that also differ in magnetic history.
+
+\begin{figure}[H]
+    \centering
+    
+    % Left side: The Table (Slightly wider for 3 columns)
+    \begin{minipage}[c]{0.42\textwidth}
+        \centering
+        \small % Keeps the text size compact
+        \captionof{table}{Irradiated sample current sweep.}
+        \label{tab:sensitivity-irr}
+        \begin{tabular}{@{}rrr@{}}
+            \toprule
+            Current (mA) & DMM (mV) & MCU (mV) \\
+            \midrule
+            \(-2999.0\) & \(-3.723\) & \(-3.258\) \\
+            \(-2595.0\) & \(-3.123\) & \(-2.803\) \\
+            \(-1999.0\) & \(-2.570\) & \(-1.748\) \\
+            \(-1512.0\) & \(-1.620\) & \(-0.044\) \\
+            \(-1017.0\) & \(-1.050\) & \(-0.001\) \\
+            \(-498.0\) & \(-0.100\) & $0.463$ \\
+            \(-0.7\) & $0.269$ & $0.308$ \\
+            $498.0$ & $1.130$ & $1.749$ \\
+            $1017.0$ & $1.640$ & $2.657$ \\
+            $1512.0$ & $2.098$ & $3.178$ \\
+            $1999.0$ & $2.720$ & $3.298$ \\
+            $2595.0$ & $3.303$ & $4.350$ \\
+            $2999.0$ & $3.912$ & $4.834$ \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}%
+    \hfill
+    % Right side: The Plot (Dual lines)
+    \begin{minipage}[c]{0.55\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                height=6cm, % Squashes vertical height
+                title={$V_{\text{out}}$ vs.\ Trace Current},
+                xlabel={Trace current, $I$ (mA)},
+                ylabel={$V_{\text{out}}$ (mV)},
+                grid=both,
+                grid style={line width=.1pt, draw=gray!20},
+                major grid style={line width=.2pt, draw=gray!50},
+                mark size=1.5pt,
+                x tick label style={rotate=45, anchor=east},
+                /pgf/number format/1000 sep={},
+                label style={font=\small},
+                tick label style={font=\small},
+                legend pos=south east, % Puts legend in bottom right corner
+                legend style={font=\footnotesize, cells={anchor=west}}
+            ]
+                % First line: DMM Data
+                \addplot[color=blue, thick, mark=square*] coordinates {
+                    (-2999.0, -3.723) (-2595.0, -3.123) (-1999.0, -2.570)
+                    (-1512.0, -1.620) (-1017.0, -1.050) (-498.0, -0.100)
+                    (-0.7, 0.269) (498.0, 1.130) (1017.0, 1.640)
+                    (1512.0, 2.098) (1999.0, 2.720) (2595.0, 3.303) (2999.0, 3.912)
+                };
+                \addlegendentry{DMM}
+
+                % Second line: MCU Data
+                \addplot[color=cyan, thick, mark=*] coordinates {
+                    (-2999.0, -3.258) (-2595.0, -2.803) (-1999.0, -1.748)
+                    (-1512.0, -0.044) (-1017.0, -0.001) (-498.0, 0.463)
+                    (-0.7, 0.308) (498.0, 1.749) (1017.0, 2.657)
+                    (1512.0, 3.178) (1999.0, 3.298) (2595.0, 4.350) (2999.0, 4.834)
+                };
+                \addlegendentry{MCU}
+            \end{axis}
+        \end{tikzpicture}
+        \captionof{figure}{Plot of irradiated DMM and MCU sweeps detailed in Table~\ref{tab:sensitivity-irr}.}
+        \label{fig:sensitivity-irr-dual-plot}
+    \end{minipage}
+\end{figure}
+
+The same linear-fit procedure gives a gradient of \SI{1.269}{\milli\volt\per\ampere} on the DMM ($R^2 = 0.995$) and \SI{1.312}{\milli\volt\per\ampere} on the MCU ($R^2 = 0.975$), which are 93.6\% (DMM) and 99.8\% (MCU) of the non-irradiated values in Section~\ref{sec:sensitivity-fit}. Both are within the session-to-session variation seen on non-irradiated hardware (Section~\ref{sec:session-variance}), and the two instruments do not agree on the direction of any change, so no significant change in sensitivity was found at the tested dose. This agrees with the literature on MTJ radiation tolerance (Section~\ref{sec:rad-tolerance-lit}). For this specific COTS part and exposure it is a device-level result from one irradiated unit, and it is not a qualification result.
+
+\subsection{Irradiated Saturation Recovery on the Integrated Board}
+\label{sec:sat-recovery-irradiated}
+
+After irradiation, the saturation recovery of the integrated board (Board B) was measured with a regulator input of $V_{\text{CC}} = \SI{5.00}{\volt}$ and a measured sensor supply of $V_{\text{DD}} = \SI{3.289}{\volt}$, using the same procedure as for Board A (Section~\ref{sec:sat-recovery-integrated}). The data was collected on 9 October 2026. Table~\ref{tab:sat-ceiling-iradl} lists the extracted values and Figure~\ref{fig:integrated-recovery-sat} shows the recovery transients.
+
+\begin{table}[H]
+\centering
+\caption{Saturation recovery results, irradiated integrated board (Board B).}
+\label{tab:sat-ceiling-iradl}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sample & Ceiling (V) & Baseline (mV) & Swing (V) & Recovery (ms) \\
+\midrule
+B & $-1.146$ & $0.0$ & 1.146 & 66.7 \\
+B & $+1.149$ & $+1.6$ & 1.147 & 63.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.5cm, vertical sep=1.7cm},
+    width=0.48\textwidth, height=0.36\textwidth,
+    xmin=-20, xmax=150, grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Saturation recovery, negative ceiling}, xlabel={Time since start of recovery (ms)}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.3, ymax=0.2]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_neg.csv};
+\draw[dashed] (axis cs:66.7,-1.3) -- (axis cs:66.7,0.2);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:70,-0.55) {$t_{\text{rec}}=66.7$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:5,-1.1) {ceiling $-1.146$ V};
+
+\nextgroupplot[title={(b) Saturation recovery, positive ceiling}, xlabel={Time since start of recovery (ms)}, ymin=-0.2, ymax=1.3]
+\addplot[red!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_irr_pos.csv};
+\draw[dashed] (axis cs:63.2,-0.2) -- (axis cs:63.2,1.3);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:66,0.45) {$t_{\text{rec}}=63.2$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:3,1.1) {ceiling $+1.149$ V};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Saturation recovery of the irradiated integrated board (Board B) after the magnet is removed. Time zero is the start of the fall from the ceiling, and the dashed line marks the recovery time.}
+\label{fig:integrated-recovery-sat}
+\end{figure}
+
+The ceilings of Board B are $-1.146$ and $+\SI{1.149}{\volt}$ (mean magnitude $\SI{1.148}{\volt}$), within 0.3\% of Board A (1.145 V). Recovery took 66.7 and $\SI{63.2}{\milli\second}$, and the fitted time constants are 13.8 and $\SI{12.7}{\milli\second}$, against 13.1 and $\SI{13.3}{\milli\second}$ for Board A. The decay dynamics are therefore unchanged after irradiation. The baselines after the two events are $0.0$ and $+\SI{1.6}{\milli\volt}$ (zero and one ADC step), compared with $-8.1$ and $+\SI{12.9}{\milli\volt}$ on Board A; this difference is examined in Section~\ref{sec:hysteresis}.
+
+
+
+\section{Magnetic Shielding}
+\label{sec:shielding}
+
+\subsection{Enclosure Design}
+\label{sec:shielding-enclosure}
+
+A 3D-printed enclosure incorporating ferrite shielding was built to test whether shielding changes the measured response. Surrounding a sensor with a high-permeability material gives magnetic flux a low-reluctance path around the enclosed volume, so an external field is partly diverted away from the sensor. For an ideal closed spherical shell of inner radius $a$, thickness $t \ll a$ and relative permeability $\mu_r \gg 1$, the field inside is reduced by a factor of about $1 + 2\mu_r t/(3a)$ \cite{jackson}. A constant ambient field adds only a fixed offset to the output, so shielding is expected to reduce that offset and any noise or drift it causes, not to change the gradient of the response to the trace current (Section~\ref{sec:disc-shielding}).
+
+Mu-metal, a nickel-iron alloy, is the usual choice for DC and low-frequency shielding because of its very high permeability: the initial permeability of fully annealed material is of order 50{,}000 to 100{,}000 depending on the test conditions \cite{msc_mumetal}. It was not used here because of cost, and because shaping the metal after annealing degrades its permeability unless it is re-annealed. \todo{Cite a source for the stress sensitivity of mu-metal, for example a manufacturer handling note.}
+
+Instead, a MnZn ferrite, TDK (EPCOS) SIFERRIT material N95, was selected as a cost-effective alternative. The manufacturer quotes an initial relative permeability $\mu_i$ of 3000 at $25^{\circ}\text{C}$ and a saturation flux density $B_S$ of \SI{525}{\milli\tesla} at $25^{\circ}\text{C}$ \cite{tdk_n95}. Six N95 slabs, each \SI{100}{\milli\metre} $\times$ \SI{100}{\milli\metre} $\times$ \SI{5}{\milli\metre}, form the walls of the enclosure. With $\mu_r = 3000$, $t = \SI{5}{\milli\metre}$ and an inner radius of about \SI{50}{\milli\metre}, the closed-shell expression above gives an ideal shielding factor near 200, so a closed shell would cut an external field by about two orders of magnitude. This is an upper bound: the quoted permeability is a small-signal value for a ferrite core rather than a measurement at DC in an enclosure, and the real enclosure has seams and a cable cut-out. The ambient fields to be attenuated (tens of microtesla) are far below the \SI{525}{\milli\tesla} saturation flux density, so the ferrite stays in its linear region.
+
+To enable continuous operation and data logging during testing, power and data connections via an ST-Link programmer must be routed to the enclosed PCB. Consequently, a physical cut-out was designed into the enclosures to accommodate this. However, any gap effects the reluctance of the shielding and allows for ambient magnetic flux to leak and impact the TMR readings.
+
+To reduce this flux leakage, a flexible nanocrystalline shielding foil, which is also a highly permeable material, was placed over the cut-out. \todo{State the foil's product name, thickness and quoted permeability, and cite its datasheet.}
+
+The magnetic shielding progression—including the printed chassis slots, the internal board placement (Figure~\ref{fig:box_pcb}), and the final exterior wrap (Figure~\ref{fig:box_nano})—can be seen in Figure~\ref{fig:shielding_enclosure}.
+
+
+\begin{figure}[H]
+    \centering
+    % Define the professional style: Bright cyan lines, clean white badges
+    \tikzset{
+        badge/.style={fill=white, draw=black!40, thick, rounded corners=2pt, inner sep=3pt, font=\sffamily\small\bfseries, text=black!80},
+        pointer/.style={-stealth, draw=cyan, line width=1.5pt}
+    }
+
+    % Subfigure A: CAD Model
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[anchor=south west, inner sep=0] (imageA) at (0,0) {\includegraphics[width=\textwidth]{Box_FINAL_v2 v1.png}};
+            \begin{scope}[x={(imageA.south east)},y={(imageA.north west)}]
+                % F badge pointing precisely to the bottom right ferrite insertion slot
+                \node[badge] (F_cad) at (0.85, 0.1) {F};
+                \draw[pointer] (F_cad) -- (0.7, 0.25);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Enclosure CAD render.}
+        \label{fig:box_cad}
+    \end{subfigure}
+    \hfill
+    % Subfigure B: PCB inside the box
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[anchor=south west, inner sep=0] (imageB) at (0,0) {\includegraphics[width=\textwidth]{pcb_box.png}};
+            \begin{scope}[x={(imageB.south east)},y={(imageB.north west)}]
+                % F badge pointing exactly to the 4 internal ferrite slabs/slots
+                \node[badge] (F_pcb) at (0.15, 0.85) {F};
+                \draw[pointer] (F_pcb) -- (0.64, 0.73); % Top right slab
+                \draw[pointer] (F_pcb) -- (0.80, 0.50); % Bottom right slab
+                \draw[pointer] (F_pcb) -- (0.28, 0.40); % Bottom left slab
+                \draw[pointer] (F_pcb) -- (0.3, 0.72); % Top left slab
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Internal PCB mounting.}
+        \label{fig:box_pcb}
+    \end{subfigure}
+    \hfill
+    % Subfigure C: Fully shielded with Nano/Ferrite layer
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \node[anchor=south west, inner sep=0] (imageC) at (0,0) {\includegraphics[width=\textwidth]{box_nano.png}};
+            \begin{scope}[x={(imageC.south east)},y={(imageC.north west)}]
+                % F badge pointing to the top ferrite lid block
+                \node[badge] (F_ext) at (0.2, 0.8) {F};
+                \draw[pointer] (F_ext) -- (0.55, 0.9);
+                
+                % N badge pointing directly onto the shiny metal shielding wrap
+                \node[badge] (N_ext) at (0.85, 0.2) {N};
+                \draw[pointer] (N_ext) -- (0.65, 0.550);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Exterior shielding layer.}
+        \label{fig:box_nano}
+    \end{subfigure}
+    
+    \caption{Development of the magnetic shielding enclosure. (a) The 3D-printed chassis. (b) The integrated sensor board mounted inside. (c) The assembled test configuration wrapped in shielding. Annotations indicate the placement of ferrite plates (\textbf{F}) and flexible nanocrystalline shielding (\textbf{N}).} 
+    \label{fig:shielding_enclosure}
+\end{figure}
+    
+
+\subsection{Shielded Sweep Results}
+\label{sec:shielded-results}
+
+With MCU-DMM agreement already established across the full current range (Section~\ref{sec:instr-validation}), the shielded current sweep was conducted using MCU-only logging (no DMM or oscilloscope): the earlier cross-validation (Section~\ref{sec:instr-validation}) showed MCU and DMM readings agreeing to within a fraction of an ADC LSB across the unshielded sweep, so introducing the DMM into the shielded enclosure was judged to add setup complexity and added another source of possible stray magnetic field.
+
+The non-irradiated and irradiated integrated boards was tested inside the shielded enclosure under the same sweep procedure as in Section~\ref{sec:nonirr-characterisation}.  Note that the irradiated TMR sensor tested under this shielding condition had not previously been driven into saturation. 
+
+The raw measurement data for both the non-irradiated and irradiated shielded sweeps are detailed in Table~\ref{tab:sensitivity-shielded} and Table~\ref{tab:sensitivity-irr-shielded}, respectively. To visualize the effect of the magnetic shielding, Figure~\ref{fig:shielding-overlay} compares these shielded sweeps directly against their unshielded counterparts.
+
+Operating conditions are as follows, testing perfomed at a $V_{\text{DD}} = \SI{3.29}{\volt}$.
+
+
+
+\begin{table}[H]
+    \centering
+    
+    % --- ROW 1: CAPTIONS ---
+    % Both minipages top-aligned [t] so the caption text starts at the exact same height
+    \begin{minipage}[t]{0.48\textwidth}
+        \caption{Shielded, non-irradiated current sweep (MCU only): $V_{\text{out}}$ vs.\ trace current.}
+        \label{tab:sensitivity-shielded}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \caption{Irradiated, shielded current sweep (MCU only): $V_{\text{out}}$ vs.\ trace current.}
+        \label{tab:sensitivity-irr-shielded}
+    \end{minipage}
+    
+    \vspace{0.3cm} % Small vertical buffer between captions and the tables
+    
+    % --- ROW 2: TABLES ---
+    % Both minipages top-aligned [t] so the tables start at the exact same height
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \small
+        \begin{tabular}{@{}rr@{}}
+            \toprule
+            Current (mA) & MCU (mV) \\
+            \midrule
+            \(-3043.4\) & 8.039 \\
+            \(-2522.5\) & 8.549 \\
+            \(-2057.7\) & 9.594 \\
+            \(-1540.3\) & 9.949 \\
+            \(-1040.2\) & 11.170 \\
+            \(-546.2\) & 11.319 \\
+            \(-6.3\) & 12.705 \\
+            $535.4$ & 12.946 \\
+            $996.2$ & 13.931 \\
+            $1523.0$ & 14.530 \\
+            $2038.1$ & 15.532 \\
+            $2486.1$ & 16.103 \\
+            $2988.7$ & 16.474 \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \small 
+        \begin{tabular}{@{}rr@{}}
+            \toprule
+            Current (mA) & MCU (mV) \\
+            \midrule
+            \(-3007.1\) & \(-3.287\) \\
+            \(-2501.2\) & \(-2.769\) \\
+            \(-2054.6\) & \(-1.130\) \\
+            \(-1567.3\) & 0.069 \\
+            \(-1037.7\) & \(-0.001\) \\
+            \(-532.1\) & 0.107 \\
+            \(-6.3\) & 1.318 \\
+            $512.5$ & 1.699 \\
+            $1011.4$ & 2.837 \\
+            $1557.8$ & 3.241 \\
+            $2048.6$ & 3.933 \\
+            $2560.6$ & 4.807 \\
+            $3025.4$ & 4.932 \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}
+    
+\end{table}
+
+
+% ============================================================
+% Preamble (if not already present):
+%   \usepackage{pgfplots}
+%   \usepgfplotslibrary{groupplots}
+%   \pgfplotsset{compat=1.18}
+% ============================================================
+% Shielded vs. unshielded overlaid on ONE figure, one panel per
+% sample condition. Both panels use the same vertical SPAN (14 mV)
+% so the gradients can be compared by eye even though the two
+% boards sit at different baselines. Raw MCU data, no table needed
+% (the tables already exist elsewhere in the report).
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=1.6cm},
+    width=0.48\textwidth, height=0.55\textwidth,
+    xlabel={Trace current, $I$ (mA)},
+    xmin=-3200, xmax=3200,
+    xtick={-3000,-2000,-1000,0,1000,2000,3000},
+    xticklabel style={rotate=45, anchor=north east, /pgf/number format/1000 sep={}},
+    tick label style={font=\footnotesize},
+    label style={font=\small}, title style={font=\small},
+    grid=major, grid style={gray!25},
+    axis lines=box,
+    legend style={font=\scriptsize, draw=black, at={(0.5,-0.36)}, anchor=north, legend columns=1},
+]
+
+% ---------------- Panel (a): non-irradiated ----------------
+\nextgroupplot[title={(a) Non-irradiated}, ylabel={$V_{\text{out}}$ (mV)}, ymin=5, ymax=19]
+\addplot[color={rgb,255:red,0;green,115;blue,189}, mark=o, mark size=1.5pt, thick]
+    coordinates {
+    (-2991.0,8.069) (-2498.5,9.571) (-2029.0,9.584) (-1501.0,11.249)
+    (-1022.0,11.107) (-499.0,12.022) (-0.7,12.847) (499.0,13.628)
+    (1022.0,13.796) (1501.0,14.790) (2029.0,15.020) (2498.5,16.068)
+    (2991.0,16.088)};
+\addlegendentry{Unshielded (1.32 mV/A)}
+\addplot[color={rgb,255:red,0;green,153;blue,76}, mark=square*, mark size=1.4pt, thick, dashed]
+    coordinates {
+    (-3043.4,8.039) (-2522.5,8.549) (-2057.7,9.594) (-1540.3,9.949)
+    (-1040.2,11.170) (-546.2,11.319) (-6.3,12.705) (535.4,12.946)
+    (996.2,13.931) (1523.0,14.530) (2038.1,15.532) (2486.1,16.103)
+    (2988.7,16.474)};
+\addlegendentry{Shielded (1.45 mV/A)}
+
+% ---------------- Panel (b): irradiated ----------------
+\nextgroupplot[title={(b) Irradiated}, ymin=-7, ymax=7]
+\addplot[color={rgb,255:red,217;green,83;blue,25}, mark=triangle, mark size=1.8pt, thick]
+    coordinates {
+    (-2999.0,-3.258) (-2595.0,-2.803) (-1999.0,-1.748) (-1512.0,-0.044)
+    (-1017.0,-0.001) (-498.0,0.463) (-0.7,0.308) (498.0,1.749)
+    (1017.0,2.657) (1512.0,3.178) (1999.0,3.298) (2595.0,4.350)
+    (2999.0,4.834)};
+\addlegendentry{Unshielded (1.31 mV/A)}
+\addplot[color={rgb,255:red,125;green,46;blue,143}, mark=diamond*, mark size=1.8pt, thick, dashed]
+    coordinates {
+    (-3007.1,-3.287) (-2501.2,-2.769) (-2054.6,-1.130) (-1567.3,0.069)
+    (-1037.7,-0.001) (-532.1,0.107) (-6.3,1.318) (512.5,1.699)
+    (1011.4,2.837) (1557.8,3.241) (2048.6,3.933) (2560.6,4.807)
+    (3025.4,4.932)};
+\addlegendentry{Shielded (1.34 mV/A)}
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{Shielded vs.\ unshielded current sweeps (MCU readings) for (a) the non-irradiated and (b) the irradiated sample.}
+\label{fig:shielding-overlay}
+\end{figure}
+
+ Shielding changes the gradient by $+10\%$ on the non-irradiated board and $+2.3\%$ on the irradiated board.
+
+\subsection{Session-to-Session Variance}
+\label{sec:session-variance}
+
+To better quantify the expected measurement tolerance and validate earlier findings, a secondary current sweep was performed on the non-irradiated shielded MCU board on. This validation test was conducted at $V_{\text{DD}} = \SI{3.29}{\volt}$.
+
+The raw data logged for this secondary shielded sweep is detailed in Table~\ref{tab:variance-new-data}. Figure~\ref{fig:variance-overlay} visualizes this data alongside the initial shielded non-irradiated sweep to illustrate the session-to-session any offset and sensitivity drift. 
+
+\begin{figure}[H]
+    \centering
+    
+    % --- LEFT SIDE: THE TABLE ---
+    \begin{minipage}[c]{0.38\textwidth}
+        \centering
+        \small 
+        \captionof{table}{Validation Sweep: Non-Irradiated Shielded Board}
+        \label{tab:variance-new-data}
+        
+        \begin{tabular}{@{}cc@{}}
+            \toprule
+            INA Current (mA) & MCU (mV) \\
+            \midrule
+            \(-3046.47\) & 8.039 \\
+            \(-2492.64\) & 8.595 \\
+            \(-2009.76\) & 9.604 \\
+            \(-1493.87\) & 10.014 \\
+            \(-1037.81\) & 11.110 \\
+            \(-507.16\) & 11.312 \\
+            \(-4.58\) & 12.514 \\
+            $494.27$ & 12.888 \\
+            $1055.68$ & 13.579 \\
+            $1515.83$ & 14.455 \\
+            $2016.78$ & 14.890 \\
+            $2487.65$ & 15.978 \\
+            $3006.08$ & 16.192 \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}\hfill
+    % --- RIGHT SIDE: THE PLOT ---
+    \begin{minipage}[c]{0.58\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=\textwidth,
+                height=6.5cm,
+                title={Session-to-Session Variance},
+                title style={align=center},
+                xlabel={Trace current, $I$ (mA)},
+                ylabel={$V_{\text{out}}$ (mV)},
+                grid=both,
+                grid style={line width=.1pt, draw=gray!20},
+                major grid style={line width=.2pt, draw=gray!50},
+                xmin=-3200, xmax=3200,
+                ymin=7, ymax=17,
+                xtick={-3000,-2000,-1000,0,1000,2000,3000},
+                /pgf/number format/1000 sep={},
+                legend style={at={(0.5,-0.25)}, anchor=north, font=\scriptsize, legend columns=2, draw=none},
+            ]
+                
+                % Initial Shielded Run
+                \addplot[
+                    color={rgb,255:red,0;green,153;blue,76}, 
+                    mark=square*, mark size=1.5pt, thick, dashed
+                ] coordinates {
+                    (-3043.4,8.039) (-2522.5,8.549) (-2057.7,9.594) (-1540.3,9.949)
+                    (-1040.2,11.170) (-546.2,11.319) (-6.3,12.705) (535.4,12.946)
+                    (996.2,13.931) (1523.0,14.530) (2038.1,15.532) (2486.1,16.103)
+                    (2988.7,16.474)
+                };
+                \addlegendentry{Initial Run (\(\sim\)1.45 mV/A)}
+
+                % Validation Run (25/09)
+                \addplot[
+                    color=purple, 
+                    mark=*, mark size=1.5pt, thick
+                ] coordinates {
+                    (-3046.47, 8.039) (-2492.64, 8.595) (-2009.76, 9.604) (-1493.87, 10.014)
+                    (-1037.81, 11.110) (-507.16, 11.312) (-4.58, 12.514) (494.27, 12.888)
+                    (1055.68, 13.579) (1515.83, 14.455) (2016.78, 14.890) (2487.65, 15.978)
+                    (3006.08, 16.192)
+                };
+                \addlegendentry{Validation Run (\(\sim\)1.35 mV/A)}
+
+            \end{axis}
+        \end{tikzpicture}
+        \captionof{figure}{Plots of two discrete testing sessions on the same shielded, non-irradiated board.}
+        \label{fig:variance-overlay}
+    \end{minipage}
+    
+\end{figure}
+
+A linear estimation of the validation sweep data yields an approximate sensitivity of \SI{1.35}{\milli\volt\per\ampere}. When compared to the initial shielded run's sensitivity of \SI{1.45}{\milli\volt\per\ampere} (Section~\ref{sec:shielded-results}), this reveals an approximate 7\% discrepancy attributable to standard session-to-session environmental and setup variance.
+
+Crucially, this baseline session to session variance contextualizes the earlier shielding tests. The 2.3\% to 10\% sensitivity differences previously observed between unshielded and shielded states fall within this expected session to session tolerance. Consequently, the data does not demonstrate a distinct shielding effect, the observed deviations are likely artifacts of standard testing drift rather than a physical shift in the sensor's ambient response. Furthermore, no statistically significant change in sensitivity is apparent across either shielding condition.
+
+\section{Quantitative Magnetic Hysteresis Testing}
+\label{sec:hysteresis}
+
+To separate the effect of magnetic history from board-level effects, the sensor on the non-irradiated integrated board was desoldered and replaced with a new sensor that had never been exposed to a magnetic field (Board C). All measurements were taken on 12 October 2026 with a regulator input of $V_{\text{CC}} = \SI{5.00}{\volt}$ and a sensor supply of $V_{\text{DD}} = \SI{3.321}{\volt}$.
+
+The test was run in one session, with no other change to the board, in three steps: (i) a current sweep on the untouched sensor (before saturation); (ii) saturation to the negative ceiling and then to the positive ceiling (Section~\ref{sec:sat-test-methodology}), recording the output throughout; and (iii) a second, identical current sweep (after saturation). The two sweeps are listed in Tables~\ref{tab:naive-sat-before} and~\ref{tab:naive-sat-after} and plotted in Figure~\ref{fig:hysteresis-sweeps}. Panel (a) of that figure shows the raw output of both sweeps, and panel (b) shows them again with each sweep's fitted offset removed so that only the gradient is compared. The saturation events themselves are reported in Table~\ref{tab:mh-saturation} and Figure~\ref{fig:mh-recovery}.
+
+\begin{figure}[H]
+    \centering
+    
+    % ==========================================
+    %       LEFT SIDE: STACKED TABLES
+    % ==========================================
+    \begin{minipage}[c]{0.40\textwidth}
+        \centering
+        \captionof{table}{Board C current sweep before saturation.}
+        \label{tab:naive-sat-before}
+        \small 
+        \begin{tabular}{@{}rr@{}}
+            \toprule
+            Current (mA) & $V_{\text{out}}$ (mV) \\
+            \midrule
+            $-3026.78$ & $-8.076$ \\
+            $-2500.36$ & $-8.047$ \\
+            $-2074.76$ & $-7.625$ \\
+            $-1490.19$ & $-6.462$ \\
+            $-1043.62$ & $-5.821$ \\
+            $-508.79$  & $-4.869$ \\
+            $-6.30$    & $-4.824$ \\
+            $493.28$   & $-3.809$ \\
+            $1003.71$  & $-3.222$ \\
+            $1498.85$  & $-2.582$ \\
+            $2037.68$  & $-1.641$ \\
+            $2510.09$  & $-1.571$ \\
+            $3025.05$  & $-0.709$ \\
+            \bottomrule
+        \end{tabular}
+        
+        \vspace{1.5cm} 
+        
+        \captionof{table}{Board C current sweep after saturation.}
+        \label{tab:naive-sat-after}
+        \small 
+        \begin{tabular}{@{}rr@{}}
+            \toprule
+            Current (mA) & $V_{\text{out}}$ (mV) \\
+            \midrule
+            $-2971.20$ & $7.896$ \\
+            $-2516.89$ & $8.091$ \\
+            $-2031.67$ & $8.878$ \\
+            $-1500.70$ & $9.660$ \\
+            $-999.23$  & $10.051$ \\
+            $-504.66$  & $11.124$ \\
+            $-6.15$    & $11.297$ \\
+            $492.07$   & $12.077$ \\
+            $1010.23$  & $12.875$ \\
+            $1504.07$  & $13.100$ \\
+            $2039.39$  & $14.316$ \\
+            $2502.52$  & $14.558$ \\
+            $3018.47$  & $15.590$ \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}\hfill
+    % ==========================================
+    %       RIGHT SIDE: STACKED PLOTS
+    % ==========================================
+    \begin{minipage}[c]{0.58\textwidth}
+        \centering
+        \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={group size=1 by 2, vertical sep=3.2cm}, % <-- Increased vertical separation
+            width=\textwidth, height=0.65\textwidth,
+            xlabel={Trace current, $I$ (mA)}, xmin=-3200, xmax=3200,
+            xtick={-3000,-2000,-1000,0,1000,2000,3000},
+            xticklabel style={rotate=45, anchor=north east, /pgf/number format/1000 sep={}},
+            tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+            grid=major, grid style={gray!25}, axis lines=box,
+        ]
+        
+        % Plot (a): Raw Output
+        \nextgroupplot[
+            title={(a) Raw output}, ylabel={$V_{\text{out}}$ (mV)}, ymin=-12, ymax=20,
+            legend style={at={(0.03,0.97)}, anchor=north west, font=\scriptsize, legend columns=1} % <-- Moved to top left
+        ]
+        \addplot[color={rgb,255:red,0;green,115;blue,189}, mark=o, mark size=1.5pt, thick] coordinates {(-3026.8,-8.076) (-2500.4,-8.047) (-2074.8,-7.625) (-1490.2,-6.462) (-1043.6,-5.821) (-508.8,-4.869) (-6.3,-4.824) (493.3,-3.809) (1003.7,-3.222) (1498.9,-2.582) (2037.7,-1.641) (2510.1,-1.571) (3025.1,-0.709)};
+        \addlegendentry{Before sat (1.289 mV/A)}
+        
+        \addplot[color={rgb,255:red,217;green,83;blue,25}, mark=*, mark size=1.4pt, thick, dashed] coordinates {(-2971.2,7.896) (-2516.9,8.091) (-2031.7,8.878) (-1500.7,9.660) (-999.2,10.051) (-504.7,11.124) (-6.1,11.297) (492.1,12.077) (1010.2,12.875) (1504.1,13.100) (2039.4,14.316) (2502.5,14.558) (3018.5,15.590)};
+        \addlegendentry{After sat (1.283 mV/A)}
+        
+        \draw[<->, thick] (axis cs:-2000,-7.3) -- (axis cs:-2000,8.3);
+        \node[font=\scriptsize, anchor=west, fill=white, inner sep=1pt] at (axis cs:-1800,0.65) {$\Delta V = 16.121$ mV};
+         
+        % Plot (b): Offset removed
+        \nextgroupplot[
+            title={(b) Offset removed}, ylabel={$V_{\text{out}}$ (mV)}, ymin=-6, ymax=6, 
+            legend style={at={(0.03,0.97)}, anchor=north west, font=\scriptsize, legend columns=1} 
+        ]
+        \addplot[color={rgb,255:red,0;green,115;blue,189}, mark=o, mark size=1.5pt, thick] coordinates {(-3026.8,-3.526) (-2500.4,-3.497) (-2074.8,-3.075) (-1490.2,-1.912) (-1043.6,-1.271) (-508.8,-0.319) (-6.3,-0.274) (493.3,0.741) (1003.7,1.328) (1498.9,1.968) (2037.7,2.909) (2510.1,2.979) (3025.1,3.841)};
+        \addlegendentry{Before sat (1.289 mV/A)} % <-- Added sensitivity for consistency
+        
+        \addplot[color={rgb,255:red,217;green,83;blue,25}, mark=*, mark size=1.4pt, thick, dashed] coordinates {(-2971.2,-3.601) (-2516.9,-3.406) (-2031.7,-2.619) (-1500.7,-1.837) (-999.2,-1.446) (-504.7,-0.373) (-6.1,-0.200) (492.1,0.580) (1010.2,1.378) (1504.1,1.603) (2039.4,2.819) (2502.5,3.061) (3018.5,4.093)};
+        \addlegendentry{After sat (1.283 mV/A)} % <-- Added sensitivity for consistency
+        
+        \end{groupplot}
+        \end{tikzpicture}
+        
+        \vspace{0.5cm}
+        \captionof{figure}{Current sweep on a fresh, never-saturated sensor before (solid) and after (dashed) being driven to saturation. (a) Raw output: the curve moves up by $16.121$\,mV. (b) With offset removed, sweeps overlap.}
+        \label{fig:hysteresis-sweeps}
+    \end{minipage}
+    
+\end{figure}
+
+The saturation events applied to Board C are listed in Table~\ref{tab:mh-saturation}, in the same format as the other saturation tables. The sensor was driven to the negative ceiling first and then to the positive ceiling.
+
+
+\begin{table}[H]
+\centering
+\caption{Saturation recovery results, fresh sensor on the integrated board (Board C).}
+\label{tab:mh-saturation}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sample & Ceiling (V) & Baseline (mV) & Swing (V) & Recovery (ms) \\
+\midrule
+C & $-1.107$ & $-1.6$ & 1.105 & 40.1 \\
+C & $+1.117$ & $+11.3$ & 1.105 & 48.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The negative ceiling ($-\SI{1.107}{\volt}$) equals $V_{\text{DD}}/3$ for this board ($\SI{3.321}{\volt}/3 = \SI{1.107}{\volt}$), and the positive ceiling is 0.9\% higher. Figure~\ref{fig:mh-recovery} shows the recovery after each ceiling: the output settles to within $\SI{5}{\milli\volt}$ of its new baseline in $\SI{40.1}{\milli\second}$ after the negative ceiling and $\SI{48.7}{\milli\second}$ after the positive ceiling. Fitted time constants are 8.6 and $\SI{9.6}{\milli\second}$, faster than on Boards A and B (about $\SI{13}{\milli\second}$). This is within unit-to-unit variation, although the uncontrolled hand withdrawal of the magnet may also contribute.
+
+The zero-field baseline is the output once the field has been removed. Table~\ref{tab:baseline-shift} lists the baseline before and after each saturation event for all three integrated boards. ``Before'' is the median output in a quiet interval before the field was applied, ``after'' is the median output once recovery was complete, and the shift is after minus before, so a positive shift means the zero-field output moved up. The shifts are computed from unrounded values. Figure~\ref{fig:mh-baseline} shows the baseline of Board C through the sequence.
+
+\begin{table}[H]
+\centering
+\caption{Baseline before and after each saturation event, integrated boards.}
+\label{tab:baseline-shift}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Sample & Ceiling reached & Before (mV) & After (mV) & Shift (mV) \\
+\midrule
+A (non-irradiated) & Negative & $-6.4$ & $-8.1$ & $-1.6$ \\
+A (non-irradiated) & Positive & $-8.1$ & $+12.9$ & $+20.9$ \\
+B (irradiated) & Negative & $0.0$ & $0.0$ & $0.0$ \\
+B (irradiated) & Positive & $0.0$ & $+1.6$ & $+1.6$ \\
+C (fresh sensor) & Negative & $-4.8$ & $-1.6$ & $+3.2$ \\
+C (fresh sensor) & Positive & $-1.6$ & $+11.3$ & $+12.9$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three observations follow from Table~\ref{tab:baseline-shift}. First, on Board C the negative ceiling moved the baseline by only $+\SI{3.2}{\milli\volt}$ (two ADC steps of $\SI{1.61}{\milli\volt}$), but the positive ceiling that followed moved it by $+\SI{12.9}{\milli\volt}$, leaving the baseline at $+\SI{11.3}{\milli\volt}$, a total shift of $+\SI{16.1}{\milli\volt}$ from the untouched sensor. Second, Board A shows the same pattern, a negligible shift at the negative ceiling and a large one ($+\SI{20.9}{\milli\volt}$) at the positive ceiling. Third, the irradiated Board B shows no comparable shift ($0.0$ and $+\SI{1.6}{\milli\volt}$). Because the negative ceiling was always reached first, these data cannot yet separate the direction of the field from the order of the events, and Board B is a single irradiated unit.
+
+\textbf{Gradient stability.} Despite a total zero-current offset shift of $\SI{16.05}{\milli\volt}$, the sensor's linear response to current is essentially unaffected. Table~\ref{tab:mh-sweeps} gives a straight-line fit to each sweep, and shows that the gradient changes by only $-0.5\%$ (from $\SI{1.289}{\milli\volt\per\ampere}$ to $\SI{1.283}{\milli\volt\per\ampere}$) after the two saturation events, while $R^2$ stays above 0.99. The shift therefore moves the whole response up without changing its slope or its linearity, which is the pattern seen in panel (b) of Figure~\ref{fig:hysteresis-sweeps}, where the two sweeps overlap once their offsets are removed.
+
+ 
+\begin{table}[h]
+\centering
+\caption{Fresh sensor: linear fit of the current sweep before and after the saturation events in Table~\ref{tab:mh-saturation}.}
+\label{tab:mh-sweeps}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Sweep & Gradient (mV/A) & Offset at 0 A (mV) & $R^2$ \\
+\midrule
+Before saturation & 1.289 & $-4.55$ & 0.991 \\
+After saturation  & 1.283 & $+11.50$ & 0.994 \\
+\midrule
+Change & $-0.5\%$ & $+16.05$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ---------- Figure A: the two recovery transients ----------
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 1, horizontal sep=1.5cm},
+    width=0.48\textwidth, height=0.38\textwidth,
+    xmin=-20, xmax=150, xlabel={Time since start of recovery (ms)},
+    grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small}, title style={font=\small},
+]
+\nextgroupplot[title={(a) Saturation recovery, negative ceiling}, ylabel={$V_{\text{out}}$ (V)}, ymin=-1.25, ymax=0.15]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_mh_neg.csv};
+\draw[dashed] (axis cs:40.1,-1.25) -- (axis cs:40.1,0.15);
+\node[font=\scriptsize, anchor=north west, fill=white, inner sep=1pt] at (axis cs:44,-0.55) {$t_{\text{rec}}=40.1$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:58,-1.1) {ceiling $-1.107$ V};
+ 
+\nextgroupplot[title={(b) Saturation recovery, positive ceiling}, ymin=-0.15, ymax=1.25]
+\addplot[blue!70!black, thick] table[col sep=comma, x=t_ms, y=v_V] {rec_mh_pos.csv};
+\draw[dashed] (axis cs:48.7,-0.15) -- (axis cs:48.7,1.25);
+\node[font=\scriptsize, anchor=south west, fill=white, inner sep=1pt] at (axis cs:52,0.45) {$t_{\text{rec}}=48.7$ ms};
+\node[font=\scriptsize, anchor=west] at (axis cs:58,1.1) {ceiling $+1.117$ V};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Saturation recovery of the fresh sensor (Board C) after the magnet is removed, from (a) the negative ceiling and (b) the positive ceiling. Time zero is the start of the fall from the ceiling; the dashed line marks the recovery time (output within 5\,mV of its final baseline).}
+\label{fig:mh-recovery}
+\end{figure}
+ 
+% ---------- Figure B: baseline before, between and after the events ----------
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.92\textwidth, height=0.32\textwidth,
+    xlabel={Time (s)}, ylabel={$V_{\text{out}}$ (mV)}, xmin=0, xmax=29.5, ymin=-30, ymax=30,
+    grid=major, grid style={gray!25}, axis lines=box,
+    tick label style={font=\footnotesize}, label style={font=\small},
+    unbounded coords=jump, restrict y to domain=-30:30,
+]
+\addplot[blue!70!black, thin] table[col sep=comma, x=t_s, y=v_mV] {trace_mh.csv};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:2.2,-18) {$-4.8$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:15,-18) {$-1.6$ mV};
+\node[font=\scriptsize, fill=white, inner sep=1pt] at (axis cs:27,22) {$+11.3$ mV};
+\end{axis}
+\end{tikzpicture}
+\caption{Output baseline before, between and after the two saturation events (view clipped to $\pm30$\,mV so the baseline is visible). The baseline moves from $-4.8$\,mV to $-1.6$\,mV after the negative saturation, then to $+11.3$\,mV after the positive saturation.}
+\label{fig:mh-baseline}
+\end{figure}
+ 
+ 
+
+\section{Discussion}
+\label{sec:discussion}
+
+This project asked whether a low-cost commercial TMR sensor, the CT100, is operationally viable for CubeSat ADCS/EPS use, focusing on how it behaves when driven into saturation and after irradiation (Section~\ref{sec:research-question}). The motivation (Section~\ref{sec:intro}) is that CubeSat magnetometers must be small, light and low power, and that TMR offers high sensitivity in a few-millimetre package but has little space heritage (Section~\ref{sec:magnetometer-tech}). This section first checks that the test method can be trusted, then discusses each result against the literature and the CubeSat use case, and ends with the limitations of the work.
+
+\subsection{Validity of the Test Method}
+\label{sec:disc-validity}
+
+The results depend on the measurement chain, so it was validated before it was used. The MCU voltage readings agree with the DMM to within $\SI{0.9}{\milli\volt}$, less than one ADC step, and the INA219 current reading agrees with the DMM to within about 1 to 2\% (Section~\ref{sec:instr-validation}). The oscilloscope disagreed with both for DC measurements and was therefore used only for transients, where its time resolution matters. On that basis the MCU alone was used for the shielded sweeps and the hysteresis test, which saved a large amount of test time. The radiation sweeps used both the DMM and the MCU so that they were consistent with the earlier baseline. Two further checks support the method: the analytical field model and the Ansys Maxwell simulation agree within about 8\% (\SI{462.7}{\micro\tesla} and about \SI{500}{\micro\tesla} at \SI{4.175}{\ampere}, Section~\ref{sec:field-validation}), and the measured gradients vary by up to about 7\% between sessions (Section~\ref{sec:session-variance}). The method is therefore good enough for the effects reported here, which are offset shifts of 13 to $\SI{21}{\milli\volt}$ and gradient changes of a few percent. It is not good enough for signals at the level of Earth's field, as discussed in Section~\ref{sec:disc-limitations}.
+
+\subsection{Field Model and Sensitivity}
+\label{sec:disc-model}
+
+Across the seven current sweeps in this report the measured gradient lies between 1.283 and $\SI{1.447}{\milli\volt\per\ampere}$ (mean about $\SI{1.33}{\milli\volt\per\ampere}$), which is 77 to 87\% of the theoretical $\SI{1.655}{\milli\volt\per\ampere}$ (Figure~\ref{fig:gradient-summary}). Expressed as a sensitivity, the mean gradient corresponds to about $\SI{3.6}{\milli\volt\per\volt\per\milli\tesla}$, which is about 5\% below the lower end of the datasheet range of 3.8 to $\SI{5.2}{\milli\volt\per\volt\per\milli\tesla}$ \cite{ct100_datasheet}. Figure~\ref{fig:sensitivity-comparison} compares the four test conditions against the theoretical line with each sweep's offset removed, so that only the gradients are compared. All measured lines are close together and below the theoretical line.
+
+This shortfall is small enough to be explained by two things that were not controlled. The first is the field model: the coupling constant $k_B$ depends strongly on the distance $d$ from the trace to the sensing element, which is not known precisely inside the package (Section~\ref{sec:field-model}). The second is part-to-part tolerance, since the datasheet allows sensitivities down to $\SI{3.8}{\milli\volt\per\volt\per\milli\tesla}$. The ambient field is not a candidate explanation: a constant ambient field adds an offset to the output but does not change its gradient. The measured response is linear (R$^2$ of about 0.97 or higher in the sweeps fitted in this report) and the transfer from trace current to output is therefore well described by a single gradient. For a CubeSat designer the practical conclusion is that the datasheet sensitivity can be used as a starting point, but that each unit should be calibrated, as with any magnetometer.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar, width=0.92\textwidth, height=0.5\textwidth, bar width=13pt,
+    ymin=0, ymax=2.2, xmin=0.4, xmax=7.6,
+    ylabel={Gradient, $\Delta V_{\text{out}}/\Delta I$ (mV/A)},
+    xtick={1,2,3,4,5,6,7},
+    xticklabels={Unshielded non-irr., Unshielded irr., Shielded non-irr., Shielded irr., Shielded repeat (non-irr.), Fresh sensor before sat., Fresh sensor after sat.},
+    xticklabel style={rotate=35, anchor=east, font=\scriptsize},
+    tick label style={font=\footnotesize}, label style={font=\small},
+    grid=major, grid style={gray!25}, axis lines=box,
+    nodes near coords,
+    every node near coord/.append style={font=\scriptsize, yshift=1pt},
+    /pgf/number format/.cd, fixed, precision=2,
+]
+\fill[gray!20] (axis cs:0.4,1.398) rectangle (axis cs:7.6,1.913);
+\addplot[fill=blue!55, draw=blue!70!black] coordinates {(1,1.315) (2,1.312) (3,1.447) (4,1.342) (5,1.35) (6,1.289) (7,1.283)};
+\draw[dashed, thick] (axis cs:0.4,1.655) -- (axis cs:7.6,1.655);
+\node[font=\scriptsize, anchor=south east, fill=white, inner sep=1pt] at (axis cs:7.55,1.92) {theory $1.655$ (dashed), datasheet range (shaded)};
+\end{axis}
+\end{tikzpicture}
+\caption{Measured current-to-output gradient for all seven current sweeps (MCU readings), against the theoretical gradient (dashed line) and the range implied by the datasheet sensitivity of 3.8 to $\SI{5.2}{\milli\volt\per\volt\per\milli\tesla}$ at $V_{\text{DD}} = \SI{3.32}{\volt}$ (shaded).}
+\label{fig:gradient-summary}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.85\textwidth,
+    height=0.58\textwidth,
+    xlabel={Trace current, $I$ (mA)},
+    ylabel={$V_{\text{out}} - V_{\text{out},0}$ (mV)},
+    grid=major,
+    grid style={gray!25},
+    xmin=-3200, xmax=3200,
+    axis lines=box,
+    tick label style={font=\footnotesize},
+    xticklabel style={rotate=45, anchor=north east},
+    label style={font=\small},
+    title style={font=\small},
+    legend columns=2,
+    legend style={
+        at={(0.5,-0.32)},
+        anchor=north,
+        font=\footnotesize,
+        draw=black,
+        /tikz/every even column/.append style={column sep=0.4cm},
+    },
+]
+
+% --- Theoretical / Ansys-model expectation (slope = 1.6453 mV/A = 0.0016453 mV/mA) ---
+\addplot[black, dashed, thick, domain=-3100:3100, samples=50] {0.001655*x};
+\addlegendentry{Theoretical (datasheet \SI{4.5}{mV/V/mT})}
+
+% --- Unshielded, non-irradiated (slope 1.315 mV/A, offset 12.603 mV removed) ---
+\addplot[color={rgb,255:red,0;green,115;blue,189}, mark=o, mark size=1.6pt, thick]
+    coordinates {
+    (-2991.0,-4.534) (-2498.5,-3.032) (-2029.0,-3.019) (-1501.0,-1.354)
+    (-1022.0,-1.496) (-499.0,-0.581) (-0.7,0.244) (499.0,1.025)
+    (1022.0,1.193) (1501.0,2.187) (2029.0,2.417) (2498.5,3.465)
+    (2991.0,3.485)
+    };
+\addlegendentry{Unshielded, non-irradiated}
+
+% --- Shielded, non-irradiated (slope 1.447 mV/A, offset 12.393 mV removed) ---
+\addplot[color={rgb,255:red,0;green,153;blue,76}, mark=square, mark size=1.6pt, thick]
+    coordinates {
+    (-3043.4,-4.354) (-2522.5,-3.844) (-2057.7,-2.799) (-1540.3,-2.444)
+    (-1040.2,-1.223) (-546.2,-1.074) (-6.3,0.312) (535.4,0.553)
+    (996.2,1.538) (1523.0,2.137) (2038.1,3.139) (2486.1,3.710)
+    (2988.7,4.081)
+    };
+\addlegendentry{Shielded, non-irradiated}
+
+% --- Unshielded, irradiated (slope 1.312 mV/A, offset 0.999 mV removed) ---
+\addplot[color={rgb,255:red,217;green,83;blue,25}, mark=triangle, mark size=2pt, thick]
+    coordinates {
+    (-2999.0,-4.257) (-2595.0,-3.802) (-1999.0,-2.747) (-1512.0,-1.043)
+    (-1017.0,-1.000) (-498.0,-0.536) (-0.7,-0.691) (498.0,0.750)
+    (1017.0,1.658) (1512.0,2.179) (1999.0,2.299) (2595.0,3.351)
+    (2999.0,3.835)
+    };
+\addlegendentry{Unshielded, irradiated}
+
+% --- Shielded, irradiated (slope 1.342 mV/A, offset 1.211 mV removed) ---
+\addplot[color={rgb,255:red,125;green,46;blue,143}, mark=diamond, mark size=2pt, thick]
+    coordinates {
+    (-3007.1,-4.498) (-2501.2,-3.980) (-2054.6,-2.341) (-1567.3,-1.142)
+    (-1037.7,-1.212) (-532.1,-1.104) (-6.3,0.107) (512.5,0.488)
+    (1011.4,1.626) (1557.8,2.030) (2048.6,2.722) (2560.6,3.596)
+    (3025.4,3.721)
+    };
+\addlegendentry{Shielded, irradiated}
+
+\end{axis}
+\end{tikzpicture}
+\caption{Current sweeps for the four test conditions with each sweep's fitted zero-current offset removed, so that only the gradient is compared, against the theoretical gradient (dashed). All measured sweeps lie close together and below the theoretical line.}
+\label{fig:sensitivity-comparison}
+\end{figure}
+
+\subsection{Saturation Recovery and What It Means for a CubeSat}
+\label{sec:disc-recovery}
+
+Table~\ref{tab:recovery-summary} summarises the saturation recovery across all samples. The ceiling is within a few percent of $V_{\text{DD}}/3$ on every unit, confirming the bridge model of Section~\ref{sec:bridge-topology}, and it is symmetric about zero. Recovery takes 40 to $\SI{85}{\milli\second}$ depending on the unit, and on the three integrated boards the decay is a clean exponential with a time constant of 9 to $\SI{14}{\milli\second}$, with no difference between the non-irradiated and irradiated boards.
+
+\begin{table}[H]
+\centering
+\caption{Summary of saturation recovery across all samples (means over both ceilings).}
+\label{tab:recovery-summary}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Group & Units & Ceiling (V) & Recovery (ms) & $\tau$ (ms) \\
+\midrule
+Sensor-only, non-irradiated (Samples 1--2) & 2 & 1.130 & 73.5 & --- \\
+Sensor-only, irradiated (Samples 3--4) & 2 & 1.124 & 74.8 & --- \\
+Integrated, non-irradiated (Board A) & 1 & 1.145 & 62.7 & 13.2 \\
+Integrated, irradiated (Board B) & 1 & 1.148 & 65.0 & 13.3 \\
+Integrated, fresh sensor (Board C) & 1 & 1.112 & 44.4 & 9.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+What this means depends on how often the on-board computer reads the magnetometer. Published CubeSat designs read magnetometers at rates from about \SI{1}{\hertz}, the rate of the whole attitude-control loop on InnoCube \cite{djebko_lelar}, up to about \SI{10}{\hertz} for a commercial CubeSat magnetometer \cite{nss_magnetometer}. At \SI{10}{\hertz} the sample interval is $T_s = \SI{100}{\milli\second}$, so the worst measured recovery time of $\SI{85}{\milli\second}$ (Sample 4) leaves a margin of only $\SI{15}{\milli\second}$. Comparing the recovery \emph{frequency} ($1/t_{\text{rec}} \approx 12$ to $\SI{25}{\hertz}$) with the sampling frequency is misleading, because a saturating event is not synchronised with the sampling clock. In the worst case the event ends just before a scheduled sample, and that sample is taken while the sensor is still recovering. An unrecovered reading would appear to a state estimator as a sudden impulse in the field and could trigger a false correction. The design quantity is therefore a guard window that covers the worst-case recovery with margin. Applying a conventional safety factor of 1.5 to 2 to the worst measured recovery gives a guard window of $\SI{127.5}{}$ to $\SI{170}{\milli\second}$:
+\begin{equation}
+T_{\text{guard}} = (1.5 \text{ to } 2) \times t_{\text{rec,max}} = (1.5 \text{ to } 2) \times \SI{85}{\milli\second} \approx \SI{127.5}{} \text{ to } \SI{170}{\milli\second}.
+\end{equation}
+This exceeds one sample interval at \SI{10}{\hertz}, so the first one or two readings after a saturating event should be discarded. At a \SI{1}{\hertz} loop the recovery is over long before the next sample and no blanking is needed. At sample rates of hundreds of hertz, such as the \SI{500}{\hertz} maximum configurable rate of one commercial magnetometer \cite{mm200_datasheet}, tens of consecutive samples would be affected, so a longer blanking period, or fusion with another attitude sensor during recovery, would be required.
+
+Saturation is easy to detect in flight, because the output goes to a ceiling of about $\pm V_{\text{DD}}/3$ ($\pm\SI{1.1}{\volt}$), which is more than a thousand times larger than the output for Earth's field. Flight software can therefore recognise a saturating event from the reading itself and then apply the guard window. The sources of such events are off-nominal (Section~\ref{sec:strong-field-lit}): a normally operating magnetorquer of about $\SI{0.2}{\ampere\metre\squared}$ gives a few millitesla at a few centimetres \cite{isis_imtq}, which would shift the output by tens of millivolts but is well inside the CT100's $\pm\SI{50}{\milli\tesla}$ range. Saturation would instead come from a much closer or stronger source, such as a magnet near the sensor or magnetising equipment during ground handling. Stress-testing saturation is still worthwhile because it characterises the worst case the sensor must survive and recover from, regardless of which source causes it.
+
+The measured recovery times should be treated with caution because the magnet was withdrawn by hand. The datasheet bandwidth of $\SI{1}{\kilo\hertz}$ \cite{digikey_ct100} implies an electrical response time of well under a millisecond, so the $\SI{9}{}$ to $\SI{14}{\milli\second}$ time constants are not set by the sensor's bandwidth. They come either from the speed at which the field was removed or from the magnetic relaxation of the sensor, and the present measurement cannot separate the two (Section~\ref{sec:disc-limitations}).
+
+\subsection{Offset Shift After Saturation}
+\label{sec:disc-hysteresis}
+
+The most significant finding of this work is that saturation moves the zero-field output without changing the gradient. On a fresh sensor with no magnetic history, two saturation events shifted the baseline by $\SI{16.1}{\milli\volt}$ (from $-4.8$ to $+\SI{11.3}{\milli\volt}$), while the gradient changed by only $-0.5\%$ and the response stayed linear (Section~\ref{sec:hysteresis}). Board A showed a similar shift of $+\SI{20.9}{\milli\volt}$ at the positive ceiling. At the sensor's sensitivity of about $\SI{14.9}{\milli\volt\per\milli\tesla}$ a shift of 16 to $\SI{21}{\milli\volt}$ is equivalent to a field of 1.1 to $\SI{1.4}{\milli\tesla}$, which is at least 15 times Earth's field of 25 to $\SI{65}{\micro\tesla}$ \cite{wmm}. This is consistent with the manufacturer's statement that a strong field can leave a stable, irreversible offset shift and that recalibration is recommended \cite{allegro_an133}, and it puts a size on the effect for this part. The datasheet offset specification of $\pm 5$~mV/V ($\pm\SI{16.6}{\milli\volt}$ at $V_{\text{DD}} = \SI{3.32}{\volt}$) \cite{ct100_datasheet} would still be met after the shift, so the part would not be flagged as out of specification even though the shift is large compared with the geomagnetic signal.
+
+Because the gradient and linearity are unchanged, the shift behaves like a movement of the operating point, as expected if the free layer relaxes to a slightly different resting state after saturation. For a CubeSat this means that a one-point re-zeroing of the offset is sufficient after a saturating event, and that a full recalibration is not needed. The saturation can be detected from the reading itself (Section~\ref{sec:disc-recovery}), so the recommended procedure is to detect the ceiling, discard the guard window, and then re-measure the zero-field output before trusting the magnetometer again.
+
+This also explains the difference in baseline between the non-irradiated and irradiated sweeps (about $+\SI{12}{\milli\volt}$ against about $+\SI{1}{\milli\volt}$). The non-irradiated board had been saturated before its sweeps, the irradiated board had not, and the fresh sensor shows that saturation alone moves the baseline by this amount. It is therefore not evidence of a radiation effect on the offset. One point remains open: Board B's own saturation events moved its baseline by only $\SI{1.6}{\milli\volt}$, so it is not yet known whether irradiated sensors respond to saturation differently. The evidence is also limited by the order of the events, because in every run the negative ceiling was reached before the positive one, so the direction of the field and the order of the events cannot yet be separated.
+
+\subsection{Radiation Tolerance}
+\label{sec:disc-radiation}
+
+Ten sensors were exposed to $\SI{40.76}{\kilo rad}$(Si), and three were tested (two on sensor-only boards and one on the integrated board). No change was found in the saturation ceiling (0.5\% difference), the recovery time (1.7\%), the recovery time constant (13.3 against $\SI{13.2}{\milli\second}$) or the gradient (93.6 to 99.8\% of the non-irradiated value, within session-to-session variation). This is what the literature predicts: MTJ sensors have been shown to tolerate $\SI{5}{\mega rad}$(Si) \cite{tmr-bias-radiation} because the crystalline MgO barrier has far fewer trap sites for radiation-induced charge than the amorphous oxides in CMOS devices \cite{tid-basics-lanl}. The dose used here is modest by comparison with that work and with the $\SI{300}{\kilo rad}$(Si) used for a COTS magnetometer \cite{regoli2020}, but it is above the $\SI{10}{\kilo rad}$ component-level dose quoted for a commercial CubeSat magnetometer \cite{nss_magnetometer}. The contribution is device-level data for one low-cost packaged part, including, to the author's knowledge, saturation recovery after irradiation. The test has several limits. The sensors were not monitored during exposure, so transient effects that vanish afterwards were not seen, and the bias condition during exposure needs to be stated (Section~\ref{sec:rad-setup}). X-rays test ionising dose only, not displacement damage or single-event effects. The comparison is between different units with different magnetic histories, with two sensor-only samples and one integrated board per group. The result should therefore be read as a first indication that permanent radiation damage at this dose is small, not as a qualification.
+
+\subsection{Magnetic Shielding}
+\label{sec:disc-shielding}
+
+Shielding did not measurably change the response. The gradient changed by $+10\%$ on the non-irradiated board and $+2.3\%$ on the irradiated board (Figure~\ref{fig:shielding-overlay}), and a repeat shielded sweep differed from the first by 7\% (Section~\ref{sec:session-variance}), so the shielding effect is smaller than the session-to-session variation. This should not be read as proof that the shield does not work, for three reasons. First, a constant ambient field changes the offset and not the gradient, so a gradient comparison is an indirect test of shielding at best. Second, Earth's field of tens of microtesla is only about $\SI{0.7}{\milli\volt}$ at the CT100's sensitivity, less than one ADC step of $\SI{1.61}{\milli\volt}$, so even a perfect shield would not have produced a visible change with this measurement chain. Third, the enclosure is far from ideal: a closed shell of the N95 ferrite would at best reduce an external field by a factor of about 200 (Section~\ref{sec:shielding-enclosure}), and the real enclosure has seams and a cable cut-out. The ferrite close to the trace may also change the field of the trace itself, which could account for the $+10\%$ gradient change on one board. A proper test would apply a known external field with and without the enclosure and compare the zero-current baseline and noise on a higher-resolution measurement. Mu-metal could then be tried if the ferrite proves insufficient. For flight, magnetometer placement away from sources matters more than shielding the sensor \cite{nss_magnetometer}.
+
+\subsection{Power Consumption}
+\label{sec:disc-power}
+
+Power is a first-order constraint on a CubeSat, so the cost of the sensing element is relevant. The bridge draws current $V_{\text{DD}}/R$, where $R$ is the element resistance, because two elements in series form each of two parallel branches. With the datasheet element resistance of 20 to $\SI{40}{\kilo\ohm}$ \cite{ct100_datasheet}, the bridge draws about 82 to $\SI{165}{\micro\ampere}$, or 0.27 to $\SI{0.54}{\milli\watt}$, at $V_{\text{DD}} = \SI{3.30}{\volt}$, and this falls with the square of the supply voltage down to the datasheet minimum of $\SI{1.0}{\volt}$. For comparison, the AMR-based MAGIC instrument draws $\SI{0.5}{\watt}$ \cite{magic-radcube} and a commercial CubeSat magnetometer about $\SI{0.7}{\watt}$ \cite{nss_magnetometer}. These are complete instruments with electronics, so the comparison is not like for like, but it shows that the sensing element itself is a negligible part of a magnetometer's power budget. The power of a full instrument will be set by the gain stage, ADC and processor. \todo{This is an estimate from the datasheet resistance range. Measure the supply current of the standalone board with the DMM and replace the estimate with the measured value.}
+
+\subsection{Limitations and Better Ways to Measure the Response}
+\label{sec:disc-limitations}
+
+The main weakness of the current method is the saturating stimulus. A hand-held magnet gives an uncontrolled withdrawal speed, an unknown field at the sensor, and poor repeatability, so recovery times include the operator and cannot be compared closely between units. A better method would use an electromagnet driven through a fast switch, so that the field is removed in a controlled, repeatable way, with the coil current and the sensor output recorded together on the oscilloscope and several repeats taken to give a mean and standard deviation. A linear actuator moving a magnet at a fixed speed would also work. The trace used for the current sweeps cannot saturate the sensor, because a field of about $\SI{20}{\milli\tesla}$ would need on the order of $\SI{180}{\ampere}$.
+
+Other limitations are as follows.
+\begin{itemize}
+\item \textbf{Resolution.} With an unamplified 12-bit ADC, one step of $\SI{1.61}{\milli\volt}$ is about $\SI{108}{\micro\tesla}$ at the CT100's sensitivity, larger than Earth's field, and the noise in the SWV traces analysed (a few tenths of a millivolt) is equivalent to roughly 14 to $\SI{40}{\micro\tesla}$. This work therefore shows that the CT100 survives and recovers from strong fields and radiation, but not that it can resolve the geomagnetic field. That would need a gain stage, oversampling or a higher-resolution ADC, which would in turn affect the recovery measurements through amplifier slew rate.
+\item \textbf{Oscilloscope resolution.} At $\SI{500}{\milli\volt}$/div the oscilloscope steps are about $\SI{5}{\milli\volt}$, so the sensor-only baselines are not interpretable and the ceilings carry about $\pm\SI{5}{\milli\volt}$ of uncertainty.
+\item \textbf{Sample size and design.} There are two sensor-only samples per group, one board per group on the integrated board, a single dose level, and the irradiated and non-irradiated comparison is across different units.
+\item \textbf{Hysteresis test.} The two sensors tested were saturated negative first, and only one fresh sensor was tested in a controlled before-and-after sequence.
+\item \textbf{Field model.} The trace-to-die distance used in the field model needs to be confirmed (Section~\ref{sec:field-model}).
+\item \textbf{Scope of the project.} Temperature effects were studied separately by the project partner and are not covered here.
+\end{itemize}
+
+\section{Conclusions and Future Work}
+\label{sec:conclusions}
+
+\textbf{Conclusions.} This project characterised a low-cost commercial TMR sensor, the CT100, using two purpose-built PCBs, a field model checked against a finite-element simulation, and instruments that were validated against each other. Within the limits above, the findings are as follows.
+\begin{itemize}
+\item The saturation ceiling is within about 5\% of $\pm V_{\text{DD}}/3$, as derived from the datasheet resistance range, on every unit tested, and it is symmetric about zero.
+\item Recovery from saturation takes 40 to $\SI{85}{\milli\second}$, as an exponential decay with a time constant of about 9 to $\SI{14}{\milli\second}$. At a $\SI{10}{\hertz}$ magnetometer rate this requires the first one to two samples after a saturating event to be discarded, while at \SI{1}{\hertz} no action is needed.
+\item Saturation shifts the zero-field offset by about 13 to $\SI{21}{\milli\volt}$ (1 to 1.4 mT equivalent) without changing the gradient or the linearity, so a one-point re-zeroing after a saturating event is required. This matches the manufacturer's note on offset shift and puts a size on it for the CT100.
+\item The measured gradient is 77 to 87\% of the theoretical value, consistent with the datasheet tolerance and the uncertainty of the field model. The current-to-output response is linear with R$^2$ above 0.97.
+\item No change attributable to radiation was found in ceiling, recovery, time constant or gradient after $\SI{40.76}{\kilo rad}$(Si), as expected from the literature on MTJ sensors.
+\item Ferrite shielding did not measurably change the response. The test was insensitive to what shielding does, so shielding effectiveness remains unresolved.
+\item The sensing element draws an estimated 0.27 to $\SI{0.54}{\milli\watt}$, a negligible part of a magnetometer power budget.
+\end{itemize}
+
+\textbf{Significance.} Taken together, these results suggest that the CT100 is a promising low-cost COTS candidate for CubeSat magnetometry: it tolerates ionising radiation at the dose tested, survives saturation, recovers within tens of milliseconds, and only shifts its zero point, which can be corrected by re-zeroing. They also provide a reusable, low-cost test method for other COTS TMR parts. The main reservations are that the ability to resolve the geomagnetic field was not demonstrated, the dose was modest, and the sample sizes were small, so more testing is needed before flight use.
+
+\textbf{Future work.}
+\begin{itemize}
+\item Replace the hand-held magnet with a controlled, repeatable saturation source (an electromagnet with a fast switch) and record several repeats per sample.
+\item Repeat the hysteresis test on several fresh sensors, with the positive ceiling first as well as the negative, and on a fresh irradiated sensor, and test a re-zeroing procedure in firmware that detects the ceiling, applies the guard window and re-measures the offset.
+\item Monitor sensors during irradiation, state the bias condition, and extend the tests to more dose levels and to proton irradiation.
+\item Test shielding properly with a known external field and a higher-resolution measurement, and try mu-metal.
+\item Add a gain stage or a higher-resolution ADC, characterise the noise floor in field units, and measure the supply current.
+\item Confirm the trace-to-die distance in the field model, and combine these results with the thermal-cycling results of the project partner.
+\end{itemize}
+
+
+% ============================================================
+% PAGE-COUNT RANGE END (Introduction -- Conclusions)
+% ============================================================
+
+
+\begin{thebibliography}{99}
+
+\bibitem{survey-magnetic-sensing}
+``A Survey on Magnetic Sensing and Communication: Technologies, Sensors, and Applications,'' \emph{IEEE Journals \& Magazine}, IEEE Xplore.
+
+\bibitem{alves-thesis}
+P.\ F.\ L.\ Alves, ``Radiation Hardness Assessment of MR sensors for Space Applications,'' MSc thesis, available via lip.pt.
+
+\bibitem{amr-gmr-hall-bridging}
+``Bridging The Gap Between AMR, GMR, And Hall Magnetic Sensors,'' \emph{IEEE Conference Publication}, IEEE Xplore.
+
+\bibitem{magic-radcube}
+``In Flight Performance of the MAGIC Magnetoresistive Magnetometer on the RadCube CubeSat,'' \emph{Space Science Reviews} (Springer).
+
+\bibitem{julliere1975}
+M.\ Julli\`ere, ``Tunneling between ferromagnetic films,'' \emph{Physics Letters A}, vol.~54, no.~3, pp.~225--226, 1975.
+
+\bibitem{parkin2004}
+S.\ S.\ P.\ Parkin \emph{et al.}, ``Giant tunnelling magnetoresistance at room temperature with MgO (100) tunnel barriers,'' \emph{Nature Materials}, vol.~3, pp.~862--867, 2004.
+
+\bibitem{yuasa2004}
+S.\ Yuasa, T.\ Nagahama, A.\ Fukushima, Y.\ Suzuki, and K.\ Ando, ``Giant room-temperature magnetoresistance in single-crystal Fe/MgO/Fe magnetic tunnel junctions,'' \emph{Nature Materials}, vol.~3, pp.~868--871, 2004.
+
+\bibitem{tmr-bias-radiation}
+``Radiation tolerance of tunneling magnetoresistance sensors under bias voltage,'' \emph{Science China / Springer}.
+
+\bibitem{nguyen2010}
+H.\ Nguyen, A.\ Persson, and G.\ Thornell, ``Material- and fabrication-governed performance of a tunnelling magnetometer,'' 2010. [Online]. Available: https://ans.vast.vn/index.php/oms/article/view/62/63 (accessed Oct.\ 2026).
+
+\bibitem{tid-basics-lanl}
+``Basic Mechanisms: Total Ionizing Dose,'' Los Alamos National Laboratory presentation.
+
+\bibitem{regoli2020}
+L.\ H.\ Regoli, M.\ B.\ Moldwin, C.\ Raines, T.\ A.\ Nordheim, C.\ A.\ Miller, M.\ Carts, and S.\ A.\ Pozzi, ``Radiation tolerance of the PNI RM3100 magnetometer for a Europa lander mission,'' \emph{Geoscientific Instrumentation, Methods and Data Systems}, vol.~9, pp.~499--507, 2020, doi: 10.5194/gi-9-499-2020.
+
+\bibitem{nss_magnetometer}
+NewSpace Systems, ``NSS Magnetometer data sheet.'' [Online]. Available: https://www.cubesatshop.com/wp-content/uploads/2016/06/NSS-Magnetometer-1.pdf (accessed Oct.\ 2026).
+
+\bibitem{isis_imtq}
+Innovative Solutions In Space (ISISpace), ``iMTQ magnetorquer board,'' product brochure.
+
+\bibitem{jackson}
+J.\ D.\ Jackson, \emph{Classical Electrodynamics}, 3rd ed. New York, NY, USA: Wiley, 1999.
+
+\bibitem{wmm}
+NOAA National Centers for Environmental Information, ``World Magnetic Model.'' [Online]. Available: https://www.ncei.noaa.gov/products/world-magnetic-model (accessed Oct.\ 2026).
+
+\bibitem{ct100_datasheet}
+Allegro MicroSystems, \emph{CT100 1D Linear TMR Sensor Datasheet}, CT100-DS Rev. 3, 2023.
+
+\bibitem{allegro_an133}
+Allegro MicroSystems, ``AN133: What is XtremeSense TMR?'' Application note. [Online]. Available: https://www.allegromicro.com/-/media/files/application-notes/an133-what-is-xtremesense-tmr.pdf (accessed Oct.\ 2026).
+
+\bibitem{digikey_ct100}
+DigiKey, ``CT100LW-FS6 product listing (Allegro MicroSystems).'' [Online]. Available: https://www.digikey.com/en/products/detail/allegro-microsystems/CT100LW-FS6/22114166 (accessed Oct.\ 2026).
+
+\bibitem{stm32g4_rm}
+STMicroelectronics, ``RM0440: STM32G4 Series advanced Arm-based 32-bit MCUs,'' reference manual.
+
+\bibitem{ina219_datasheet}
+Texas Instruments, ``INA219 zero-drift, bidirectional current/power monitor with I2C interface,'' data sheet.
+
+\bibitem{poivey_rha}
+C.\ Poivey, ``Radiation hardness assurance for space systems,'' IEEE Nuclear and Space Radiation Effects Conference (NSREC) Short Course, 2002.
+
+\bibitem{escc22900}
+European Space Components Coordination (ESCC), ``Total dose steady-state irradiation test method,'' ESCC Basic Specification No.~22900, European Space Agency.
+
+\bibitem{msc_mumetal}
+Magnetic Shield Corporation, ``MuMETAL fully annealed material data sheet.'' [Online]. Available: https://www.magnetic-shield.com (accessed Oct.\ 2026).
+
+\bibitem{tdk_n95}
+TDK Electronics (EPCOS), ``SIFERRIT material N95,'' ferrite material data sheet. [Online]. Available: https://www.tdk-electronics.tdk.com (accessed Oct.\ 2026).
+
+\bibitem{djebko_lelar}
+K.\ Djebko, T.\ Baumann, E.\ Dilger, F.\ Puppe, and S.\ Montenegro, ``LeLaR: The first in-orbit demonstration of an AI-based satellite attitude controller,'' arXiv:2512.19576, 2025.
+
+\bibitem{mm200_datasheet}
+AAC Clyde Space, ``MM200 magnetometer data sheet.'' [Online]. Available: https://www.aac-clyde.space/wp-content/uploads/2021/11/MM200.pdf (accessed Oct.\ 2026).
+
+\end{thebibliography}
+
+\end{document}
